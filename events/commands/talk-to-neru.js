@@ -1,8 +1,8 @@
 const { Events, MessageFlags } = require('discord.js');
 const replyWithText = require("../../utils/replyWithText");
-const { geminiApiKey, clientId, staffRoles } = require('../../config.json');
+const { clientId, staffRoles } = require('../../config.json');
 
-const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`;
+const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
 
 const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
 
