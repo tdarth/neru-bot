@@ -69,7 +69,10 @@ module.exports = {
 
                 const afkMessageReply = await message.reply({
                     flags: MessageFlags.IsComponentsV2,
-                    components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(afkMessage.join("\n\n")))]
+                    components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(afkMessage.join("\n\n")))],
+                    allowedMentions: {
+                        parse: []
+                    }
                 });
 
                 setTimeout(() => { afkMessageReply.delete(); }, 5000);
