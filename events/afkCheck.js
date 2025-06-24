@@ -71,6 +71,7 @@ module.exports = {
                     flags: MessageFlags.IsComponentsV2,
                     components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(afkMessage.join("\n\n")))],
                     allowedMentions: {
+                        repliedUser: true,
                         parse: []
                     }
                 });
