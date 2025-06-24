@@ -1,0 +1,12 @@
+{
+  "name": "nerubot",
+  "version": "1.0.0",
+  "description": "A utility bot used in the baka baka baka Discord Server.",
+  "license": "ISC",
+  "author": "tdarth",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
