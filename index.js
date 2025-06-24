@@ -2,6 +2,15 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
 const getJsFiles = require('./utils/getJsFiles');
+const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => res.send('Bot is running.'));
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
+});
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
