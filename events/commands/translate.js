@@ -1,6 +1,6 @@
 const { Events, TextDisplayBuilder, ContainerBuilder, MessageFlags, SeparatorBuilder } = require('discord.js');
-const replyWithText = require("../../utils/replyWithText");
 const { prefix } = require('../../config.json');
+const replyWithText = require("../../utils/replyWithText");
 
 const apiUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=`;
 

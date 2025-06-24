@@ -19,7 +19,7 @@ client.commands = new Collection();
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath).filter(item => item !== ".DS_Store");
 
-const token = process.env.TOKEN;
+const token = process.env.TOKEN
 
 for (const folder of commandFolders) {
 	const commandsPath = path.join(foldersPath, folder);

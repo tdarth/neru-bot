@@ -1,6 +1,6 @@
 const { Events, MessageFlags } = require('discord.js');
-const replyWithText = require("../../utils/replyWithText");
 const { clientId, staffRoles } = require('../../config.json');
+const replyWithText = require("../../utils/replyWithText");
 
 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
 

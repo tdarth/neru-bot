@@ -20,7 +20,6 @@ module.exports = {
             .reverse();
 
         let reportReason = message.content.toLowerCase().replace(/^(\?report|!report)/, '').trim();
-        reportReason.trim();
         if (reportReason == "") reportReason = "No reason specified."
 
         const container = new ContainerBuilder();
@@ -28,7 +27,7 @@ module.exports = {
         container.addSectionComponents(new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(`${reportPingRoles.map(id => `<@&${id}>`).join(' ')}\n## Report against <@${authorId}> \`${authorId}\`\n* __Submitted By__: <@${message.author.id}>. \`${message.author.id}\`\n* __In Channel__: <#${message.channel.id}>.\n* __Timestamp__: <t:${Math.floor(Date.now() / 1000)}:f>.\n\n:notepad_spiral: **Reason:** \`${reportReason}\`\n:pencil2: **Attached Message**: \`\`\`${referencedMessage.content}\`\`\`\n-# Below are recent messages sent by the reported user.`)).setThumbnailAccessory(new ThumbnailBuilder().setURL(`https://cdn.discordapp.com/avatars/${authorId}/${referencedMessage.author.avatar}.png`))).addSeparatorComponents(new SeparatorBuilder());
 
         for (const userMessage of userMessages) {
-            container.addSectionComponents(new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent('`' + userMessage.content + '`\n')).setButtonAccessory(new ButtonBuilder().setLabel(`Jump`).setURL(`https://discord.com/channels/${userMessage.guildId}/${userMessage.channelId}/${userMessage.id}`).setStyle(ButtonStyle.Link))).addSeparatorComponents(new SeparatorBuilder());
+            container.addSectionComponents(new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(`${userMessage.content}\n`)).setButtonAccessory(new ButtonBuilder().setLabel(`Jump`).setURL(`https://discord.com/channels/${userMessage.guildId}/${userMessage.channelId}/${userMessage.id}`).setStyle(ButtonStyle.Link))).addSeparatorComponents(new SeparatorBuilder());
         }
 
         container.addSectionComponents(new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent("Finished with the report?")).setButtonAccessory(new ButtonBuilder().setLabel("Mark as Resolved").setStyle(ButtonStyle.Success).setCustomId(`markAsResolved_button`)));

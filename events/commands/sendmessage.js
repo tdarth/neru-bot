@@ -1,6 +1,6 @@
 const { Events, TextDisplayBuilder, ContainerBuilder, SeparatorBuilder, MessageFlags } = require('discord.js');
-const replyWithText = require("../../utils/replyWithText");
 const { prefix, emojis } = require('../../config.json');
+const replyWithText = require("../../utils/replyWithText");
 
 module.exports = {
     name: Events.MessageCreate,
