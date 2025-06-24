@@ -53,7 +53,7 @@ module.exports = {
         const allUserIds = [...mentionedIds];
         if (repliedToId && !allUserIds.includes(repliedToId)) allUserIds.push(repliedToId);
 
-        fetch(`https://bakabakabakaafkusers.tdarthh.workers.dev/isafk?userid=${allUserIds}&access_token=${afkStorageApiKey}`, {})
+        fetch(`https://bakabakabakaafkusers.tdarthh.workers.dev/isafk?userid=${allUserIds.join(',')}&access_token=${afkStorageApiKey}`, {})
             .then(response => response.json())
             .then(async (data) => {
                 let afkUserIds = [];
