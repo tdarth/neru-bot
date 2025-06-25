@@ -1,4 +1,4 @@
-const { Events, MessageFlags, ContainerBuilder, TextDisplayBuilder } = require('discord.js');
+const { Events, MessageFlags, PermissionsBitField, ContainerBuilder, TextDisplayBuilder } = require('discord.js');
 const { deletedLinksChannelId } = require('../config.json');
 
 const urlRegex = /https?:\/\/[^\s]+|www\.[^\s]+/gi;
@@ -13,7 +13,7 @@ module.exports = {
             message.channel.id === '1370819438139674634'
         ) return;
 
-        if (message.member.permissionsIn(message.channel).has('EMBED_LINKS')) return;
+        if (message.member.permissionsIn(message.channel).has(PermissionsBitField.Flags.EmbedLinks)) return;
 
         await message.delete();
         const sentDeletedMessage = await message.client.channels.cache
