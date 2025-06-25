@@ -1,11 +1,11 @@
-const { Events, TextDisplayBuilder, ContainerBuilder, SeparatorBuilder, MessageFlags } = require('discord.js');
+const { TextDisplayBuilder, ContainerBuilder, SeparatorBuilder, MessageFlags } = require('discord.js');
 const { prefix, emojis } = require('../../config.json');
 const replyWithText = require("../../utils/replyWithText");
 
 module.exports = {
-    name: Events.MessageCreate,
+    name: 'sendmessage',
+    trigger: (message) => message.content.toLowerCase().startsWith(`${prefix}sendmessage`),
     async execute(message) {
-        if (message.author.bot || !message.content.toLowerCase().startsWith(`${prefix}sendmessage`)) return;
         if (message.author.id !== "990500436047982602") return await replyWithText(message, ':x: Only `tdarth-chan` can use this command.');
 
         const container = new ContainerBuilder();

@@ -1,13 +1,11 @@
-const { Events, ContainerBuilder, MessageFlags, TextDisplayBuilder, ThumbnailBuilder, SectionBuilder, ButtonBuilder, ButtonStyle, SeparatorBuilder } = require('discord.js');
+const { ContainerBuilder, MessageFlags, TextDisplayBuilder, ThumbnailBuilder, SectionBuilder, ButtonBuilder, ButtonStyle, SeparatorBuilder } = require('discord.js');
 const { prefix, reportPingRoles, reportsChannelId } = require('../../config.json');
 const replyWithText = require('../../utils/replyWithText');
 
 module.exports = {
-    name: Events.MessageCreate,
+    name: 'report',
+    trigger: (message) => message.content.toLowerCase().startsWith(`${prefix}report`) || message.content.toLowerCase().startsWith('!report'),
     async execute(message) {
-        const content = message.content.toLowerCase();
-
-        if (message.author.bot || !(content.startsWith(`${prefix}report`) || content.startsWith('!report'))) return;
         if (!message.reference) return await replyWithText(message, `:x: **Please reply this command to the message you are reporting.**`);
         const referencedMessage = await message.channel.messages.fetch(message.reference.messageId);
         const authorId = referencedMessage.author.id;

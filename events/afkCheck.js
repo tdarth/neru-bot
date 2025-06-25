@@ -1,7 +1,7 @@
 const { Events, MessageFlags, ContainerBuilder, TextDisplayBuilder } = require('discord.js');
 const replyWithText = require('../utils/replyWithText');
 
-const afkStorageApiKey = process.env.AFK_API_KEY
+const afkStorageApiKey = process.env.AFK_API_KEY;
 
 module.exports = {
     name: Events.MessageCreate,
@@ -70,10 +70,7 @@ module.exports = {
                 const afkMessageReply = await message.reply({
                     flags: MessageFlags.IsComponentsV2,
                     components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(afkMessage.join("\n\n")))],
-                    allowedMentions: {
-                        repliedUser: true,
-                        parse: []
-                    }
+                    allowedMentions: { repliedUser: true, parse: [] }
                 });
 
                 setTimeout(() => { afkMessageReply.delete(); }, 5000);

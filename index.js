@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
-const getJsFiles = require('./utils/getJsFiles');
+const { Client, GatewayIntentBits, Collection } = require('discord.js');
+const loadTriggers = require('./utils/triggerCommandLoader');
 const express = require('express');
 const app = express();
 
@@ -19,7 +19,7 @@ client.commands = new Collection();
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath).filter(item => item !== ".DS_Store");
 
-const token = process.env.TOKEN
+const token = process.env.TOKEN;
 
 for (const folder of commandFolders) {
 	const commandsPath = path.join(foldersPath, folder);
@@ -36,17 +36,20 @@ for (const folder of commandFolders) {
 }
 
 const eventsPath = path.join(__dirname, 'events');
-const eventFiles = getJsFiles(eventsPath);
+const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
-for (const filePath of eventFiles) {
+for (const file of eventFiles) {
+	const filePath = path.join(eventsPath, file);
 	const event = require(filePath);
-    console.log(`Loading event: ${filePath}`);
+	console.log(`Loading event: ${filePath}`);
 	if (event.once) {
 		client.once(event.name, (...args) => event.execute(...args));
 	} else {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
+
+loadTriggers(client);
 
 
 client.login(token);

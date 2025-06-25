@@ -1,14 +1,13 @@
-const { Events, TextDisplayBuilder, ContainerBuilder, MessageFlags, SeparatorBuilder } = require('discord.js');
+const { TextDisplayBuilder, ContainerBuilder, MessageFlags, SeparatorBuilder } = require('discord.js');
 const { prefix } = require('../../config.json');
 const replyWithText = require("../../utils/replyWithText");
 
 const apiUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=`;
 
 module.exports = {
-    name: Events.MessageCreate,
+    name: 'translate',
+    trigger: (message) => message.content.toLowerCase().startsWith(`${prefix}translate`),
     async execute(message) {
-        if (message.author.bot || !message.content.toLowerCase().startsWith(`${prefix}translate`)) return;
-
         let textToTranslate;
 
         if (message.reference) {

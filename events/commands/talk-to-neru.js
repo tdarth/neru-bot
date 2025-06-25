@@ -1,8 +1,9 @@
-const { Events, MessageFlags } = require('discord.js');
 const { clientId, staffRoles } = require('../../config.json');
 const replyWithText = require("../../utils/replyWithText");
 
-const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
+const geminiApiKey = process.env.GEMINI_API_KEY;
+
+const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`;
 
 const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
 
@@ -13,9 +14,9 @@ const basePromptText =
     "The person who is sending you this request is named REPLACE_USER_HERE. Here is your prompt: REPLACE_PROMPT_HERE";
 
 module.exports = {
-    name: Events.MessageCreate,
+    name: 'talk-to-neru',
+    trigger: (message) => message.content.startsWith(`<@${clientId}>`),
     async execute(message) {
-        if (message.author.bot || !message.content.startsWith(`<@${clientId}>`)) return;
         if (!message.member.roles.cache.some(role => staffRoles.includes(role.id) || role.id === "1370622872728506469")) { return await replyWithText(message, ":x: You do not have permission to use this command."); }
 
         const messagePrompt = message.content.replace(`<@${clientId}>`, '').trim();
