@@ -13,7 +13,7 @@ module.exports = {
             message.channel.id === '1370819438139674634'
         ) return;
 
-        if (message.member.permissionsIn(message.channel).has(PermissionsBitField.Flags.EmbedLinks)) return;
+        if (message.member.permissions.has(PermissionsBitField.Flags.EmbedLinks)) return;
 
         await message.delete();
         const sentDeletedMessage = await message.client.channels.cache
