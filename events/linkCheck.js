@@ -1,6 +1,5 @@
 const { Events, MessageFlags, ContainerBuilder, TextDisplayBuilder } = require('discord.js');
-const { levelRoles, deletedLinksChannelId } = require('../config.json');
-const replyWithText = require('../utils/replyWithText');
+const { levelRoles, deletedLinksChannelId, staffRoles } = require('../config.json');
 
 const levelRoleIds = Object.entries(levelRoles)
     .filter(([level]) => level !== "10")
@@ -14,6 +13,8 @@ module.exports = {
         if (message.author.bot) return;
         if (!urlRegex.test(message.content)) return;
         if (levelRoleIds.some(roleId => message.member.roles.cache.has(roleId))) return;
+        if (message.member.roles.cache.some(role => staffRoles.includes(role.id))) return;
+        if (message.channel.id == '1370819406308835359' || message.channel.id == '1370819438139674634') return;
 
         await message.delete();
         const sentDeletedMessage = await message.client.channels.cache.get(deletedLinksChannelId).send({ content: message.content });
