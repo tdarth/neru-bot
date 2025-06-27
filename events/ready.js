@@ -10,8 +10,7 @@ module.exports = {
             activities: [{
                 name: 'phone noises. 🎵',
                 type: ActivityType.Playing
-            }],
-            status: "idle"
+            }]
         });
     },
 };
