@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
+const { DefaultWebSocketManagerOptions: { identifyProperties } } = require("@discordjs/ws");
 const loadTriggers = require('./utils/triggerCommandLoader');
 const express = require('express');
 const app = express();
@@ -11,6 +12,8 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
+
+identifyProperties.browser = "Discord iOS";
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
