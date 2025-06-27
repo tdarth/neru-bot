@@ -64,8 +64,10 @@ module.exports = {
                         afkUserReasons.push(user.reason);
                     }
                 });
+                
+                if (afkUserIds.length == 0) return;
 
-                const afkMessage = afkUserIds.map((id, i) => `<@${id}> is **AFK**\n${afkUserReasons[i]}`);
+                const afkMessage = afkUserIds.map((id, i) => `<@${id}> is **AFK**.\n${afkUserReasons[i]}`);
 
                 const afkMessageReply = await message.reply({
                     flags: MessageFlags.IsComponentsV2,
