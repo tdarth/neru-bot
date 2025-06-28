@@ -1,7 +1,7 @@
 const { Events, MessageFlags, PermissionsBitField, ContainerBuilder, TextDisplayBuilder } = require('discord.js');
 const { deletedLinksChannelId } = require('../config.json');
 
-const urlRegex = /https?:\/\/[^\s]+|www\.[^\s]+/gi;
+const urlRegex = /https?:\/\/[^\s]+|www\.[^\s]+/i;
 
 module.exports = {
     name: Events.MessageCreate,
@@ -18,7 +18,7 @@ module.exports = {
         await message.delete();
         const sentDeletedMessage = await message.client.channels.cache
             .get(deletedLinksChannelId)
-            .send({ content: message.content });
+            .send({ content: message.content, allowedMentions: { parse: [] } });
 
         await sentDeletedMessage.reply({
             flags: MessageFlags.IsComponentsV2,
