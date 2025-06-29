@@ -15,7 +15,7 @@ module.exports = {
 
         if (message.member.permissions.has(PermissionsBitField.Flags.EmbedLinks)) return;
 
-        const level15Message = await message.reply({ flags: MessageFlags.IsComponentsV2, components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(":x: **Level 15** is required to send gifs/links.")).addSeparatorComponents(new SeparatorBuilder()).addTextDisplayComponents(new TextDisplayBuilder().setContent("-# You can check your progress with **level** in <#1369383513132105874>."))] })
+        const level15Message = await message.reply({ flags: MessageFlags.IsComponentsV2, components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(":x: **Level 15** is required to send gifs/links.")).addSeparatorComponents(new SeparatorBuilder()).addTextDisplayComponents(new TextDisplayBuilder().setContent("-# You can check your progress with **/level** in <#1369383513132105874>."))] })
         await message.delete();
 
         const sentDeletedMessage = await message.client.channels.cache
