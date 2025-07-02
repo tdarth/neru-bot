@@ -9,7 +9,7 @@ module.exports = {
     async execute(message) {
         if (message.author.bot) return;
         if (!urlRegex.test(message.content)) return;
-        if (!allowedChannels.includes(message.channel.id)) return;
+        if (allowedChannels.includes(message.channel.id)) return;
 
         if (message.member.permissions.has(PermissionsBitField.Flags.EmbedLinks)) return;
 
