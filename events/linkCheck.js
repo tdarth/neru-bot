@@ -2,16 +2,14 @@ const { Events, MessageFlags, PermissionsBitField, ContainerBuilder, TextDisplay
 const { deletedLinksChannelId } = require('../config.json');
 
 const urlRegex = /https?:\/\/[^\s]+|www\.[^\s]+/i;
+const allowedChannels = ['1370819406308835359', '1370819438139674634', '1369383513132105874']
 
 module.exports = {
     name: Events.MessageCreate,
     async execute(message) {
         if (message.author.bot) return;
         if (!urlRegex.test(message.content)) return;
-        if (
-            message.channel.id === '1370819406308835359' ||
-            message.channel.id === '1370819438139674634'
-        ) return;
+        if (!allowedChannels.includes(message.channel.id)) return;
 
         if (message.member.permissions.has(PermissionsBitField.Flags.EmbedLinks)) return;
 
