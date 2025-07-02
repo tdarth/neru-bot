@@ -6,7 +6,7 @@ const loadTriggers = require('./utils/triggerCommandLoader');
 const express = require('express');
 const app = express();
 
-app.get('/', (req, res) => res.send('Bot is running.'));
+app.get('/', (req, res) => res.send('https://discord.gg/nerutag'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
