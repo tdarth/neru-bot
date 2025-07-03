@@ -1,9 +1,9 @@
-const { Events } = require('discord.js');
+const { Events, MessageFlags, ContainerBuilder, TextDisplayBuilder, SectionBuilder, ThumbnailBuilder } = require('discord.js');
+const { modApplicationsChannelId } = require('../config.json');
 
 const codeRegex = /^[a-z0-9]{8}$/i;
 const ACCESS_TOKEN = process.env.APPLICATIONS_ACCESS_TOKEN;
 const FETCH_URL = "https://bakabakabakaapplication.tdarthh.workers.dev/fetchapplication";
-const APPLICATION_CHANNEL_ID = "1381511430578245642";
 
 module.exports = {
   name: Events.MessageCreate,
@@ -42,16 +42,14 @@ module.exports = {
 
         const application = JSON.parse(text);
 
-        const channel = await message.client.channels.fetch(APPLICATION_CHANNEL_ID);
+        const channel = await message.client.channels.fetch(modApplicationsChannelId);
         if (!channel || !channel.isTextBased()) return;
 
         let applicationFields = Object.entries(application)
-          .map(([q, a]) => `**${q}**:\n${a}`)
+          .map(([q, a]) => `-# **${q}**\n- ${a}`)
           .join("\n\n");
 
-        await channel.send({
-          content: `New application from **${username}**:\n\n${applicationFields}`
-        });
+        await channel.send({flags: MessageFlags.IsComponentsV2, components: [new ContainerBuilder().addSectionComponents(new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(`# <${message.author.id}>'s Application \`${message.author.id}\``)).setThumbnailAccessory(new ThumbnailBuilder().setURL(`https://cdn.discordapp.com/avatars/${authorId}/${referencedMessage.author.avatar}.png`))).addTextDisplayComponents(new TextDisplayBuilder().setContent(applicationFields))]});
 
         await message.reply("Your application has been verified and sent.");
       } catch (err) {
