@@ -46,20 +46,30 @@ module.exports = {
         if (!channel || !channel.isTextBased()) return;
 
         let applicationFields = Object.entries(application)
-          .map(([q, a]) => {
-            const cleanAnswer = a
-              .replace(/\*/g, '')
-              .trim();
-            return `-# **${q}**\n- ${cleanAnswer}`;
-          })
-          .join("\n\n");
+              .map(([q, a]) => {
+                let cleanAnswer;
+            
+                if (Array.isArray(a)) {
+                  cleanAnswer = a
+                    .map(item => String(item).replace(/\*/g, '').trim())
+                    .join('\n- ');
+                  cleanAnswer = '- ' + cleanAnswer;
+                } else {
+                  cleanAnswer = String(a || '')
+                    .replace(/\*/g, '')
+                    .trim();
+                }
+            
+                return `-# **${q}**\n${cleanAnswer}`;
+              })
+              .join("\n\n");
 
         await channel.send({flags: MessageFlags.IsComponentsV2, components: [new ContainerBuilder().addSectionComponents(new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(`# <${message.author.id}>'s Application \`${message.author.id}\``)).setThumbnailAccessory(new ThumbnailBuilder().setURL(`https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`))).addTextDisplayComponents(new TextDisplayBuilder().setContent(applicationFields))]});
 
-        await message.reply("Your application has been verified and sent.");
+        await message.reply(":white_check_mark: **Your application has been submitted!**");
       } catch (err) {
         console.error("Error verifying application:", err);
-        await message.reply(":x: Something went wrong verifying your application.");
+        await message.reply(":x: An error occurred. If this happens again, please message staff.");
       }
     }
   },
