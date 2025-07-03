@@ -35,10 +35,20 @@ app.post('/newapplication', async (req, res) => {
 
     let applicationFields = Object.entries(application)
       .map(([q, a]) => {
-        let cleanAnswer = String(a || '')
-          .replace(/\*/g, '')
-          .trim();
-        return `-# **${q}**\n- ${cleanAnswer}`;
+        let cleanAnswer;
+    
+        if (Array.isArray(a)) {
+          cleanAnswer = a
+            .map(item => String(item).replace(/\*/g, '').trim())
+            .join('\n- ');
+          cleanAnswer = '- ' + cleanAnswer;
+        } else {
+          cleanAnswer = String(a || '')
+            .replace(/\*/g, '')
+            .trim();
+        }
+    
+        return `-# **${q}**\n${cleanAnswer}`;
       })
       .join("\n\n");
 
