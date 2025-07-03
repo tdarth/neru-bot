@@ -1,5 +1,6 @@
 const { Events, MessageFlags, ContainerBuilder, TextDisplayBuilder, SectionBuilder, ThumbnailBuilder } = require('discord.js');
 const { modApplicationsChannelId } = require('../config.json');
+const replyWithText = require('../utils/replyWithText');
 
 const codeRegex = /^[a-z0-9]{8}$/i;
 const ACCESS_TOKEN = process.env.APPLICATIONS_ACCESS_TOKEN;
@@ -35,41 +36,39 @@ module.exports = {
         const res = await fetch(url);
         const text = await res.text();
 
-        if (!res.ok) {
-          await message.reply(":x: Invalid verification code or no matching application.");
-          return;
-        }
+        if (!res.ok) return await replyWithText(message, ":x: **Invalid verification code.**");
 
         const application = JSON.parse(text);
 
         const channel = await message.client.channels.fetch(modApplicationsChannelId);
-        if (!channel || !channel.isTextBased()) return;
+        if (!channel) return;
 
         let applicationFields = Object.entries(application)
-              .map(([q, a]) => {
-                let cleanAnswer;
-            
-                if (Array.isArray(a)) {
-                  cleanAnswer = a
-                    .map(item => String(item).replace(/\*/g, '').trim())
-                    .join('\n- ');
-                  cleanAnswer = '- ' + cleanAnswer;
-                } else {
-                  cleanAnswer = String(a || '')
-                    .replace(/\*/g, '')
-                    .trim();
-                }
-            
-                return `-# **${q}**\n${cleanAnswer}`;
-              })
-              .join("\n\n");
+          .map(([q, a]) => {
+            let cleanAnswer;
 
-        await channel.send({flags: MessageFlags.IsComponentsV2, components: [new ContainerBuilder().addSectionComponents(new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(`# <${message.author.id}>'s Application \`${message.author.id}\``)).setThumbnailAccessory(new ThumbnailBuilder().setURL(`https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`))).addTextDisplayComponents(new TextDisplayBuilder().setContent(applicationFields))]});
+            if (Array.isArray(a)) {
+              cleanAnswer = a
+                .map(item => String(item).replace(/\*/g, '').trim())
+                .join('\n-# **');
+              cleanAnswer = '-# **' + cleanAnswer + '**';
+            } else {
+              cleanAnswer = String(a || '')
+                .replace(/\*/g, '')
+                .trim();
+              cleanAnswer = '-# **' + cleanAnswer + '**';
+            }
 
-        await message.reply(":white_check_mark: **Your application has been submitted!**");
+            return `**${q}**\n${cleanAnswer}`;
+          })
+          .join("\n\n");
+
+
+        await channel.send({ flags: MessageFlags.IsComponentsV2, components: [new ContainerBuilder().addSectionComponents(new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(`# <@${message.author.id}>'s Application \`${message.author.id}\``)).setThumbnailAccessory(new ThumbnailBuilder().setURL(`https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`))).addTextDisplayComponents(new TextDisplayBuilder().setContent(applicationFields))] });
+        replyWithText(message, ":white_check_mark: **Your application has been submitted.**");
       } catch (err) {
         console.error("Error verifying application:", err);
-        await message.reply(":x: An error occurred. If this happens again, please message staff.");
+        replyWithText(message, ":x: **An error occurred. If this happens again, please message staff.**");
       }
     }
   },
