@@ -21,7 +21,7 @@ module.exports = {
       }
     }
 
-    if (message.channel.type !== 1) {
+    if (message.channel.type === 1) {
       const verifyCode = message.content.trim();
       if (!codeRegex.test(verifyCode)) return;
       const username = message.author.username;
