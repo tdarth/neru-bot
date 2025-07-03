@@ -45,26 +45,27 @@ module.exports = {
 
         let applicationFields = Object.entries(application)
           .map(([q, a]) => {
+            const cleanQuestion = q.replace(/\s*\n\s*/g, ' ').trim();
+        
             let cleanAnswer;
-
+        
             if (Array.isArray(a)) {
               cleanAnswer = a
                 .map(item => String(item).replace(/\*/g, '').trim())
-                .join('\n-# **');
-              cleanAnswer = '-# **' + cleanAnswer + '**';
+                .join('\n- ');
+              cleanAnswer = '- ' + cleanAnswer;
             } else {
               cleanAnswer = String(a || '')
                 .replace(/\*/g, '')
                 .trim();
-              cleanAnswer = '-# **' + cleanAnswer + '**';
+              cleanAnswer = '- ' + cleanAnswer;
             }
-
-            return `**${q}**\n${cleanAnswer}`;
+        
+            return `-# **${cleanQuestion}**\n${cleanAnswer}`;
           })
           .join("\n\n");
 
-
-        await channel.send({ flags: MessageFlags.IsComponentsV2, components: [new ContainerBuilder().addSectionComponents(new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(`# <@${message.author.id}>'s Application \`${message.author.id}\``)).setThumbnailAccessory(new ThumbnailBuilder().setURL(`https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`))).addTextDisplayComponents(new TextDisplayBuilder().setContent(applicationFields))] });
+        await channel.send({ flags: MessageFlags.IsComponentsV2, components: [new ContainerBuilder().addSectionComponents(new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(`# <@${message.author.id}>'s Application \`${message.author.id}\``)).setThumbnailAccessory(new ThumbnailBuilder().setURL(`https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`))).addTextDisplayComponents(new TextDisplayBuilder().setContent(applicationFields))], allowedMentions: { parse: [] } });
         replyWithText(message, ":white_check_mark: **Your application has been submitted.**");
       } catch (err) {
         console.error("Error verifying application:", err);
