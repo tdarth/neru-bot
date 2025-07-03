@@ -34,7 +34,12 @@ app.post('/newapplication', async (req, res) => {
     }
 
     let applicationFields = Object.entries(application)
-      .map(([q, a]) => `-# **${q}**\n- ${a}`)
+      .map(([q, a]) => {
+        const cleanAnswer = a
+          .replace(/\*/g, '')
+          .trim();
+        return `-# **${q}**\n- ${cleanAnswer}`;
+      })
       .join("\n\n");
 
     await user.send({flags: MessageFlags.IsComponentsV2, components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(applicationFields)).addSeparatorComponents(new SeparatorBuilder()).addTextDisplayComponents(new TextDisplayBuilder().setContent(`If this application was sent by you, please type \`${verifyCode}\` in this DM.`))]});
