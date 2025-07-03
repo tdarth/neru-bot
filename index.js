@@ -55,7 +55,7 @@ app.post('/newapplication', async (req, res) => {
         })
         .join("\n\n");
 
-    await user.send({ flags: MessageFlags.IsComponentsV2, components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(applicationFields)).addSeparatorComponents(new SeparatorBuilder()).addTextDisplayComponents(new TextDisplayBuilder().setContent(`If this application was sent by you, please type \`${verifyCode}\` in this DM.`))] });
+    await user.send({ flags: MessageFlags.IsComponentsV2, components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(applicationFields)).addSeparatorComponents(new SeparatorBuilder()).addTextDisplayComponents(new TextDisplayBuilder().setContent(`:warning: If this application was sent by you, please type \`${verifyCode}\` in this DM.`))] });
 
     return res.status(200).json({ success: true });
   } catch (err) {
