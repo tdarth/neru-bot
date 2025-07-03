@@ -51,7 +51,7 @@ app.listen(PORT, () => {
 
 identifyProperties.browser = "Discord iOS";
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.DirectMessages], partials: ["CHANNEL"] });
 
 client.commands = new Collection();
 
