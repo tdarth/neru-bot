@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const express = require('express');
-const { Client, GatewayIntentBits, Collection } = require('discord.js');
+const { Client, GatewayIntentBits, Collection, MessageFlags, ContainerBuilder, TextDisplayBuilder, SeparatorBuilder } = require('discord.js');
 const { DefaultWebSocketManagerOptions: { identifyProperties } } = require("@discordjs/ws");
 
 const loadTriggers = require('./utils/triggerCommandLoader');
@@ -33,9 +33,11 @@ app.post('/newapplication', async (req, res) => {
       return res.status(404).json({ error: "Discord user not found" });
     }
 
-    await user.send(
-      `Your application was received.\nPlease type this code into this DM:\n\n**${verifyCode}**`
-    );
+    let applicationFields = Object.entries(application)
+      .map(([q, a]) => `-# **${q}**\n- ${a}`)
+      .join("\n\n");
+
+    await user.send({flags: MessageFlags.IsComponentsV2, components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(applicationFields)).addSeparatorComponents(new SeparatorBuilder()).addTextDisplayComponents(new TextDisplayBuilder().setContent(`If this application was sent by you, please type \`${verifyCode}\` in this DM.`))]});
 
     return res.status(200).json({ success: true });
   } catch (err) {
