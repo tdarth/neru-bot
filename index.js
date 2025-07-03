@@ -35,21 +35,23 @@ app.post('/newapplication', async (req, res) => {
 
       let applicationFields = Object.entries(application)
         .map(([q, a]) => {
+          const cleanQuestion = q.replace(/\s*\n\s*/g, ' ').trim();
+      
           let cleanAnswer;
-
+      
           if (Array.isArray(a)) {
             cleanAnswer = a
               .map(item => String(item).replace(/\*/g, '').trim())
-              .join('\n-# **');
-            cleanAnswer = '-# **' + cleanAnswer + '**';
+              .join('\n- ');
+            cleanAnswer = '- ' + cleanAnswer;
           } else {
             cleanAnswer = String(a || '')
               .replace(/\*/g, '')
               .trim();
-            cleanAnswer = '-# **' + cleanAnswer + '**';
+            cleanAnswer = '- ' + cleanAnswer;
           }
-
-          return `**${q}**\n${cleanAnswer}`;
+      
+          return `-# **${cleanQuestion}**\n${cleanAnswer}`;
         })
         .join("\n\n");
 
