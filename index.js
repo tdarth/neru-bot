@@ -35,7 +35,7 @@ app.post('/newapplication', async (req, res) => {
 
     let applicationFields = Object.entries(application)
       .map(([q, a]) => {
-        const cleanAnswer = a
+        let cleanAnswer = String(a || '')
           .replace(/\*/g, '')
           .trim();
         return `-# **${q}**\n- ${cleanAnswer}`;
