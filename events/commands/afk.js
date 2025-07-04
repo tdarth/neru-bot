@@ -22,8 +22,9 @@ module.exports = {
         })
             .then(response => {
                 if (!response.ok) {
-                  console.log(`AFK Error: ${JSON.stringify(response)}`);
-                  return replyWithText(message, `:x: **An error occurred while setting your AFK status. #2**`);
+                    const errorText = await response.text();
+                    console.log(`AFK Error (${response.status}): ${errorText}`);
+                    return replyWithText(message, `:x: **An error occurred while setting your AFK status. #2**`);
                 }
                 message.reply({
                     flags: MessageFlags.IsComponentsV2,
