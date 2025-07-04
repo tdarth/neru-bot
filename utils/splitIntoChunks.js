@@ -21,6 +21,4 @@ function splitIntoChunks(str, maxLength) {
   return chunks;
 }
 
-module.exports
-
 module.exports = splitIntoChunks;
