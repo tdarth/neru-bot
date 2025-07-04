@@ -5,6 +5,7 @@ const { Client, GatewayIntentBits, Collection, MessageFlags, ContainerBuilder, T
 const { DefaultWebSocketManagerOptions: { identifyProperties } } = require("@discordjs/ws");
 
 const loadTriggers = require('./utils/triggerCommandLoader');
+const splitIntoChunks = require('./utils/splitIntoChunks');
 const app = express();
 
 app.use(express.json());
@@ -33,29 +34,44 @@ app.post('/newapplication', async (req, res) => {
       return res.status(404).json({ error: "Discord user not found" });
     }
 
-      let applicationFields = Object.entries(application)
-        .map(([q, a]) => {
-          const cleanQuestion = q.replace(/\s*\n\s*/g, ' ').trim();
-      
-          let cleanAnswer;
-      
-          if (Array.isArray(a)) {
-            cleanAnswer = a
-              .map(item => String(item).replace(/\*/g, '').trim())
-              .join('\n- ');
-            cleanAnswer = '- ' + cleanAnswer;
-          } else {
-            cleanAnswer = String(a || '')
-              .replace(/\*/g, '')
-              .trim();
-            cleanAnswer = '- ' + cleanAnswer;
-          }
-      
-          return `-# **${cleanQuestion}**\n${cleanAnswer}`;
-        })
-        .join("\n\n");
+    let applicationFields = Object.entries(application)
+      .map(([q, a]) => {
+        const cleanQuestion = q.replace(/\s*\n\s*/g, ' ').trim();
 
-    await user.send({ flags: MessageFlags.IsComponentsV2, components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(applicationFields)).addSeparatorComponents(new SeparatorBuilder()).addTextDisplayComponents(new TextDisplayBuilder().setContent(`:warning: If this application was sent by you, please type \`${verifyCode}\` in this DM.`))] });
+        let cleanAnswer;
+
+        if (Array.isArray(a)) {
+          cleanAnswer = a
+            .map(item => String(item).replace(/\*/g, '').trim())
+            .join('\n- ');
+          cleanAnswer = '- ' + cleanAnswer;
+        } else {
+          cleanAnswer = String(a || '')
+            .replace(/\*/g, '')
+            .trim();
+          cleanAnswer = '- ' + cleanAnswer;
+        }
+
+        return `-# **${cleanQuestion}**\n${cleanAnswer}`;
+      })
+      .join("\n\n");
+
+    const chunks = splitIntoChunks(applicationFields, 3900);
+
+    for (const chunk of chunks) {
+      await user.send({
+        flags: MessageFlags.IsComponentsV2,
+        components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(chunk))]
+      });
+    }
+
+    await user.send({
+      flags: MessageFlags.IsComponentsV2,
+      components: [new ContainerBuilder()
+        .addSeparatorComponents(new SeparatorBuilder())
+        .addTextDisplayComponents(new TextDisplayBuilder()
+          .setContent(`:warning: If this application was sent by you, please type \`${verifyCode}\` in this DM.`))]
+    });
 
     return res.status(200).json({ success: true });
   } catch (err) {
