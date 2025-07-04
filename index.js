@@ -127,5 +127,5 @@ for (const file of eventFiles) {
 
 loadTriggers(client);
 
-
+console.log("Attempting to login..");
 client.login(token);
