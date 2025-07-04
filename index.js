@@ -129,3 +129,5 @@ loadTriggers(client);
 
 console.log("Attempting to login..");
 client.login(token);
+  .then(() => console.log("Login success"))
+  .catch(err => console.error("Login error:", err));
