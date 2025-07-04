@@ -21,7 +21,10 @@ module.exports = {
             })
         })
             .then(response => {
-                if (!response.ok) return replyWithText(message, `:x: **An error occurred while setting your AFK status.**`);
+                if (!response.ok) {
+                  console.log(`AFK Error: ${JSON.stringify(response)}`);
+                  return replyWithText(message, `:x: **An error occurred while setting your AFK status. #2**`);
+                }
                 message.reply({
                     flags: MessageFlags.IsComponentsV2,
                     components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(afkReason)).addSeparatorComponents(new SeparatorBuilder()).addTextDisplayComponents(new TextDisplayBuilder().setContent(`-# Sending a message will automatically clear your AFK status.`))]
