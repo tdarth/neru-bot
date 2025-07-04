@@ -1,6 +1,7 @@
 const { Events, MessageFlags, ContainerBuilder, TextDisplayBuilder, SectionBuilder, ThumbnailBuilder } = require('discord.js');
 const { modApplicationsChannelId } = require('../config.json');
 const replyWithText = require('../utils/replyWithText');
+const splitIntoChunks = require('../utils/splitIntoChunks');
 
 const codeRegex = /^[a-z0-9]{8}$/i;
 const ACCESS_TOKEN = process.env.APPLICATIONS_ACCESS_TOKEN;
@@ -67,7 +68,38 @@ module.exports = {
           })
           .join("\n\n");
 
-        await channel.send({ flags: MessageFlags.IsComponentsV2, components: [new ContainerBuilder().addSectionComponents(new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(`# <@${message.author.id}>'s Application \`${message.author.id}\``)).setThumbnailAccessory(new ThumbnailBuilder().setURL(`https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`))).addTextDisplayComponents(new TextDisplayBuilder().setContent(applicationFields))], allowedMentions: { parse: [] } });
+        const headerContainer = new ContainerBuilder()
+          .addSectionComponents(
+            new SectionBuilder()
+              .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(`# <@${message.author.id}>'s Application \`${message.author.id}\``)
+              )
+              .setThumbnailAccessory(
+                new ThumbnailBuilder().setURL(`https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.png`)
+              )
+          );
+        
+        const chunks = splitIntoChunks(applicationFields, 3900);
+        
+        await channel.send({
+          flags: MessageFlags.IsComponentsV2,
+          components: [
+            headerContainer,
+            new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(chunks[0]))
+          ],
+          allowedMentions: { parse: [] }
+        });
+        
+        for (let i = 1; i < chunks.length; i++) {
+          await channel.send({
+            flags: MessageFlags.IsComponentsV2,
+            components: [
+              new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(chunks[i]))
+            ],
+            allowedMentions: { parse: [] }
+          });
+        }
+
         replyWithText(message, ":white_check_mark: **Your application has been submitted.**");
       } catch (err) {
         console.error("Error verifying application:", err);
