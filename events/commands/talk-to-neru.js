@@ -17,7 +17,7 @@ module.exports = {
     name: 'talk-to-neru',
     trigger: (message) => message.content.startsWith(`<@${clientId}>`),
     async execute(message) {
-        if (!message.member.roles.cache.some(role => staffRoles.includes(role.id) || role.id === "1370622872728506469")) { return await replyWithText(message, ":x: You do not have permission to use this command."); }
+        if (!message.member.roles.cache.some(role => staffRoles.includes(role.id) || role.id === "1370622872728506469")) { return await replyWithText(message, ":x: **You do not have permission to use this command.**"); }
 
         const messagePrompt = message.content.replace(`<@${clientId}>`, '').trim();
         if (!messagePrompt && message.attachments.size === 0) {
