@@ -9,34 +9,31 @@ module.exports = {
     trigger: (message) => message.content.startsWith(`${prefix}afk`),
     async execute(message) {
         let afkReason = message.content.replace(/(.*)afk/i, '').trim();
-        if (afkReason == "") afkReason = "No reason specified."
+        if (afkReason == "") afkReason = "No reason specified.";
 
-        fetch(`https://bakabakabakaafkusers.tdarthh.workers.dev/makeafk`, {
-            method: "POST",
-            body: JSON.stringify({
-                "userid": message.author.id,
-                "username": message.member?.nickname || message.author.globalName,
-                "reason": afkReason,
-                "access_token": afkStorageApiKey
-            })
-        })
-            .then(response => {
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.log(`AFK Error (${response.status}): ${errorText}`);
-                    return replyWithText(message, `:x: **An error occurred while setting your AFK status. #2**`);
-                }
-                message.reply({
-                    flags: MessageFlags.IsComponentsV2,
-                    components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(afkReason)).addSeparatorComponents(new SeparatorBuilder()).addTextDisplayComponents(new TextDisplayBuilder().setContent(`-# Sending a message will automatically clear your AFK status.`))]
-                });
+        try {
+            const response = await fetch(`https://bakabakabakaafkusers.tdarthh.workers.dev/makeafk`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userid: message.author.id,
+                    username: message.member?.nickname || message.author.globalName,
+                    reason: afkReason,
+                    access_token: afkStorageApiKey
+                })
+            });
 
-                if (`[AFK] ${message.member.nickname || message.author.globalName}`.length >= 32) return;
-                message.member.setNickname(`[AFK] ${message.member.nickname || message.author.globalName}`).catch(error => { });
-            })
-            .catch(error => {
-                replyWithText(message, `:x: **An error occurred while setting your AFK status.**`);
-                console.log(`${error} while setting AFK status`);
-            })
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.log(`AFK Error (${response.status}): ${errorText}`);
+                return replyWithText(message, `:x: **An error occurred while setting your AFK status. #2**`);
+            }
+
+            await message.reply({ flags: MessageFlags.IsComponentsV2, components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(afkReason)).addSeparatorComponents(new SeparatorBuilder()).addTextDisplayComponents(new TextDisplayBuilder().setContent(`-# Sending a message will automatically clear your AFK status.`))] });
+            if (`[AFK] ${message.member.nickname || message.author.globalName}`.length < 32) await message.member.setNickname(`[AFK] ${message.member.nickname || message.author.globalName}`).catch(() => {});
+        } catch (error) {
+            replyWithText(message, `:x: **An error occurred while setting your AFK status.**`);
+            console.log(`${error} while setting AFK status`);
+        }
     },
 };
