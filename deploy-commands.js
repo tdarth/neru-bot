@@ -5,7 +5,13 @@ const path = require('node:path');
 
 const commands = [];
 const foldersPath = path.join(__dirname, 'commands');
-const commandFolders = fs.readdirSync(foldersPath).filter(item => item !== ".DS_Store");
+
+let commandFolders = [];
+if (fs.existsSync(foldersPath)) {
+    commandFolders = fs.readdirSync(foldersPath).filter(item => item !== ".DS_Store");
+} else {
+    console.log("Commands folder does not exist. Will unregister all commands.");
+}
 
 const token = process.env.TOKEN;
 
