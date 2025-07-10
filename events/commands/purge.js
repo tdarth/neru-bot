@@ -36,7 +36,7 @@ module.exports = {
                     const channelName = message.channel.name;
                     const messageId = msg.id;
                     const timestamp = msg.createdAt.toISOString().replace('T', ' ').substring(0, 19);
-                    const username = msg.member?.displayName || msg.author.username;
+                    const username = msg.author.username;
                     const content = msg.content.replace(/\n/g, " ");
                     deletedMessagesArchive.push(`[${channelName}] [${messageId}] [${timestamp}] ${username}: ${content}`);
                 });
