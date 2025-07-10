@@ -29,7 +29,13 @@ const rest = new REST().setToken(token);
     try {
         console.log(`Started refreshing ${commands.length} application (/) commands in guild ${guildId}`);
 
-        const data = await rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands });
+        let data;
+        if (commands.length === 0) {
+            console.log('No commands found. Clearing..');
+            data = await rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: [] });
+        } else {
+            data = await rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands });
+        }
 
         console.log(`Successfully reloaded ${data.length} application (/) commands.`);
     } catch (error) {
