@@ -37,19 +37,13 @@ app.post('/newapplication', async (req, res) => {
     let applicationFields = Object.entries(application)
       .map(([q, a]) => {
         const cleanQuestion = q.replace(/\s*\n\s*/g, ' ').trim();
-
         let cleanAnswer;
 
         if (Array.isArray(a)) {
-          cleanAnswer = a
-            .map(item => String(item).replace(/\*/g, '').trim())
-            .join('\n- ');
+          cleanAnswer = a.map(item => String(item).replace(/\*/g, '').trim()).join('\n- ');
           cleanAnswer = '- ' + cleanAnswer;
         } else {
-          cleanAnswer = String(a || '')
-            .replace(/\*/g, '')
-            .trim();
-          cleanAnswer = '- ' + cleanAnswer;
+          cleanAnswer = '- ' + String(a || '').replace(/\*/g, '').trim();
         }
 
         return `-# **${cleanQuestion}**\n${cleanAnswer}`;
@@ -87,42 +81,60 @@ app.listen(PORT, () => {
 
 identifyProperties.browser = "Discord iOS";
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.DirectMessages], partials: ["CHANNEL"] });
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.DirectMessages
+  ],
+  partials: ["CHANNEL"]
+});
 
 client.commands = new Collection();
 
 const foldersPath = path.join(__dirname, 'commands');
-const commandFolders = fs.readdirSync(foldersPath).filter(item => item !== ".DS_Store");
+if (fs.existsSync(foldersPath)) {
+  const commandFolders = fs.readdirSync(foldersPath).filter(item => item !== ".DS_Store");
 
-for (const folder of commandFolders) {
-  const commandsPath = path.join(foldersPath, folder);
-  const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+  for (const folder of commandFolders) {
+    const commandsPath = path.join(foldersPath, folder);
+    if (!fs.existsSync(commandsPath)) continue;
 
-  for (const file of commandFiles) {
-    const filePath = path.join(commandsPath, file);
-    const command = require(filePath);
+    const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
-    if ('data' in command && 'execute' in command) {
-      client.commands.set(command.data.name, command);
-    } else {
-      console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+    for (const file of commandFiles) {
+      const filePath = path.join(commandsPath, file);
+      const command = require(filePath);
+
+      if ('data' in command && 'execute' in command) {
+        client.commands.set(command.data.name, command);
+      } else {
+        console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+      }
     }
   }
+} else {
+  console.log("No commands folder found. Skipping command loading.");
 }
 
 const eventsPath = path.join(__dirname, 'events');
-const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+if (fs.existsSync(eventsPath)) {
+  const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
-for (const file of eventFiles) {
-  const filePath = path.join(eventsPath, file);
-  const event = require(filePath);
-  console.log(`Loading event: ${filePath}`);
+  for (const file of eventFiles) {
+    const filePath = path.join(eventsPath, file);
+    const event = require(filePath);
+    console.log(`Loading event: ${filePath}`);
 
-  if (event.once) {
-    client.once(event.name, (...args) => event.execute(...args));
-  } else {
-    client.on(event.name, (...args) => event.execute(...args));
+    if (event.once) {
+      client.once(event.name, (...args) => event.execute(...args));
+    } else {
+      client.on(event.name, (...args) => event.execute(...args));
+    }
   }
+} else {
+  console.log("No events folder found. Skipping event loading.");
 }
 
 loadTriggers(client);
