@@ -25,7 +25,18 @@ module.exports = {
 
             if (!response.ok) {
                 const errorText = await response.text();
-                console.log(`AFK Error (${response.status}): ${errorText}`);
+                console.error("AFK API Error", {
+                    status: response.status,
+                    statusText: response.statusText,
+                    responseHeaders: Object.fromEntries(response.headers.entries()),
+                    errorText,
+                    sentBody: {
+                        userid: message.author.id,
+                        username: message.member?.nickname || message.author.globalName,
+                        reason: afkReason
+                    }
+                });
+            
                 return replyWithText(message, `:x: **An error occurred while setting your AFK status. #2**`);
             }
 
