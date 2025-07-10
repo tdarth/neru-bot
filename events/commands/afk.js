@@ -17,7 +17,7 @@ module.exports = {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     userid: message.author.id,
-                    username: message.member?.nickname || message.author.globalName,
+                    username: message.member?.nickname || message.author.username,
                     reason: afkReason,
                     access_token: afkStorageApiKey
                 })
