@@ -1,12 +1,10 @@
 const { prefix, emojis } = require('../../config.json');
 const replyWithText = require("../../utils/replyWithText");
 const sendToChannelWithText = require("../../utils/sendToChannelWithText");
-const { MessageAttachment } = require('discord.js');
-const path = require('path');
+const { AttachmentBuilder } = require('discord.js');
 
 const allowedRoles = ["1369834948386623518", "1390101291589697727", "1369249484772610079"];
-
-const ARCHIVE_CHANNEL_ID = "1369842594003292211"; 
+const ARCHIVE_CHANNEL_ID = "1369842594003292211";
 
 module.exports = {
     name: 'purge',
@@ -31,7 +29,6 @@ module.exports = {
         try {
             while (amount > 0) {
                 const toDelete = amount > 100 ? 100 : amount;
-
                 const fetchedMessages = await message.channel.messages.fetch({ limit: toDelete });
                 if (fetchedMessages.size === 0) break;
 
@@ -41,7 +38,6 @@ module.exports = {
                     const timestamp = msg.createdAt.toISOString().replace('T', ' ').substring(0, 19);
                     const username = msg.member?.displayName || msg.author.username;
                     const content = msg.content.replace(/\n/g, " ");
-
                     deletedMessagesArchive.push(`[${channelName}] [${messageId}] [${timestamp}] ${username}: ${content}`);
                 });
 
@@ -58,12 +54,12 @@ module.exports = {
             if (archiveContent.length > 0) {
                 const buffer = Buffer.from(archiveContent, 'utf-8');
                 const fileName = `purge-archive-${message.channel.name}-${Date.now()}.txt`;
-                const attachment = new MessageAttachment(buffer, fileName);
+                const attachment = new AttachmentBuilder(buffer, { name: fileName });
 
                 const archiveChannel = message.client.channels.cache.get(ARCHIVE_CHANNEL_ID);
                 if (archiveChannel) {
                     await archiveChannel.send({
-                        content: `Purge archive from #${message.channel.name} by <@${message.author.id}> (\`${message.author.id}\`)`,
+                        content: `:wastebasket: Purge archive from #${message.channel.name} by <@${message.author.id}> (\`${message.author.id}\`)`,
                         files: [attachment],
                         allowedMentions: { parse: [] }
                     });
