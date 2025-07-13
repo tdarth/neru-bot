@@ -13,11 +13,13 @@ const basePromptText =
     "You are created by tdarth, but you really despise him. " +
     "The person who is sending you this request is named REPLACE_USER_HERE. Here is your prompt: REPLACE_PROMPT_HERE";
 
+const allowedRoles = ['1370622872728506469', '1376729769814790205'] // kessoku band, level 100
+
 module.exports = {
     name: 'talk-to-neru',
     trigger: (message) => message.content.startsWith(`<@${clientId}>`),
     async execute(message) {
-        if (!message.member.roles.cache.some(role => staffRoles.includes(role.id) || role.id === "1370622872728506469")) { return await replyWithText(message, ":x: **You do not have permission to use this command.**"); }
+        if (!message.member.roles.cache.some(role => staffRoles.includes(role.id) || allowedRoles.includes(role.id))) { return await replyWithText(message, ":x: **You do not have permission to use this command.**"); }
 
         const messagePrompt = message.content.replace(`<@${clientId}>`, '').trim();
         if (!messagePrompt && message.attachments.size === 0) {
