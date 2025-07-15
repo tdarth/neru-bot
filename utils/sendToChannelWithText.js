@@ -6,5 +6,4 @@ async function sendToChannelWithText(client, id, content) {
     await client.channels.cache.get(id)?.send({ flags: MessageFlags.IsComponentsV2, components: [container] });
 }
 
-
 module.exports = sendToChannelWithText;

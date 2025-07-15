@@ -1,3 +1,4 @@
+require('dotenv').config();
 const fs = require('node:fs');
 const path = require('node:path');
 const express = require('express');
@@ -62,7 +63,6 @@ app.post('/newapplication', async (req, res) => {
     await user.send({
       flags: MessageFlags.IsComponentsV2,
       components: [new ContainerBuilder()
-        .addSeparatorComponents(new SeparatorBuilder())
         .addTextDisplayComponents(new TextDisplayBuilder()
           .setContent(`:warning: If this application was sent by you, please type \`${verifyCode}\` in this DM.`))]
     });

@@ -1,4 +1,3 @@
-
 module.exports = {
     name: 'job',
     trigger: (message) => message.content.toLowerCase() == 'job',
