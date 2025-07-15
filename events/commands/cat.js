@@ -6,10 +6,17 @@ module.exports = {
     name: 'cat',
     trigger: (message) => message.content.startsWith(`${prefix}cat`),
     async execute(message) {
-        let catAmount = message.content.replaceAll(`${prefix}cat`, '').trim() || 1;
-        if (catAmount > 40) catAmount = 40;
+        const container = new ContainerBuilder();
 
-        if (isNaN(catAmount)) return replyWithText(message, `:x: **?cat <1-40>**`);
+        let catAmount = message.content.replaceAll(`${prefix}cat`, '').trim() || 1;
+        if (catAmount > 39) catAmount = 39;
+
+        if (message.channel.id !== '1369383513132105874' && catAmount > 1) {
+            catAmount = 1;
+            container.addTextDisplayComponents(new TextDisplayBuilder().setContent(':warning: **You can only specify a value above 1 in <#1369383513132105874>**.'))
+        }
+
+        if (isNaN(catAmount)) return replyWithText(message, `:x: **?cat <1-39>**`);
 
         await message.channel.sendTyping();
 
@@ -17,7 +24,6 @@ module.exports = {
         if (!response.ok) { console.log(`Cat Command Error: ${response.status} ${response.statusText}`); replyWithText(message, `:x: **An error occurred.**`); }
 
         const data = await response.json();
-        const container = new ContainerBuilder();
 
         for (const cat of data) {
             container.addMediaGalleryComponents(
@@ -32,9 +38,9 @@ module.exports = {
             )
         }
 
-        message.reply({
+        await message.reply({
             flags: MessageFlags.IsComponentsV2,
             components: [container]
-        })
+        }).catch(error => replyWithText(message, `:x: **An error occurred.**`) | console.log(`Cat Command Error: ${error}`))
     },
 };
