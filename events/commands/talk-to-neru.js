@@ -1,4 +1,4 @@
-const { ContainerBuilder, TextDisplayBuilder } = require('discord.js');
+const { ContainerBuilder, TextDisplayBuilder, MessageFlags } = require('discord.js');
 const { clientId, staffRoles } = require('../../config.json');
 const replyWithText = require("../../utils/replyWithText");
 
