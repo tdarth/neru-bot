@@ -6,13 +6,11 @@ module.exports = {
     name: 'afk',
     trigger: (message) => message.content.startsWith(`${prefix}afk`),
     async execute(message) {
-        let afkReason = message.content.replace(/(.*)afk/i, '').trim();
-        if (afkReason == "") afkReason = "No reason specified.";
+        let afkReason = message.content.replace(/(.*)afk/i, '').trim() || "No reason specified.";
 
         setAfkUser(message.author.id, { username: message.member?.nickname || message.author.username, reason: afkReason, setAt: Date.now() })
 
         await message.reply({ flags: MessageFlags.IsComponentsV2, components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(afkReason)).addSeparatorComponents(new SeparatorBuilder()).addTextDisplayComponents(new TextDisplayBuilder().setContent(`-# Sending a message will automatically clear your AFK status.`))] });
         if (`[AFK] ${message.member.nickname || message.author.globalName}`.length < 32) await message.member.setNickname(`[AFK] ${message.member.nickname || message.author.globalName}`).catch(() => { });
-
     },
 };

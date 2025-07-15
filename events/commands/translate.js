@@ -64,9 +64,7 @@ module.exports = {
             }
         }
 
-        if (!textToTranslate) {
-            textToTranslate = message.content.slice(prefix.length + "translate".length).trim();
-        }
+        textToTranslate = textToTranslate || message.content.slice(prefix.length + "translate".length).trim();
 
         if (!textToTranslate) {
             return await replyWithText(message, ":warning: Please reply to a message or provide text to translate.");
