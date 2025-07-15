@@ -1,5 +1,5 @@
 const { ContainerBuilder, TextDisplayBuilder, MessageFlags } = require('discord.js');
-const { clientId, staffRoles } = require('../../config.json');
+const { clientId, staffRoles, levelRoles } = require('../../config.json');
 const replyWithText = require("../../utils/replyWithText");
 
 const geminiApiKey = process.env.GEMINI_API_KEY;
@@ -16,13 +16,25 @@ const basePromptText =
     "You are created by tdarth, but you really despise him. " +
     "The person who is sending you this request is named REPLACE_USER_HERE. Here is your prompt: REPLACE_PROMPT_HERE";
 
-const allowedRoles = ['1370622872728506469', '1376729769814790205', '1369250421016629288'] // kessoku band, level 100, booster
+const allowedRoles = ['1370622872728506469', levelRoles[100], levelRoles.Booster] // kessoku band, level 100, booster
 
 module.exports = {
     name: 'talk-to-neru',
     trigger: (message) => message.content.startsWith(`<@${clientId}>`),
     async execute(message) {
-        if (!message.member.roles.cache.some(role => staffRoles.includes(role.id) || allowedRoles.includes(role.id))) { return await replyWithText(message, ":x: **You do not have permission to use this command.**"); }
+        if (!message.member.roles.cache.some(role => staffRoles.includes(role.id) || allowedRoles.includes(role.id))) { 
+            return await message.reply({
+                flags: MessageFlags.IsComponentsV2,
+                components: [
+                    new ContainerBuilder()
+                        .addTextDisplayComponents(
+                            new TextDisplayBuilder()
+                                .setContent(`:x: **Using this command requires:** ${allowedRoles.map(role => `<@&${role}>`).join(", ")}.`)
+                        )
+                ],
+                allowedMentions: { repliedUser: true, parse: [] }
+            })
+        }
 
         const messagePrompt = message.content.replace(`<@${clientId}>`, '').trim();
         if (!messagePrompt && message.attachments.size === 0) {
