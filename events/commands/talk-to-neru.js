@@ -1,7 +1,10 @@
+const { ContainerBuilder, TextDisplayBuilder } = require('discord.js');
 const { clientId, staffRoles } = require('../../config.json');
 const replyWithText = require("../../utils/replyWithText");
 
 const geminiApiKey = process.env.GEMINI_API_KEY;
+
+const logging_channel = '1394518674710466571';
 
 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`;
 
@@ -87,7 +90,8 @@ module.exports = {
                 return await replyWithText(message, ":x: **An error occurred.**");
             }
 
-            return await replyWithText(message, aiResponse, message.author.id);
+            await replyWithText(message, aiResponse, message.author.id);
+            await message.client.channels.cache.get(logging_channel)?.send({ flags: MessageFlags.IsComponentsV2, components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(`<@${message.author.id}> (\`${message.author.id}\`) used prompt: \`${messagePrompt}\` ${message.url}`))] });
 
         } catch (error) {
             console.error('Fetch error:', error);
