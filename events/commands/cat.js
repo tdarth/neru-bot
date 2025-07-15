@@ -9,7 +9,9 @@ module.exports = {
         let catAmount = message.content.replaceAll(`${prefix}cat`, '').trim() || 1;
         if (catAmount > 40) catAmount = 40;
 
-        if (isNaN(catAmount)) return replyWithText(message, `:x: **?cat <number>**`);
+        if (isNaN(catAmount)) return replyWithText(message, `:x: **?cat <1-40>**`);
+
+        await message.channel.sendTyping();
 
         const response = await fetch(`https://api.thecatapi.com/v1/images/search?limit=${catAmount}&api_key=${process.env.CAT_API_KEY}`);
         if (!response.ok) { console.log(`Cat Command Error: ${response.status} ${response.statusText}`); replyWithText(message, `:x: **An error occurred.**`); }
