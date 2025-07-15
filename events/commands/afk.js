@@ -6,7 +6,7 @@ module.exports = {
     name: 'afk',
     trigger: (message) => message.content.startsWith(`${prefix}afk`),
     async execute(message) {
-        let afkReason = message.content.replace(/(.*)afk/i, '').trim() || "No reason specified.";
+        let afkReason = message.content.replace(`${prefix}afk`, '').trim() || "No reason specified.";
 
         setAfkUser(message.author.id, { username: message.member?.nickname || message.author.username, reason: afkReason, setAt: Date.now() })
 
