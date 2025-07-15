@@ -91,7 +91,7 @@ module.exports = {
             }
 
             await replyWithText(message, aiResponse, message.author.id);
-            await message.client.channels.cache.get(logging_channel)?.send({ flags: MessageFlags.IsComponentsV2, components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(`<@${message.author.id}> (\`${message.author.id}\`) used prompt: \`${messagePrompt}\` ${message.url}`))] });
+            await message.client.channels.cache.get(logging_channel)?.send({ flags: MessageFlags.IsComponentsV2, components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(`<@${message.author.id}> (\`${message.author.id}\`) used prompt: \`${messagePrompt}\` ${message.url}`))], allowedMentions: { parse: [] } });
 
         } catch (error) {
             console.error('Fetch error:', error);
