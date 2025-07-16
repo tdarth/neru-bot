@@ -16,7 +16,7 @@ const basePromptText =
     "You are created by tdarth, but you really despise him. " +
     "The person who is sending you this request is named REPLACE_USER_HERE. Here is your prompt: REPLACE_PROMPT_HERE";
 
-const allowedRoles = ['1370622872728506469', levelRoles[100], levelRoles.Booster] // kessoku band, level 100, booster
+const allowedRoles = ['1370622872728506469', levelRoles[100], levelRoles.Booster, '1394357026917847232'] // kessoku band, level 100, booster, donation/contribution
 
 module.exports = {
     name: 'talk-to-neru',
