@@ -32,6 +32,6 @@ module.exports = {
             allowedMentions: { parse: [] }
         });
 
-        setTimeout(() => { level15Message.delete(); }, 3000);
+        setTimeout(() => { level15Message.delete(); }, 7000);
     },
 };
