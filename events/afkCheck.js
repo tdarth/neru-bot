@@ -32,7 +32,7 @@ module.exports = {
                 const refMsg = await message.channel.messages.fetch(message.reference.messageId);
                 repliedToId = refMsg.author.id;
             } catch (err) {
-                console.error('Fetch referenced message error:', err);
+                // probably fine
             }
         }
 
