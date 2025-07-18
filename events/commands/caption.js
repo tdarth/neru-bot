@@ -9,14 +9,21 @@ function splitTextWithEmojis(text) {
     const parts = [];
     let lastIndex = 0;
 
-    const emojiRegex = /\p{Extended_Pictographic}/gu;
+    const regex = /<a?:\w+:(\d+)>|\p{Extended_Pictographic}/gu;
 
     let match;
-    while ((match = emojiRegex.exec(text)) !== null) {
+    while ((match = regex.exec(text)) !== null) {
         if (match.index > lastIndex) {
             parts.push({ type: 'text', value: text.slice(lastIndex, match.index) });
         }
-        parts.push({ type: 'emoji', value: match[0] });
+
+        if (match[0].startsWith('<')) {
+            const animated = match[0].startsWith('<a:');
+            const id = match[1];
+            parts.push({ type: 'discord_emoji', id, animated });
+        } else {
+            parts.push({ type: 'emoji', value: match[0] });
+        }
         lastIndex = match.index + match[0].length;
     }
     if (lastIndex < text.length) {
@@ -31,7 +38,7 @@ async function measureLineWidth(ctx, parts, fontSize) {
     for (const part of parts) {
         if (part.type === 'text') {
             width += ctx.measureText(part.value).width;
-        } else if (part.type === 'emoji') {
+        } else if (part.type === 'emoji' || part.type === 'discord_emoji') {
             width += fontSize;
         }
     }
@@ -93,6 +100,18 @@ async function drawLineWithEmojis(ctx, parts, x, y, fontSize) {
             } catch (e) {
                 ctx.fillText(part.value, cursorX, y);
                 cursorX += ctx.measureText(part.value).width;
+            }
+        } else if (part.type === 'discord_emoji') {
+            const ext = part.animated ? 'gif' : 'png';
+            const url = `https://cdn.discordapp.com/emojis/${part.id}.${ext}`;
+            try {
+                const img = await loadImage(url);
+                const emojiSize = fontSize;
+                ctx.drawImage(img, cursorX, y, emojiSize, emojiSize);
+                cursorX += emojiSize;
+            } catch (e) {
+                ctx.fillText('?', cursorX, y);
+                cursorX += ctx.measureText('?').width;
             }
         }
     }
@@ -195,7 +214,7 @@ module.exports = {
                 for (const part of lineParts) {
                     if (part.type === 'text') {
                         lineWidth += canvasCtx.measureText(part.value).width;
-                    } else if (part.type === 'emoji') {
+                    } else if (part.type === 'emoji' || part.type === 'discord_emoji') {
                         lineWidth += fontSize;
                     }
                 }
