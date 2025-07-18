@@ -1,4 +1,3 @@
-const { MessageFlags, ContainerBuilder, TextDisplayBuilder, SeparatorBuilder, MediaGalleryBuilder } = require('discord.js');
 const { prefix } = require('../../config.json');
 const replyWithText = require('../../utils/replyWithText');
 const { AttachmentBuilder } = require('discord.js');
