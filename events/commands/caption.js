@@ -7,14 +7,13 @@ registerFont(path.join(__dirname, '../../assets/impact.ttf'), { family: 'Impact'
 
 function wrapText(ctx, text, maxWidth) {
     const words = text.split(' ');
-    let lines = [];
+    const lines = [];
     let currentLine = '';
 
     for (const word of words) {
         const testLine = currentLine ? currentLine + ' ' + word : word;
-        const { width: testWidth } = ctx.measureText(testLine);
-
-        if (testWidth > maxWidth && currentLine) {
+        const { width } = ctx.measureText(testLine);
+        if (width > maxWidth && currentLine) {
             lines.push(currentLine);
             currentLine = word;
         } else {
@@ -22,7 +21,6 @@ function wrapText(ctx, text, maxWidth) {
         }
     }
     if (currentLine) lines.push(currentLine);
-
     return lines;
 }
 
@@ -34,11 +32,9 @@ module.exports = {
         if (!caption) return await message.reply({
             flags: MessageFlags.IsComponentsV2,
             components: [
-                new ContainerBuilder()
-                    .addTextDisplayComponents(
-                        new TextDisplayBuilder()
-                            .setContent(`:x: **Usage: ${prefix}caption <text>**`)
-                    )
+                new ContainerBuilder().addTextDisplayComponents(
+                    new TextDisplayBuilder().setContent(`:x: **Usage: ${prefix}caption <text>**`)
+                )
             ]
         });
 
@@ -47,11 +43,9 @@ module.exports = {
             return await message.reply({
                 flags: MessageFlags.IsComponentsV2,
                 components: [
-                    new ContainerBuilder()
-                        .addTextDisplayComponents(
-                            new TextDisplayBuilder()
-                                .setContent(`:x: **No image uploaded.**`)
-                        )
+                    new ContainerBuilder().addTextDisplayComponents(
+                        new TextDisplayBuilder().setContent(`:x: **No image uploaded.**`)
+                    )
                 ]
             });
         }
@@ -59,40 +53,46 @@ module.exports = {
         const loadingMessage = await message.reply({
             flags: MessageFlags.IsComponentsV2,
             components: [
-                new ContainerBuilder()
-                    .addTextDisplayComponents(
-                        new TextDisplayBuilder()
-                            .setContent(`${emojis.loading} **Captioning..**`)
-                    )
+                new ContainerBuilder().addTextDisplayComponents(
+                    new TextDisplayBuilder().setContent(`${emojis.loading} **Captioning...**`)
+                )
             ]
         });
 
         try {
             const img = await loadImage(attachment.url);
             const canvasWidth = img.width;
-
-            let fontSize = Math.floor(canvasWidth / 10);
-            if (fontSize > 100) fontSize = 100;
-
             const ctx = createCanvas(0, 0).getContext('2d');
-            ctx.font = `bold ${fontSize}px Impact`;
 
             const maxTextWidth = canvasWidth * 0.9;
-            let lines = wrapText(ctx, caption, maxTextWidth);
+            const maxBorderHeight = img.height / 3;
+            const minFontSize = 18;
+            let fontSize = Math.floor(canvasWidth / 10);
+            let lines = [];
+            let textHeight = 0;
+            let lineHeight = 0;
+            let borderHeight = 0;
 
-            const lineHeight = fontSize * 1.2;
-            let textHeight = lines.length * lineHeight;
-
-            const maxBorderHeight = Math.max(img.height / 3, lineHeight * 3);
-            while (textHeight > maxBorderHeight && fontSize > 10) {
-                fontSize -= 2;
+            while (fontSize >= minFontSize) {
                 ctx.font = `bold ${fontSize}px Impact`;
                 lines = wrapText(ctx, caption, maxTextWidth);
-                const newLineHeight = fontSize * 1.2;
-                textHeight = lines.length * newLineHeight;
+                lineHeight = fontSize * 1.2;
+                textHeight = lines.length * lineHeight;
+                borderHeight = Math.ceil((textHeight + fontSize * 0.5) * 1.2);
+
+                if (borderHeight <= maxBorderHeight) break;
+
+                fontSize -= 2;
             }
 
-            const borderHeight = Math.ceil(textHeight + fontSize * 0.5);
+            if (fontSize < minFontSize) {
+                fontSize = minFontSize;
+                ctx.font = `bold ${fontSize}px Impact`;
+                lines = wrapText(ctx, caption, maxTextWidth);
+                lineHeight = fontSize * 1.2;
+                textHeight = lines.length * lineHeight;
+                borderHeight = Math.min(Math.ceil((textHeight + fontSize * 0.5) * 1.2), maxBorderHeight);
+            }
 
             const canvas = createCanvas(canvasWidth, img.height + borderHeight);
             const canvasCtx = canvas.getContext('2d');
@@ -108,7 +108,7 @@ module.exports = {
             const startY = (borderHeight - textHeight) / 2;
 
             for (let i = 0; i < lines.length; i++) {
-                const y = startY + i * (fontSize * 1.2);
+                const y = startY + i * lineHeight;
                 canvasCtx.fillText(lines[i], canvasWidth / 2, y);
             }
 
@@ -121,18 +121,12 @@ module.exports = {
                 components: [
                     new ContainerBuilder()
                         .addMediaGalleryComponents(
-                            new MediaGalleryBuilder()
-                                .addItems([
-                                    {
-                                        media: {
-                                            url: `attachment://captioned.gif`,
-                                        },
-                                    }
-                                ])
+                            new MediaGalleryBuilder().addItems([
+                                { media: { url: `attachment://captioned.gif` } }
+                            ])
                         )
                         .addFileComponents(
-                            new FileBuilder()
-                                .setURL('attachment://captioned.png')
+                            new FileBuilder().setURL('attachment://captioned.png')
                         )
                 ],
                 flags: MessageFlags.IsComponentsV2,
@@ -142,13 +136,11 @@ module.exports = {
             await loadingMessage.edit({
                 flags: MessageFlags.IsComponentsV2,
                 components: [
-                    new ContainerBuilder()
-                        .addTextDisplayComponents(
-                            new TextDisplayBuilder()
-                                .setContent(`:x: **An error occurred.**`)
-                        )
+                    new ContainerBuilder().addTextDisplayComponents(
+                        new TextDisplayBuilder().setContent(`:x: **An error occurred.**`)
+                    )
                 ]
             });
         }
-    },
+    }
 };
