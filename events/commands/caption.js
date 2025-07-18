@@ -38,7 +38,17 @@ module.exports = {
             ]
         });
 
-        const attachment = await message.attachments.first();
+        let attachment = message.attachments.first();
+
+        if (!attachment && message.reference) {
+            try {
+                const referencedMessage = await message.channel.messages.fetch(message.reference.messageId);
+                attachment = referencedMessage.attachments.first();
+            } catch (err) {
+                console.error('Failed to fetch replied message:', err);
+            }
+        }
+
         if (!attachment || !attachment.contentType?.startsWith('image/')) {
             return await message.reply({
                 flags: MessageFlags.IsComponentsV2,
