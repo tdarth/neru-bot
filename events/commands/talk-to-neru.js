@@ -29,7 +29,7 @@ module.exports = {
                     new ContainerBuilder()
                         .addTextDisplayComponents(
                             new TextDisplayBuilder()
-                                .setContent(`:x: **Using this command requires:** ${allowedRoles.map(role => `<@&${role}>`).join(", ")}.`)
+                                .setContent(`:x: **Using this command requires:**\n${allowedRoles.map(role => `<@&${role}>`).join(", ")}.`)
                         )
                 ],
                 allowedMentions: { repliedUser: true, parse: [] }
@@ -102,7 +102,20 @@ module.exports = {
                 return await replyWithText(message, ":x: **An error occurred.**");
             }
 
-            await replyWithText(message, aiResponse, message.author.id);
+            await message.reply({
+                flags: MessageFlags.IsComponentsV2,
+                components: [
+                    new ContainerBuilder()
+                        .addTextDisplayComponents(
+                            new TextDisplayBuilder()
+                                .setContent(aiResponse)
+                        )
+                ],
+                allowedMentions: {
+                    repliedUser: true,
+                    parse: []
+                }
+            })
             await message.client.channels.cache.get(logging_channel)?.send({ flags: MessageFlags.IsComponentsV2, components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(`<@${message.author.id}> (\`${message.author.id}\`) used prompt: \`${messagePrompt}\` ${message.url}`))], allowedMentions: { parse: [] } });
 
         } catch (error) {
