@@ -14,7 +14,7 @@ module.exports = {
 
         const userMessages = messages
             .filter(msg => msg.author.id === authorId)
-            .first(8)
+            .first(7)
             .reverse();
 
         let reportReason = message.content.toLowerCase().replace(/^(\?report|!report)/, '').trim();
