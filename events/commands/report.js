@@ -14,7 +14,7 @@ module.exports = {
 
         const userMessages = messages
             .filter(msg => msg.author.id === authorId)
-            .first(7)
+            .first(8)
             .reverse();
 
         let reportReason = message.content.toLowerCase().replace(/^(\?report|!report)/, '').trim();
@@ -22,10 +22,24 @@ module.exports = {
 
         const container = new ContainerBuilder();
 
-        container.addSectionComponents(new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(`${reportPingRoles.map(id => `<@&${id}>`).join(' ')}\n## Report against <@${authorId}> \`${authorId}\`\n* __Submitted By__: <@${message.author.id}>. \`${message.author.id}\`\n* __In Channel__: <#${message.channel.id}>.\n* __Timestamp__: <t:${Math.floor(Date.now() / 1000)}:f>.\n\n:notepad_spiral: **Reason:** \`${reportReason}\`\n:pencil2: **Attached Message**: \`\`\`${referencedMessage.content}\`\`\`\n-# Below are recent messages sent by the reported user.`)).setThumbnailAccessory(new ThumbnailBuilder().setURL(`https://cdn.discordapp.com/avatars/${authorId}/${referencedMessage.author.avatar}.png`))).addSeparatorComponents(new SeparatorBuilder());
+        container.addSectionComponents(new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(`${reportPingRoles.map(id => `<@&${id}>`).join(' ')}\n## Report against <@${authorId}> \`${authorId}\`\n* __Submitted By__: <@${message.author.id}>. \`${message.author.id}\`\n* __In Channel__: <#${message.channel.id}>.\n* __Timestamp__: <t:${Math.floor(Date.now() / 1000)}:f>.\n\n:notepad_spiral: **Reason:** \`${reportReason}\`\n:pencil2: **Attached Message**: \`\`\`${referencedMessage.content || 'Empty or contains an image.'}\`\`\`\n-# Below are recent messages sent by the reported user.`)).setThumbnailAccessory(new ThumbnailBuilder().setURL(`https://cdn.discordapp.com/avatars/${authorId}/${referencedMessage.author.avatar}.png`))).addSeparatorComponents(new SeparatorBuilder());
 
         for (const userMessage of userMessages) {
-            container.addSectionComponents(new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(`${userMessage.content}\n`)).setButtonAccessory(new ButtonBuilder().setLabel(`Jump`).setURL(`https://discord.com/channels/${userMessage.guildId}/${userMessage.channelId}/${userMessage.id}`).setStyle(ButtonStyle.Link))).addSeparatorComponents(new SeparatorBuilder());
+            let content = userMessage.content || "Empty or contains an image.";
+            if (content.length > 4000) {
+                content = content.slice(0, 3997) + '...';
+            }
+
+            container.addSectionComponents(
+                new SectionBuilder()
+                    .addTextDisplayComponents(new TextDisplayBuilder().setContent(`${content}\n`))
+                    .setButtonAccessory(
+                        new ButtonBuilder()
+                            .setLabel(`Jump`)
+                            .setURL(`https://discord.com/channels/${userMessage.guildId}/${userMessage.channelId}/${userMessage.id}`)
+                            .setStyle(ButtonStyle.Link)
+                    )
+            ).addSeparatorComponents(new SeparatorBuilder());
         }
 
         container.addSectionComponents(new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent("Finished with the report?")).setButtonAccessory(new ButtonBuilder().setLabel("Mark as Resolved").setStyle(ButtonStyle.Success).setCustomId(`markAsResolved_button`)));
@@ -36,7 +50,24 @@ module.exports = {
                 users: [],
                 repliedUser: false
             }
+        }).catch(error => {
+            async () => {
+                const user = await message.client.users.fetch(message.author.id);
+                await user.send({
+                    flags: MessageFlags.IsComponentsV2,
+                    components: [
+                        new ContainerBuilder()
+                            .addTextDisplayComponents(
+                                new TextDisplayBuilder()
+                                    .setContent(':x: **An error occurred while submitting your report.**\n-# Please open a ticket if this issue persists.')
+                            )
+                    ]
+                })
+                console.log(`Report Error: ${error}`);
+            }
+            
         });
+
         await message.delete();
     },
 };
