@@ -63,7 +63,7 @@ if (fs.existsSync(eventsPath)) {
 
 loadTriggers(client);
 
-console.log("Attempting to login..");
+console.log("[TETO] Attempting to login..");
 client.login(token)
-  .then(() => console.log("Login success"))
-  .catch(err => console.error("Login error:", err));
+  .then(() => console.log("[TETO] Login success"))
+  .catch(err => console.error("[TETO] Login error:", err));

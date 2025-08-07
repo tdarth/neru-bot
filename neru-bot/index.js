@@ -139,7 +139,7 @@ if (fs.existsSync(eventsPath)) {
 
 loadTriggers(client);
 
-console.log("Attempting to login..");
+console.log("[NERU] Attempting to login..");
 client.login(token)
-  .then(() => console.log("Login success"))
-  .catch(err => console.error("Login error:", err));
+  .then(() => console.log("[NERU] Login success"))
+  .catch(err => console.error("[NERU] Login error:", err));

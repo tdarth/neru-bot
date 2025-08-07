@@ -2,9 +2,10 @@ require('dotenv').config();
 const { REST, Routes } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
+const { clientId, guildId } = require('./config.json');
 
-const clientId = process.env.CLIENT_ID;
-const guildId = process.env.GUILD_ID;
+const clientId = clientId;
+const guildId = guildId;
 
 const commands = [];
 const foldersPath = path.join(__dirname, 'commands');
