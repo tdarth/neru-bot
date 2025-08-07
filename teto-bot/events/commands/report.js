@@ -17,7 +17,7 @@ module.exports = {
             .first(8)
             .reverse();
 
-        let reportReason = message.content.toLowerCase().replace(/^(\?report|!report)/, '').trim();
+        let reportReason = message.content.toLowerCase().replace(/^(\?report|!report|.report)/, '').trim();
         if (reportReason == "") reportReason = "No reason specified."
 
         const container = new ContainerBuilder();
