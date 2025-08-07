@@ -1,8 +1,9 @@
 const { MessageFlags, ContainerBuilder, TextDisplayBuilder, SeparatorBuilder } = require('discord.js');
+const { prefix } = require('../../config.json');
 
 module.exports = {
     name: 'rules',
-    trigger: (message) => message.content.startsWith(`${process.env.PREFIX}rules`),
+    trigger: (message) => message.content.startsWith(`${prefix}rules`),
     async execute(message) {
         if (message.author.id !== '990500436047982602') return;
         

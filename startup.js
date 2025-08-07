@@ -3,8 +3,7 @@ const { spawn } = require("child_process");
 function run(command, args, cwd) {
   return spawn(command, args, {
     cwd,
-    stdio: "inherit",
-    shell: true
+    stdio: "inherit"
   });
 }
 
@@ -16,3 +15,5 @@ run("npm", ["install"], "./neru-bot")
         run("node", ["index.js"], "./teto-bot");
       });
   });
+
+console.log('Began startup script.');
