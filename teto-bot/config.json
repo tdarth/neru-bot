@@ -5,5 +5,9 @@
     "guildId": "1369181065385869352",
 
     "reportsChannelId": "1403160291138601091",
-    "reportPingRoles": ["1369184709418160150"]
+    "reportPingRoles": ["1369184709418160150"],
+
+    "emojis": {
+        "muted": "<:muted:1400298861360320564>"
+    }
 }
