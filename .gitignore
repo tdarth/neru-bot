@@ -1,4 +1,5 @@
 *.env
+*.DS_Store
 neru-bot/node_modules
 neru-bot/afk_users.json
 teto-bot/node_modules
