@@ -67,3 +67,15 @@ console.log("[TETO] Attempting to login..");
 client.login(token)
   .then(() => console.log("[TETO] Login success"))
   .catch(err => console.error("[TETO] Login error:", err));
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception:', error);
+});
+
+client.on('error', (error) => {
+    console.error('Discord.js client error:', error);
+});
