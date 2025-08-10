@@ -31,7 +31,6 @@ module.exports = {
         if (interaction.customId === 'private_button') {
             if (interaction.member.roles.cache.some(role => staffRoles.includes(role.id))) {
                 await interaction.deferUpdate();
-                console.log('yes')
                 const members = await interaction.channel.members.fetch();
 
                 for (const [id] of members) {
