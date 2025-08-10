@@ -1,10 +1,11 @@
-const { ContainerBuilder, MessageFlags, TextDisplayBuilder, SectionBuilder, ButtonBuilder, ButtonStyle, SeparatorBuilder, ThreadAutoArchiveDuration, ChannelType, EmbedBuilder } = require('discord.js');
-const { prefix } = require('../../config.json');
+const { ContainerBuilder, MessageFlags, TextDisplayBuilder, SectionBuilder, ButtonBuilder, ButtonStyle, ThreadAutoArchiveDuration, ChannelType, EmbedBuilder } = require('discord.js');
+const { prefix, staffRoles } = require('../../config.json');
 
 module.exports = {
     name: 'private',
     trigger: (message) => message.content.toLowerCase().startsWith(`${prefix}private`),
     async execute(message) {
+        if (!message.member.roles.cache.some(role => staffRoles.includes(role.id))) return;
         if (!message.reference) return await message.delete();
         const referencedMessage = await message.channel.messages.fetch(message.reference.messageId);
 
