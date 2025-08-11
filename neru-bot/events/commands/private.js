@@ -15,8 +15,6 @@ module.exports = {
             .split(/\s+/)
             .filter(id => id.length > 0);
 
-        console.log(targetIds.join(", "))
-
         const guild = message.client.guilds.cache.get(message.guild.id);
         let targetMembers = [];
 
