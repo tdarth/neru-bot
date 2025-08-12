@@ -21,15 +21,17 @@ const basePromptText =
     "Try to keep the response short, aim for around 1-3 paragraphs " +
     "The person who is sending you this request is named REPLACE_USER_HERE. Here is your prompt: REPLACE_PROMPT_HERE";
 
-const allowedRoles = ['1370622872728506469', '1376729769814790205', '1369250421016629288', '1369252362149036064', '1394357026917847232', '1370790301572272370', '1369249545959247932', '1369834138634293251', '1390101291589697727', '1369249484772610079']
-// kesoku band, level 100, server booster, donator, baka squad, staff (colorless), neru (staff), baka (smod), triple (admin), akita (owner)
+const allowedRoles = ['1370622872728506469', '1376729769814790205', '1369250421016629288', '1369252362149036064', '1394357026917847232']
+const staffRoles = ['1370790301572272370', '1369249545959247932', '1369834138634293251', '1390101291589697727', '1369249484772610079']
+// kesoku band, level 100, server booster, donator, baka squad
+// staff (colorless), neru (staff), baka (smod), triple (admin), akita (owner)
 
 module.exports = {
     name: 'talk-to-teto',
     trigger: (message) => message.content.startsWith(`<@${clientId}>`),
     async execute(message) {
         if (message.guild.id == guildId) return;
-        if (!message.member.roles.cache.some(role => allowedRoles.includes(role.id))) { 
+        if (!message.member.roles.cache.some(role => allowedRoles.includes(role.id) || staffRoles.includes(role.id))) { 
             return await message.reply({
                 flags: MessageFlags.IsComponentsV2,
                 components: [
