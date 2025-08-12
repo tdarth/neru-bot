@@ -7,7 +7,10 @@ module.exports = {
         console.log(`Ready! Logged in as ${client.user.tag}`);
 
         client.user.setPresence({
-            status: 'dnd'
+            activities: [{
+                name: 'Eating bread. 🥖',
+                type: ActivityType.Custom
+            }]
         });
     },
 };
