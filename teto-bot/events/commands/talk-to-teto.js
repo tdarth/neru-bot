@@ -1,5 +1,5 @@
 const { ContainerBuilder, TextDisplayBuilder, MessageFlags } = require('discord.js');
-const { clientId } = require('../../config.json');
+const { clientId, guildId } = require('../../config.json');
 const replyWithText = require("../../utils/replyWithText");
 
 const geminiApiKey = process.env.GEMINI_API_KEY;
