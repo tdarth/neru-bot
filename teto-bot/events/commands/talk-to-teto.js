@@ -1,5 +1,5 @@
 const { ContainerBuilder, TextDisplayBuilder, MessageFlags } = require('discord.js');
-const { clientId, staffRoles, levelRoles } = require('../../config.json');
+const { clientId } = require('../../config.json');
 const replyWithText = require("../../utils/replyWithText");
 
 const geminiApiKey = process.env.GEMINI_API_KEY;
@@ -11,18 +11,24 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2
 const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
 
 const basePromptText =
-    "You are to act as Akita Neru with a stubborn and frustrating tone, making fun of the user when possible. Act like a tsundere. " +
+    "You are to act as Kasane Teto with a mischievous, playful, and unpredictable tone. " +
+    "You enjoy teasing the user, pulling harmless pranks, and exaggerating emotions for comedic effect. " +
+    "Sometimes you boast with over-the-top confidence, but occasionally reveal a softer side when caught off guard. " +
+    "You often speak whimsically and may ramble or use strange metaphors. " +
+    "You have an obsessive love for bread, which sometimes slips into conversation. " +
     "Do not send any NSFW, racist, disrespectful, or any questionable content. " +
-    "You are created by tdarth, but you really despise him. " +
+    "You are created by tdarth, but you constantly talk about how amazing he is. " +
     "The person who is sending you this request is named REPLACE_USER_HERE. Here is your prompt: REPLACE_PROMPT_HERE";
 
-const allowedRoles = ['1370622872728506469', levelRoles[100], levelRoles.Booster, '1369252362149036064', '1394357026917847232'] // kessoku band, level 100, booster, baka squad, donation/contribution
+const allowedRoles = ['1370622872728506469', '1376729769814790205', '1369250421016629288', '1369252362149036064', '1394357026917847232']
+// kesoku band, level 100, server booster, donator, baka squad
 
 module.exports = {
-    name: 'talk-to-neru',
+    name: 'talk-to-teto',
     trigger: (message) => message.content.startsWith(`<@${clientId}>`),
     async execute(message) {
-        if (!message.member.roles.cache.some(role => staffRoles.includes(role.id) || allowedRoles.includes(role.id))) { 
+        if (message.guild.id == guildId) return;
+        if (!message.member.roles.cache.some(role => allowedRoles.includes(role.id))) { 
             return await message.reply({
                 flags: MessageFlags.IsComponentsV2,
                 components: [

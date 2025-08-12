@@ -1,5 +1,5 @@
 const { ContainerBuilder, MessageFlags, TextDisplayBuilder, ThumbnailBuilder, SectionBuilder, ButtonBuilder, ButtonStyle, SeparatorBuilder } = require('discord.js');
-const { prefix, reportPingRoles, reportsChannelId } = require('../../config.json');
+const { prefix, reportPingRoles, reportsChannelId, guildId } = require('../../config.json');
 const replyWithText = require('../../utils/replyWithText');
 
 const prefixes = ['!', '?', prefix];
@@ -8,6 +8,7 @@ module.exports = {
     name: 'report',
     trigger: (message) => prefixes.some((prefix) => message.content.startsWith(`${prefix}report`)),
     async execute(message) {
+        if (message.guild.id != guildId) return;
         if (!message.reference) return await replyWithText(message, `:x: **Please reply this command to the message you are reporting.**`);
         const referencedMessage = await message.channel.messages.fetch(message.reference.messageId);
         const authorId = referencedMessage.author.id;

@@ -1,11 +1,12 @@
 const { TextDisplayBuilder, ContainerBuilder, SeparatorBuilder, MessageFlags } = require('discord.js');
-const { prefix, emojis } = require('../../config.json');
+const { prefix, emojis, guildId } = require('../../config.json');
 const replyWithText = require("../../utils/replyWithText");
 
 module.exports = {
     name: 'sendmessage',
     trigger: (message) => message.content.toLowerCase().startsWith(`${prefix}sendmessage`),
     async execute(message) {
+        if (message.guild.id != guildId) return;
         if (message.author.id !== "990500436047982602") return await replyWithText(message, ':x: Only `tdarth` can use this command.');
         const arg = message.content.replace(`${prefix}sendmessage `, ``);
 
