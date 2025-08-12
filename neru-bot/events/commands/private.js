@@ -10,7 +10,7 @@ module.exports = {
 
         let targetIds = message.content
             .replace(`${prefix}private`, '')
-            .replace(/[<>@,]/g, '')
+            .replace(/<|>|@|,|-d(?:elete)?/g, '')
             .trim()
             .split(/\s+/)
             .filter(id => id.length > 0);
@@ -74,7 +74,12 @@ module.exports = {
                 new EmbedBuilder()
                     .setColor('#242429')
                     .setAuthor({ name: referencedMessage.author.username, iconURL: `https://cdn.discordapp.com/avatars/${referencedMessage.author.id}/${referencedMessage.author.avatar}.png` })
-                    .setDescription(referencedMessage.content || '*Message contained attachment(s)*')
+                    .setDescription(
+                        (referencedMessage.content || '*Message contained attachment(s)*') +
+                        (message.content.includes('-d')
+                            ? '\n:wastebasket: Message was deleted by a moderator.'
+                            : '')
+                    )
             ]
         });
 
@@ -98,5 +103,7 @@ module.exports = {
             ],
             allowedMentions: { parse: [] }
         });
+
+        if (message.content.includes(`-d`)) await referencedMessage.delete();
     },
 };
