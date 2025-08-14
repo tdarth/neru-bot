@@ -41,9 +41,11 @@ function startBot() {
   client.login(process.env.TOKEN)
 }
 
+process.stdin.setEncoding('utf8');
+process.stdin.resume();
+
 process.stdin.on('data', (input) => {
-    const trimmed = input.trim();
-    console.log(`[CADNIUM] Console Command: ${trimmed}`);
+    const trimmed = input.toString().trim();
 
     if (trimmed === 'cadmiumReload') {
         console.log('[CADNIUM] Running deploy-commands.js...');
