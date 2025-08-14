@@ -9,10 +9,13 @@ module.exports = {
         .addStringOption(option => option.setName('amount').setDescription('The amount').setRequired(true))
         .addStringOption(option => option.setName('id').setDescription('The user id').setRequired(true)),
 	async execute(interaction) {
-        const amount = interaction.options.getString('amount');
-        const id = interaction.options.getString('id');
+        const amount = parseInt(interaction.options.getString('amount'), 10);
+        if (isNaN(amount)) return interaction.reply(new ContainerMessage('Amount must be a number.').build());
 
-        await forceAddXp(interaction.guild.id, id, amount);
-        await interaction.reply(new ContainerMessage(`Added ${amount} to <${id}> ${id}`).build());
+        const id = interaction.options.getString('id');
+        const member = interaction.guild.members.fetch(id);
+
+        await forceAddXp(interaction.guild.id, id, member.username, amount);
+        await interaction.reply(new ContainerMessage(`Added ${amount} to <@${id}> ${id}`).build());
     }
 };
