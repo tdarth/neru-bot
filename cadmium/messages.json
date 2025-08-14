@@ -1,8 +1,13 @@
 {
     "messages": {
         "success": {
-            "ADDED_XP": ":sparkles: Added `AMOUNT` **XP** to USER.",
-            "REMOVED_XP": ":sparkles: Removed `AMOUNT` **XP** from USER."
+            "ADDED_XP": ":sparkles: Added `AMOUNT` **XP** to USER.\n-# OLD_AMOUNT -> NEW_AMOUNT",
+            "REMOVED_XP": ":sparkles: Removed `AMOUNT` **XP** from USER.\n-# OLD_AMOUNT -> NEW_AMOUNT"
+        },
+
+        "info": {
+            "USER_HAS_NO_XP": ":x: :stars: USER has no **XP**.",
+            "USER_HAS_XP": ":stars: USER's **XP**: `AMOUNT` (TOTAL total)"
         },
 
         "errors": {

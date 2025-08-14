@@ -6,26 +6,34 @@ async function updateXp(serverId, userId, username, updateFn) {
         [serverId, userId]
     );
 
+    let oldXp, oldTotal, newXp, newTotal;
+
     if (userRows.length === 0) {
-        const initialXp = updateFn(0);
+        oldXp = 0;
+        oldTotal = 0;
+        newXp = updateFn(oldXp);
+        newTotal = newXp;
+
         await pool.query(
             'INSERT INTO users (server_id, user_id, username, xp, total_xp, messages, last_message) VALUES (?, ?, ?, ?, ?, ?, NOW())',
-            [serverId, userId, username, initialXp, initialXp, 1]
+            [serverId, userId, username, newXp, newTotal, 1]
         );
-        return { newXp: initialXp, newTotal: initialXp };
+    } else {
+        const user = userRows[0];
+        oldXp = user.xp;
+        oldTotal = user.total_xp;
+
+        newXp = updateFn(oldXp);
+        newTotal = oldTotal + (newXp - oldXp);
+        const newMessages = user.messages + 1;
+
+        await pool.query(
+            'UPDATE users SET xp = ?, total_xp = ?, messages = ?, last_message = NOW(), username = ? WHERE server_id = ? AND user_id = ?',
+            [newXp, newTotal, newMessages, username, serverId, userId]
+        );
     }
 
-    const user = userRows[0];
-    const newXp = updateFn(user.xp);
-    const newTotal = user.total_xp + (newXp - user.xp);
-    const newMessages = user.messages + 1;
-
-    await pool.query(
-        'UPDATE users SET xp = ?, total_xp = ?, messages = ?, last_message = NOW(), username = ? WHERE server_id = ? AND user_id = ?',
-        [newXp, newTotal, newMessages, username, serverId, userId]
-    );
-
-    return { newXp, newTotal };
+    return { oldXp, newXp, oldTotal, newTotal };
 }
 
 module.exports = updateXp;

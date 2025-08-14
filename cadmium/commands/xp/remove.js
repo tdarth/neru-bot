@@ -14,12 +14,13 @@ module.exports = {
         if (isNaN(amount)) return interaction.reply(new ContainerMessage(messages.errors.MUST_BE_NUMBER.replace('ARGUMENT', 'amount')).isEphemeral().build());
 
         const user = interaction.options.getUser('member');
-
-        await forceRemoveXp(interaction.guild.id, user.id, user.username, amount);
+        const result = await forceRemoveXp(interaction.guild.id, user.id, user.username, amount);
         
         await interaction.reply(new ContainerMessage(messages.success.REMOVED_XP
             .replace('AMOUNT', amount)
             .replace('USER', `<@${user.id}>`)
+            .replace('OLD_AMOUNT', `${result.oldXp} (${result.oldTotal} total)`)
+            .replace('NEW_AMOUNT', `${result.newXp} (${result.newTotal} total)`)
         ).build());
     }
 };
