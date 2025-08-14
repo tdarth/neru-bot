@@ -9,6 +9,8 @@ const ContainerMessage = require('../../utils/classes/ContainerMessage');
 module.exports = {
     name: Events.MessageCreate,
     async execute(message) {
+        if (message.author.bot) return;
+
         const serverConfig = await getServerConfig(message.guild.id);
         let userData = await getUserData(message.guild.id, message.author.id);
 
