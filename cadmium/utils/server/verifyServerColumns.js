@@ -1,4 +1,4 @@
-const pool = require('./pool');
+const pool = require('../../db/pool');
 const { serverColumns } = require('../../db/init');
 
 async function verifyServerColumns() {
