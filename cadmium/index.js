@@ -1,19 +1,24 @@
 require('dotenv').config();
 const { initDatabase } = require('./db/init');
+const { verifyServerColumns } = require('./utils/server/verifyServerColumns');
 const { spawn } = require('child_process');
 const path = require('node:path');
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const getFiles = require('./utils/getFiles');
 const loadCommands = require('./utils/loadCommands');
 
-initDatabase()
-  .then(() => {
-    console.log('Tables are ready');
-    startBot();
-  })
-  .catch(err => {
-    console.error('Error initializing database:', err);
-  });
+(async () => {
+    try {
+        await initDatabase();
+        console.log('Tables are ready');
+
+        await verifyServerColumns();
+
+        startBot();
+    } catch (err) {
+        console.error('Error initializing database:', err);
+    }
+})();
 
 function startBot() {
   const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers] });
