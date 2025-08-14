@@ -12,7 +12,7 @@
         },
 
         "errors": {
-            "CATCH_ALL_ERROR_COMMAND": ":x: **Error:** an unknown error occurred.",
+            "CATCH_ALL_ERROR_COMMAND": ":x: **Error:** an `unknown` error occurred.",
             "MISSING_PERMISSION": ":x: **Error:* Missing permission: `{permission}`.",
             "MUST_BE_NUMBER": ":x: **Error:** `{argument}` must be a number."
         }

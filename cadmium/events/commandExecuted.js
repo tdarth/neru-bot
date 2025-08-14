@@ -1,4 +1,4 @@
-const { Events, MessageFlags } = require('discord.js');
+const { Events } = require('discord.js');
 const { messages } = require('../messages.json');
 const ContainerMessage = require('../utils/classes/ContainerMessage');
 

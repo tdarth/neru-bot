@@ -20,6 +20,6 @@ module.exports = {
 		const mode = interaction.options.getString('mode');
 
 		await updateServerConfig(interaction.guild.id, 'xp_levelup_mode', mode);
-		await interaction.reply(new ContainerMessage(messages.success.UPDATE_CONFIG_VALUE.replace('{config}', 'Levelup Mode').replace('{value}', `\`\`${mode}\`\``)).build());
+		await interaction.reply(new ContainerMessage(messages.success.UPDATE_CONFIG_VALUE.replace('{config}', 'Levelup Mode').replace('{value}', mode)).build());
 	}
 };
