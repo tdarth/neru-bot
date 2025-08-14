@@ -13,7 +13,7 @@ module.exports = {
 				.setRequired(true)
 				.addChoices(
 					{ name: 'Fixed Amount', value: 'fixed' },
-					{ name: 'Exponential', value: 'multiplied' },
+					{ name: 'Exponential', value: 'exponential' },
 				)),
 	async execute(interaction) {
 		if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(ContainerMessage(messages.errors.MISSING_PERMISSION.replace('{permission}', 'administrator')).build());

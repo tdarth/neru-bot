@@ -17,7 +17,7 @@ const serverColumns = [
     'xp_random_max INT DEFAULT 15',
     'xp_cooldown INT DEFAULT 30',
     'level_up_message VARCHAR(255) DEFAULT "Congrats {user}, you reached level {level}!"',
-    'xp_levelup_mode ENUM("fixed","multiplied") DEFAULT "fixed"',
+    'xp_levelup_mode ENUM("fixed","exponential") DEFAULT "fixed"',
     'xp_levelup_amount INT DEFAULT 100',
     'xp_levelup_multiplier FLOAT DEFAULT 1'
 ];
