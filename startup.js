@@ -11,8 +11,12 @@ run("npm", ["install"], "./neru-bot")
   .on("close", () => {
     run("npm", ["install"], "./teto-bot")
       .on("close", () => {
-        run("node", ["index.js"], "./neru-bot");
-        run("node", ["index.js"], "./teto-bot");
+        run("npm", ["install"], "./cadmium")
+          .on("close", () => {
+            run("node", ["index.js"], "./neru-bot");
+            run("node", ["index.js"], "./teto-bot");
+            run("node", ["index.js"], "./cadmium");
+          });
       });
   });
 
