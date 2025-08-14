@@ -1,6 +1,6 @@
 const pool = require('../../db/pool');
 
-async function updateXp(serverId, userId, username, updateFn) {
+async function updateXp(serverId, userId, updateFn) {
     const [userRows] = await pool.query(
         'SELECT * FROM users WHERE server_id = ? AND user_id = ?',
         [serverId, userId]
@@ -15,8 +15,8 @@ async function updateXp(serverId, userId, username, updateFn) {
         newTotal = newXp;
 
         await pool.query(
-            'INSERT INTO users (server_id, user_id, username, xp, total_xp, messages, last_message) VALUES (?, ?, ?, ?, ?, ?, NOW())',
-            [serverId, userId, username, newXp, newTotal, 1]
+            'INSERT INTO users (server_id, user_id, xp, total_xp, messages, last_message) VALUES (?, ?, ?, ?, ?, NOW())',
+            [serverId, userId, newXp, newTotal, 1]
         );
     } else {
         const user = userRows[0];
@@ -28,8 +28,8 @@ async function updateXp(serverId, userId, username, updateFn) {
         const newMessages = user.messages + 1;
 
         await pool.query(
-            'UPDATE users SET xp = ?, total_xp = ?, messages = ?, last_message = NOW(), username = ? WHERE server_id = ? AND user_id = ?',
-            [newXp, newTotal, newMessages, username, serverId, userId]
+            'UPDATE users SET xp = ?, total_xp = ?, messages = ? WHERE server_id = ? AND user_id = ?',
+            [newXp, newTotal, newMessages, serverId, userId]
         );
     }
 

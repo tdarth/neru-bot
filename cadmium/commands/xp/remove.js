@@ -15,7 +15,7 @@ module.exports = {
         if (isNaN(amount)) return interaction.reply(new ContainerMessage(messages.errors.MUST_BE_NUMBER.replace('{argument}', 'amount')).isEphemeral().build());
 
         const user = interaction.options.getUser('member');
-        const result = await forceRemoveXp(interaction.guild.id, user.id, user.username, amount);
+        const result = await forceRemoveXp(interaction.guild.id, user.id, amount);
         
         await interaction.reply(new ContainerMessage(messages.success.REMOVED_XP
             .replace('{amount}', amount.toLocaleString())

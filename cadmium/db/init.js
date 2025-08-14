@@ -53,5 +53,6 @@ async function initDatabase() {
 }
 
 const serverColumnNames = serverColumns.map(col => col.split(' ')[0]);
+const userColumnNames = userColumns.map(col => col.split(' ')[0]);
 
-module.exports = { initDatabase, serverColumns, serverColumnNames };
+module.exports = { initDatabase, serverColumns, serverColumnNames, userColumnNames };

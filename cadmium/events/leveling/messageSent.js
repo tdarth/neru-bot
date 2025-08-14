@@ -11,7 +11,9 @@ module.exports = {
         const userData = await getUserData(message.guild.id, message.author.id);
 
         if (serverConfig.xp_enabled) {
-            console.log(message.createdTimestamp);
+            if (message.createdTimestamp - userData.last_message >= serverConfig.xp_cooldown * 1000) {
+                await addXp(message.guild.id, message.author.id, 'msg');
+            }
         }
     },
 };
