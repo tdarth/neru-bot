@@ -1,5 +1,5 @@
 const pool = require('../../db/pool');
-const serverColumns = require('../../db/pool')
+const serverColumns = require('../../db/init')
 
 async function updateServerConfig(serverId, configName, value) {
     if (!serverColumns.includes(configName)) {
