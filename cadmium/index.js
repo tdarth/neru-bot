@@ -40,3 +40,18 @@ function startBot() {
 
   client.login(process.env.TOKEN)
 }
+
+process.stdin.on('data', (input) => {
+    const trimmed = input.trim();
+    console.log(`[CADNIUM] Console Command: ${trimmed}`);
+
+    if (trimmed === 'cadmiumReload') {
+        console.log('[CADNIUM] Running deploy-commands.js...');
+
+        const child = spawn('node', ['./deploy-commands.js'], { stdio: 'inherit' });
+
+        child.on('close', (code) => {
+            console.log(`[CADNIUM] deploy-commands.js exited with code ${code}`);
+        });
+    }
+});
