@@ -1,5 +1,5 @@
 const { SlashCommandSubcommandBuilder, MessageFlags, ContainerBuilder, TextDisplayBuilder } = require('discord.js');
-const forceAddXp = require('../../utils/leveling/forceAddXp');
+const { forceAddXp } = require('../../utils/leveling/forceAddXp');
 const ContainerMessage = require('../../utils/classes/ContainerMessage');
 
 module.exports = {
