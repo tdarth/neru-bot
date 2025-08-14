@@ -1,5 +1,5 @@
 require('dotenv').config();
-const initDatabase = require('./db/init');
+const { initDatabase } = require('./db/init');
 const { spawn } = require('child_process');
 const path = require('node:path');
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
