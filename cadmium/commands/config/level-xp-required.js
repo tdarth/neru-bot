@@ -13,6 +13,6 @@ module.exports = {
 		const requirement = interaction.options.getString('requirement');
 
 		await updateServerConfig(interaction.guild.id, 'xp_levelup_amount', requirement);
-		await interaction.reply(new ContainerMessage(messages.success.UPDATE_LEVEL_XP_REQUIREMENT.replace('{requirement}', mode)).build());
+		await interaction.reply(new ContainerMessage(messages.success.UPDATE_LEVEL_XP_REQUIREMENT.replace('{requirement}', requirement)).build());
 	}
 };

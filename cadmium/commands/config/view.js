@@ -11,6 +11,6 @@ module.exports = {
 		if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(ContainerMessage(messages.errors.MISSING_PERMISSION.replace('{permission}', 'administrator')).build());
 
 		const config = getServerConfig(interaction.guild.id);
-		await interaction.reply(new ContainerMessage(`mode: ${config.xp_levelup_mode}\nrequirement: ${config.xp_levelup_amount}`).build());
+		await interaction.reply(new ContainerMessage(`${JSON.stringify(config)}`).build());
 	}
 };
