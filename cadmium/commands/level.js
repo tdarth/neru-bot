@@ -12,7 +12,7 @@ module.exports = {
 		const targetId = interaction?.options?.getUser('member')?.id || interaction.user.id;
 
 		const level = await getLevel(interaction.guild.id, targetId);
-		if (!level.xp || level.xp == 0) return await interaction.reply(new ContainerMessage(messages.info.USER_HAS_NO_XP.replace('{user}', `<@${targetId}>`)).build());
+		if (!level.xp && level.level != 0) return await interaction.reply(new ContainerMessage(messages.info.USER_HAS_NO_XP.replace('{user}', `<@${targetId}>`)).build());
 
 		await interaction.reply(new ContainerMessage(messages.info.USER_HAS_XP
 			.replace('{user}', `<@${targetId}>`)
