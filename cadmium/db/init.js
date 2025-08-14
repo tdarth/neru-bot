@@ -4,6 +4,7 @@ const userColumns = [
     'username VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci',
     'level INT DEFAULT 0',
     'xp INT DEFAULT 0',
+    'next_level_xp DEFAULT 100',
     'total_xp INT DEFAULT 0',
     'messages INT DEFAULT 0',
     'last_message DATETIME'

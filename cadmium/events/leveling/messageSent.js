@@ -4,7 +4,6 @@ const { getServerConfig } = require('../../utils/server/getServerConfig');
 const { getUserData } = require('../../utils/user/getUserData');
 const { toMySQLDate, fromMySQLDate } = require('../../utils/sqlDate');
 const { addXp } = require('../../utils/leveling/addXp');
-const ContainerMessage = require('../../utils/classes/ContainerMessage');
 
 module.exports = {
     name: Events.MessageCreate,
