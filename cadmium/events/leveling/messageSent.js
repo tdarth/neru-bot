@@ -10,6 +10,9 @@ module.exports = {
         const serverConfig = getServerConfig(message.guild.id);
         const userData = getUserData(message.guild.id, message.author.id);
 
+        console.log('message detected');
+        console.log(serverConfig.xp_enabled);
+
         if (serverConfig.xp_enabled) {
             console.log(message.createdTimestamp);
         }
