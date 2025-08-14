@@ -15,11 +15,11 @@ module.exports = {
 		if ((level.xp == 0 || level.xp == null) && level.level == 0) return await interaction.reply(new ContainerMessage(messages.info.USER_HAS_NO_XP.replace('{user}', `<@${targetId}>`)).build());
 
 		await interaction.reply(new ContainerMessage(messages.info.USER_HAS_XP
-			.replace('{user}', `<@${targetId}>`)
-			.replace('{level}', level.level.toLocaleString())
-			.replace('{xp}', level.xp.toLocaleString())
-			.replace('{nextLevelXp}', level.nextLevelXp.toLocaleString())
-			.replace('{totalXp}', level.totalXp.toLocaleString())
+			.replaceAll('{user}', `<@${targetId}>`)
+			.replaceAll('{level}', level.level.toLocaleString())
+			.replaceAll('{xp}', level.xp.toLocaleString())
+			.replaceAll('{nextLevelXp}', level.nextLevelXp.toLocaleString())
+			.replaceAll('{totalXp}', level.totalXp.toLocaleString())
 		).build());
 	}
 };

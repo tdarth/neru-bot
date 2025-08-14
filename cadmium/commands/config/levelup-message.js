@@ -9,10 +9,10 @@ module.exports = {
 		.setDescription("Sets the message that is sent on levelup")
 		.addStringOption(option => option.setName('message').setDescription('The message. Placeholders: {user} {xp} {totalXp} {oldLevel} {newLevel}').setRequired(true)),
 	async execute(interaction) {
-		if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(ContainerMessage(messages.errors.MISSING_PERMISSION.replace('{permission}', 'administrator')).build());
+		if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).build());
 		const message = interaction.options.getString('message');
 
 		await updateServerConfig(interaction.guild.id, 'level_up_message', message);
-		await interaction.reply(new ContainerMessage(messages.success.UPDATE_CONFIG_VALUE.replace('{config}', 'Level Up Message').replace('{value}', message)).build());
+		await interaction.reply(new ContainerMessage(messages.success.UPDATE_CONFIG_VALUE.replaceAll('{config}', 'Level Up Message').replaceAll('{value}', message)).build());
 	}
 };

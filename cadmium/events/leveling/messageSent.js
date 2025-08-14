@@ -20,7 +20,7 @@ module.exports = {
 
         if (serverConfig.xp_enabled) {
             if (message.createdTimestamp - fromMySQLDate(userData.last_message) >= serverConfig.xp_cooldown * 1000) {
-                await addXp(message.guild.id, message.author.id, 'msg');
+                await addXp(message.guild.id, message.author.id, 'msg', message.channel);
             }
         }
     },
