@@ -8,7 +8,7 @@
 
         "info": {
             "USER_HAS_NO_XP": ":x: :stars: {user} has no **XP**.",
-            "USER_HAS_XP": ":stars: {user}\n-# **Level**: `{level}`\n-# **XP**: `{xp}` ({totalXp} total)"
+            "USER_HAS_XP": ":stars: {user}\n-# **Level**: `{level}`\n-# **XP**: `{xp}`/`{nextLevelXp}` ({totalXp} total)"
         },
 
         "errors": {

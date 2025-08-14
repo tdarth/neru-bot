@@ -18,6 +18,7 @@ module.exports = {
 			.replace('{user}', `<@${targetId}>`)
 			.replace('{level}', level.level.toLocaleString())
 			.replace('{xp}', level.xp.toLocaleString())
+			.replace('{nextLevelXp}', level.nextLevelXp.toLocaleString())
 			.replace('{totalXp}', level.totalXp.toLocaleString())
 		).build());
 	}
