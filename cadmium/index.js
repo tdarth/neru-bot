@@ -62,4 +62,14 @@ process.stdin.on('data', (input) => {
             console.log(`[CADMIUM] deploy-commands.js exited with code ${code}`);
         });
     }
+
+    if (trimmed === 'test') {
+      console.log('[CADMIUM] upgrading...');
+
+        const child = spawn('node', ['./db/temp.js'], { stdio: 'inherit' });
+
+        child.on('close', (code) => {
+            console.log(`[CADMIUM] temp.js exited with code ${code}`);
+        });
+    }
 });
