@@ -1,8 +1,8 @@
 const pool = require('../../db/pool');
-const { serverColumNames } = require('../../db/init');
+const { serverColumnNames } = require('../../db/init');
 
 async function updateServerConfig(serverId, configName, value) {
-    if (!serverColumNames.includes(configName)) {
+    if (!serverColumnNames.includes(configName)) {
         throw new Error(`[CADMIUMs] Invalid config column: ${configName}`);
     }
 

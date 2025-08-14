@@ -52,4 +52,6 @@ async function initDatabase() {
     console.log('[CADMIUM] Database initialized and all columns ensured.');
 }
 
-module.exports = { initDatabase, serverColumns, serverColumnNames: serverColumns.map(col => col.split(' ')[0]) };
+const serverColumnNames = serverColumns.map(col => col.split(' ')[0]);
+
+module.exports = { initDatabase, serverColumns, serverColumnNames };
