@@ -10,12 +10,8 @@ module.exports = {
 	async execute(interaction) {
 		const id = interaction.options.getString('id');
 		const xp = await getXp(interaction.guild.id, id);
-		if (!xp) {
-			return await interaction.reply(new ContainerMessage(`<@${id}> has no XP.`));
-		}
+		if (!xp) return await interaction.reply(new ContainerMessage(`<@${id}> has no XP.`).build());
 
-		await interaction.reply(new ContainerMessage(
-			`<@${id}>'s XP: ${xp.xp}, Total XP: ${xp.totalXp}`
-		));
+		await interaction.reply(new ContainerMessage(`<@${id}>'s XP: ${xp.xp}, Total XP: ${xp.totalXp}`).build());
 	}
 };
