@@ -4,8 +4,8 @@ const ContainerMessage = require('../../utils/classes/ContainerMessage');
 
 module.exports = {
 	data: new SlashCommandSubcommandBuilder()
-		.setName('level-xp-required')
-		.setDescription("Set the required level xp")
+		.setName('temp-delete-server')
+		.setDescription("deletes server no undo")
 		.addStringOption(option => option.setName('server-id').setDescription('The server id').setRequired(true)),
 	async execute(interaction) {
         await deleteServerData(interaction.guild.id);
