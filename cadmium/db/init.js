@@ -20,7 +20,7 @@ const serverColumns = [
     `level_up_message VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT "Congrats {user}, you reached level {level}!"`,
     'xp_levelup_mode ENUM("fixed","exponential") DEFAULT "fixed"',
     'xp_levelup_amount INT DEFAULT 100',
-    'xp_levelup_multiplier FLOAT DEFAULT 1'
+    'xp_levelup_multiplier FLOAT DEFAULT 1.5'
 ];
 
 async function initDatabase() {
