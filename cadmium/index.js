@@ -1,5 +1,6 @@
 require('dotenv').config();
 const initDatabase = require('./db/init');
+const { spawn } = require('child_process');
 const path = require('node:path');
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const getFiles = require('./utils/getFiles');
@@ -48,12 +49,12 @@ process.stdin.on('data', (input) => {
     const trimmed = input.toString().trim();
 
     if (trimmed === 'cadmiumReload') {
-        console.log('[CADNIUM] Running deploy-commands.js...');
+        console.log('[CADMIUM] Running deploy-commands.js...');
 
         const child = spawn('node', ['./deploy-commands.js'], { stdio: 'inherit' });
 
         child.on('close', (code) => {
-            console.log(`[CADNIUM] deploy-commands.js exited with code ${code}`);
+            console.log(`[CADMIUM] deploy-commands.js exited with code ${code}`);
         });
     }
 });
