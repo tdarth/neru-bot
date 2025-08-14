@@ -9,7 +9,7 @@ module.exports = {
             const owner = await guild.client.users.fetch(guild.ownerId);
 
             try {
-                await owner.send(new ContainerMessage(`:wave: Hi **${owner.username}**\n*Cadmium* is currently whitelist-only, meaning only approved servers can add the bot.\n-# Please message <@990500436047982602> (\`tdarth_\`) for more information.`).build())
+                await owner.send(new ContainerMessage(`:wave: Hi **${owner.username}**,\n*Cadmium* is currently whitelist-only, meaning only approved servers can add the bot.\n-# Please message <@990500436047982602> (\`tdarth_\`) for more information.`).build())
             } catch (err) {
                 console.log('[CADMIUM] Owner DM failed.');
             }

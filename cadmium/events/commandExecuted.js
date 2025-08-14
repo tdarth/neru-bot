@@ -1,4 +1,6 @@
 const { Events, MessageFlags } = require('discord.js');
+const { messages } = require('../messages.json');
+const ContainerMessage = require('../utils/classes/ContainerMessage');
 
 module.exports = {
   name: Events.InteractionCreate,
@@ -25,9 +27,9 @@ module.exports = {
     } catch (error) {
       console.error(error);
       if (interaction.replied || interaction.deferred) {
-        await interaction.followUp({ content: 'There was an error while executing this command!', flags: MessageFlags.Ephemeral });
+        await interaction.followUp(new ContainerMessage(messages.errors.CATCH_ALL_ERROR_COMMAND).isEphemeral().build());
       } else {
-        await interaction.reply({ content: 'There was an error while executing this command!', flags: MessageFlags.Ephemeral });
+        await interaction.reply(new ContainerMessage(messages.errors.CATCH_ALL_ERROR_COMMAND).isEphemeral().build());
       }
     }
   },
