@@ -7,8 +7,8 @@ const ContainerMessage = require('../utils/classes/ContainerMessage');
 module.exports = {
     name: Events.MessageCreate,
     async execute(message) {
-        const serverConfig = getServerConfig();
-        const userData = getUserData();
+        const serverConfig = getServerConfig(message.guild.id);
+        const userData = getUserData(message.guild.id, message.author.id);
 
         if (serverConfig.xp_enabled) {
             console.log(message.createdTimestamp);
