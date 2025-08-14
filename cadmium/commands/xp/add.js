@@ -1,5 +1,6 @@
 const { SlashCommandSubcommandBuilder } = require('discord.js');
 const { forceAddXp } = require('../../utils/leveling/forceAddXp');
+const { formatNumber } = require('../../utils/formatNumber');
 const { messages } = require('../../messages.json');
 const ContainerMessage = require('../../utils/classes/ContainerMessage');
 
@@ -10,7 +11,7 @@ module.exports = {
         .addUserOption(option => option.setName('member').setDescription('The member to modify').setRequired(true))
         .addStringOption(option => option.setName('amount').setDescription('The amount').setRequired(true)),
 	async execute(interaction) {
-        const amount = parseInt(interaction.options.getString('amount'), 10);
+        const amount = formatNumber(parseInt(interaction.options.getString('amount'), 10));
         if (isNaN(amount)) return interaction.reply(new ContainerMessage(messages.errors.MUST_BE_NUMBER.replace('ARGUMENT', 'amount')).isEphemeral().build());
 
         const user = interaction.options.getUser('member');
