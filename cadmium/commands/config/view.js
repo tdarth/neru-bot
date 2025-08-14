@@ -10,7 +10,7 @@ module.exports = {
 	async execute(interaction) {
 		if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(ContainerMessage(messages.errors.MISSING_PERMISSION.replace('{permission}', 'administrator')).build());
 
-		const config = getServerConfig(interaction.guild.id);
+		const config = await getServerConfig(interaction.guild.id);
 		await interaction.reply(new ContainerMessage(`${JSON.stringify(config)}`).build());
 	}
 };
