@@ -2,7 +2,9 @@
     "messages": {
         "success": {
             "ADDED_XP": ":sparkles: Added `{amount}` **XP** to {user}.\n-# {old_amount} -> {new_amount}",
-            "REMOVED_XP": ":sparkles: Removed `{amount}` **XP** from {user}.\n-# {old_amount} -> {new_amount}"
+            "REMOVED_XP": ":sparkles: Removed `{amount}` **XP** from {user}.\n-# {old_amount} -> {new_amount}",
+            "UPDATE_LEVEL_MODE": ":white_check_mark: **Leveling Mode** set to: `{mode}`.",
+            "UPDATE_LEVEL_XP_REQUIREMENT": ":white_check_mark: **Level XP Requirement** set to: `${requirement}`."
         },
 
         "info": {
@@ -11,6 +13,7 @@
         },
 
         "errors": {
+            "MISSING_PERMISSION": ":x: **Error:* Missing permission: `{permission}`.",
             "MUST_BE_NUMBER": ":x: **Error:** `{argument}` must be a number."
         }
     }
