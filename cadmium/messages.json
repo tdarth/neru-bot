@@ -1,17 +1,17 @@
 {
     "messages": {
         "success": {
-            "ADDED_XP": ":sparkles: Added `AMOUNT` **XP** to USER.\n-# OLD_AMOUNT -> NEW_AMOUNT",
-            "REMOVED_XP": ":sparkles: Removed `AMOUNT` **XP** from USER.\n-# OLD_AMOUNT -> NEW_AMOUNT"
+            "ADDED_XP": ":sparkles: Added `{amount}` **XP** to {user}.\n-# {old_amount} -> {new_amount}",
+            "REMOVED_XP": ":sparkles: Removed `{amount}` **XP** from {user}.\n-# {old_amount} -> {new_amount}"
         },
 
         "info": {
-            "USER_HAS_NO_XP": ":x: :stars: USER has no **XP**.",
-            "USER_HAS_XP": ":stars: USER's **XP**: `AMOUNT` (TOTAL total)"
+            "USER_HAS_NO_XP": ":x: :stars: {user} has no **XP**.",
+            "USER_HAS_XP": ":stars: {user}'s **XP**: `{amount}` ({total} total)"
         },
 
         "errors": {
-            "MUST_BE_NUMBER": ":x: **Error:** `ARGUMENT` must be a number."
+            "MUST_BE_NUMBER": ":x: **Error:** `{argument}` must be a number."
         }
     }
 }

@@ -12,12 +12,12 @@ module.exports = {
 		const targetId = interaction?.options?.getUser('member')?.id || interaction.user.id;
 
 		const xp = await getXp(interaction.guild.id, targetId);
-		if (!xp || xp?.xp <= 0) return await interaction.reply(new ContainerMessage(messages.info.USER_HAS_NO_XP.replace('USER', `<@${targetId}>`)).build());
+		if (!xp || xp?.xp <= 0) return await interaction.reply(new ContainerMessage(messages.info.USER_HAS_NO_XP.replace('{user}', `<@${targetId}>`)).build());
 
 		await interaction.reply(new ContainerMessage(messages.info.USER_HAS_XP
-			.replace('USER', `<@${targetId}>`)
-			.replace('AMOUNT', xp.xp.toLocaleString())
-			.replace('TOTAL', xp.totalXp.toLocaleString())
+			.replace('{user}', `<@${targetId}>`)
+			.replace('{amount}', xp.xp.toLocaleString())
+			.replace('{total}', xp.totalXp.toLocaleString())
 		).build());
 	}
 };
