@@ -1,0 +1,12 @@
+{
+    "messages": {
+        "success": {
+            "ADDED_XP": ":sparkles: Added `AMOUNT` **XP** to USER.",
+            "REMOVED_XP": ":sparkles: Removed `AMOUNT` **XP** from USER."
+        },
+
+        "errors": {
+            "MUST_BE_NUMBER": ":x: **Error:** `ARGUMENT` must be a number."
+        }
+    }
+}
