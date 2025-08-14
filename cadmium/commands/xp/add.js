@@ -17,10 +17,10 @@ module.exports = {
         const result = await forceAddXp(interaction.guild.id, user.id, user.username, amount);
 
         await interaction.reply(new ContainerMessage(messages.success.ADDED_XP
-            .replace('AMOUNT', amount)
+            .replace('AMOUNT', amount.toLocaleString())
             .replace('USER', `<@${user.id}>`)
-            .replace('OLD_AMOUNT', `${result.oldXp} (${result.oldTotal} total)`)
-            .replace('NEW_AMOUNT', `${result.newXp} (${result.newTotal} total)`)
+            .replace('OLD_AMOUNT', `${result.oldXp.toLocaleString()} (${result.oldTotal.toLocaleString()} total)`)
+            .replace('NEW_AMOUNT', `${result.newXp.toLocaleString()} (${result.newTotal.toLocaleString()} total)`)
         ).build());
     }
 };

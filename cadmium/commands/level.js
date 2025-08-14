@@ -16,8 +16,8 @@ module.exports = {
 
 		await interaction.reply(new ContainerMessage(messages.info.USER_HAS_XP
 			.replace('USER', `<@${targetId}>`)
-			.replace('AMOUNT', xp.xp)
-			.replace('TOTAL', xp.totalXp)
+			.replace('AMOUNT', xp.xp.toLocaleString())
+			.replace('TOTAL', xp.totalXp.toLocaleString())
 		).build());
 	}
 };
