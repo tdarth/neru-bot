@@ -4,7 +4,7 @@ const { updateUserData } = require('../../utils/user/updateUserData');
 
 async function checkLevelUp(serverId, userId) {
     const serverConfig = await getServerConfig(serverId);
-    const userData = await getUserData(userId);
+    const userData = await getUserData(serverId, userId);
 
     if (userData.xp >= userData.next_level_xp) {
         await updateUserData(serverId, userId, 'xp', 0);
