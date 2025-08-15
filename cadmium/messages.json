@@ -3,6 +3,7 @@
         "success": {
             "ADDED_XP": ":sparkles: Added `{amount}` **XP** to {user}.\n-# {old_amount} -> {new_amount}",
             "REMOVED_XP": ":sparkles: Removed `{amount}` **XP** from {user}.\n-# {old_amount} -> {new_amount}",
+            "SET_XP": ":sparkles: Set **XP** of {user} to `{amount}`.\n-# {old_amount} -> {new_amount}",
             "UPDATE_CONFIG_VALUE": ":white_check_mark: **{config}** updated. New value: `{value}`."
         },
 
