@@ -62,7 +62,7 @@ async function checkLevelUp(serverId, userId, channel = null) {
 
         if (serverConfig.level_up_message_card_enabled == 1) {
             let messageCard = await generateMessageCard({
-                title: serverConfig.level_up_message_card_displayname_enabled ? user.displayName || user.username : user.username,
+                title: serverConfig.level_up_message_card_displayname_enabled == 1 ? user.displayName || user.username : user.username,
                 description: levelUpMessageCard,
                 avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`,
                 bg_color: '#202024',
