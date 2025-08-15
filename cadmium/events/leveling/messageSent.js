@@ -2,6 +2,7 @@ const { Events } = require('discord.js');
 const { messages } = require('../../messages.json');
 const { getServerConfig } = require('../../utils/server/getServerConfig');
 const { getUserData } = require('../../utils/user/getUserData');
+const { updateUserData } = require('../../utils/user/updateUserData');
 const { toMySQLDate, fromMySQLDate } = require('../../utils/sqlDate');
 const { addXp } = require('../../utils/leveling/addXp');
 
