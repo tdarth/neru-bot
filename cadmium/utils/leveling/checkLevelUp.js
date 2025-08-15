@@ -91,6 +91,10 @@ async function checkLevelUp(serverId, userId, channel = null) {
             });
         }
 
+        if (newUserData.xp >= newUserData.next_level_xp) {
+            checkLevelUp(serverId, userId, channel);
+        }
+
     }
 }
 
