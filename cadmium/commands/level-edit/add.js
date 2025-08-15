@@ -17,7 +17,7 @@ module.exports = {
 
         const user = interaction.options.getUser('member');
         const oldData = await getLevel(interaction.guild.id, interaction.user.id);
-        await updateUserData(interaction.guild.id, interaction.user.id, 'level', oldData.level + 1);
+        await updateUserData(interaction.guild.id, interaction.user.id, 'level', oldData.level + amount);
         const newData = await getLevel(interaction.guild.id, interaction.user.id);
 
         await interaction.reply(new ContainerMessage(messages.success.ADDED_LEVEL
