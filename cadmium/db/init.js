@@ -22,6 +22,7 @@ const serverColumns = [
     'level_up_message_location VARCHAR(255) DEFAULT 1',
     `level_up_message VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT "Congrats {user}, you reached level {newLevel}!"`,
     `level_up_message_card VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT "Level {newLevel}"`,
+    `level_up_message_card_displayname_enabled VARCHAR(255) DEFAULT 0`,
     "level_up_message_card_enabled INT DEFAULT 1",
     'level_command_card_enabled INT DEFAULT 1',
     'level_command_message VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT ":stars: {user}\n-# **Level**: `{level}`\n-# **XP**: `{xp}`/`{nextLevelXp}` ({totalXp} total)"',
