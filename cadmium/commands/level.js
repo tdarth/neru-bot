@@ -45,7 +45,7 @@ module.exports = {
 
 					.addTextDisplayComponents(
 						new TextDisplayBuilder()
-							.setContent(serverConfig.level_command_message
+							.setContent(serverConfig.level_command_message.toString()
 								.replaceAll('{user}', `<@${targetUser.id}>`)
 								.replaceAll('{level}', level.level.toLocaleString())
 								.replaceAll('{xp}', level.xp.toLocaleString())
