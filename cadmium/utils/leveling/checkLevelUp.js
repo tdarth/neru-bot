@@ -20,9 +20,19 @@ async function checkLevelUp(serverId, userId, channel = null) {
 
 
         if (levelUpLocation != 1) {
-            try { channel = client.channels.fetch(levelUpLocation) } catch (err) { return; }
+            channel = client.channels.cache.get(levelUpLocation);
+
+            if (!channel) {
+                try {
+                    channel = await client.channels.fetch(levelUpLocation);
+                } catch (err) {
+                    console.error(`Failed to fetch channel with ID ${levelUpLocation}:`, err);
+                    return;
+                }
+            }
         }
 
+        if (!channel) return;
         if (channel?.type === ChannelType.GuildText) {
             await channel.send(new ContainerMessage(serverConfig.level_up_message
                 .replaceAll('{user}', `<@${userId}>`)
