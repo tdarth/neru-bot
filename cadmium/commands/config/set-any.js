@@ -10,7 +10,7 @@ module.exports = {
 		.addStringOption(option => option.setName('config').setDescription('Config name').setRequired(true))
         .addStringOption(option => option.setName('value').setDescription('Config value').setRequired(true)),
 	async execute(interaction) {
-		if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).build());
+		if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).build());
 		const config = interaction.options.getString('config');
         const value = interaction.options.getString('value');
 

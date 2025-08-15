@@ -8,7 +8,7 @@ module.exports = {
 		.setName('view')
 		.setDescription("View the server's config"),
 	async execute(interaction) {
-		if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).build());
+		if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).build());
 
 		const config = await getServerConfig(interaction.guild.id);
 		await interaction.reply(new ContainerMessage(`${JSON.stringify(config)}`).build());
