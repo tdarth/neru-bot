@@ -14,7 +14,7 @@ module.exports = {
 		if (targetUser.bot) return await interaction.reply(new ContainerMessage().build());
 
 		const level = await getLevel(interaction.guild.id, targetUser.id);
-		if ((level.xp == 0 || level.xp == null) && level.level == 0) return await interaction.reply(new ContainerMessage(messages.info.USER_HAS_NO_XP.replace('{user}', `<@${targetId}>`)).build());
+		if ((level.xp == 0 || level.xp == null) && level.level == 0) return await interaction.reply(new ContainerMessage(messages.info.USER_HAS_NO_XP.replace('{user}', `<@${targetUser.id}>`)).build());
 
 		await interaction.reply(new ContainerMessage(messages.info.USER_HAS_XP
 			.replaceAll('{user}', `<@${targetUser.id}>`)
