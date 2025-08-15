@@ -1,5 +1,5 @@
 const updateXp = require('./updateXp');
-const { checkLevelUp } = require('../../utils/leveling/checkLevelUp');
+const { checkLevelUp } = require('./checkLevelUp');
 
 async function forceAddXp(serverId, userId, amount, channel = null) {
     await updateXp(serverId, userId, xp => xp + amount);
