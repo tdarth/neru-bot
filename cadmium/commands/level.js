@@ -26,7 +26,7 @@ module.exports = {
 		// 	.replaceAll('{totalXp}', level.totalXp.toLocaleString())
 		// ).build());
 
-		const serverConfig = getServerConfig(interaction.guild.id);
+		const serverConfig = await getServerConfig(interaction.guild.id);
 
 		const levelCard = await generateLevelCard({
 			userName: targetUser.username || 'User',
@@ -45,7 +45,7 @@ module.exports = {
 
 					.addTextDisplayComponents(
 						new TextDisplayBuilder()
-							.setContent(serverConfig.level_command_message.toString()
+							.setContent(serverConfig.level_command_message
 								.replaceAll('{user}', `<@${targetUser.id}>`)
 								.replaceAll('{level}', level.level.toLocaleString())
 								.replaceAll('{xp}', level.xp.toLocaleString())
