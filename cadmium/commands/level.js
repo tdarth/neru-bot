@@ -25,12 +25,12 @@ module.exports = {
 		const levelCard = await generateLevelCard({
 			userName: targetUser.username || 'User',
 			avatar: `https://cdn.discordapp.com/avatars/${targetUser.id}/${targetUser.avatar}.png`,
-			level: level.level,
-			currentXp: level.xp,
-			nextLevelXp: level.nextLevelXp,
+			level: level?.level,
+			currentXp: level?.xp,
+			nextLevelXp: level?.nextLevelXp,
 			bg_color: "#202024",
-			filledBarColor: userData.card_bar_color,
-			background: userData.card_bg_image,
+			filledBarColor: userData?.card_bar_color,
+			background: userData?.card_bg_image,
 			rank: 'Coming Soon'
 		});
 
@@ -41,11 +41,11 @@ module.exports = {
 				.addTextDisplayComponents(
 					new TextDisplayBuilder()
 						.setContent(serverConfig.level_command_message
-							.replaceAll('{user}', `<@${targetUser.id}>`)
-							.replaceAll('{level}', level.level.toLocaleString())
-							.replaceAll('{xp}', level.xp.toLocaleString())
-							.replaceAll('{nextLevelXp}', level.nextLevelXp.toLocaleString())
-							.replaceAll('{totalXp}', level.totalXp.toLocaleString()))
+							.replaceAll('{user}', `<@${targetUser?.id}>`)
+							.replaceAll('{level}', level?.level.toLocaleString())
+							.replaceAll('{xp}', level?.xp.toLocaleString())
+							.replaceAll('{nextLevelXp}', level?.nextLevelXp.toLocaleString())
+							.replaceAll('{totalXp}', level?.totalXp.toLocaleString()))
 				)
 		}
 
