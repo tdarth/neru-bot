@@ -2,6 +2,7 @@ const { SlashCommandSubcommandBuilder, ContainerBuilder, MessageFlags, SectionBu
 const { getLevel } = require('../utils/leveling/getLevel');
 const { generateLevelCard } = require('../utils/leveling/generateCard');
 const { getServerConfig } = require('../utils/server/getServerConfig');
+const { getUserData } = require('../utils/user/getUserData');
 const { messages } = require('../messages.json');
 const ContainerMessage = require('../utils/classes/ContainerMessage');
 
@@ -27,6 +28,7 @@ module.exports = {
 		// ).build());
 
 		const serverConfig = await getServerConfig(interaction.guild.id);
+		const userData = await getUserData(interaction.guild.id, targetUser.id)
 
 		const levelCard = await generateLevelCard({
 			userName: targetUser.username || 'User',
@@ -35,6 +37,8 @@ module.exports = {
 			currentXp: level.xp,
 			nextLevelXp: level.nextLevelXp,
 			bg_color: "#202024",
+			filledBarColor: userData.card_bar_color,
+			background: userData.card_bg_image,
 			rank: 'Coming Soon'
 		});
 
@@ -53,7 +57,7 @@ module.exports = {
 				)
 		}
 
-		if (serverConfig.enable_level_command_card == 1) {
+		if (serverConfig.level_command_card_enabled == 1) {
 			response
 				.addMediaGalleryComponents(
 					new MediaGalleryBuilder({
