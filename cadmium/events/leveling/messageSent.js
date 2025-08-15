@@ -13,8 +13,9 @@ module.exports = {
         const serverConfig = await getServerConfig(message.guild.id);
         let userData = await getUserData(message.guild.id, message.author.id);
 
-        if (!userData.last_message) {
+        if (!userData?.last_message) {
             await updateUserData(message.guild.id, message.author.id, 'last_message', toMySQLDate(Date.now()));
+            await updateUserData(message.guild.id, message.author.id, 'username', message.author.username);
             userData = await getUserData(message.guild.id, message.author.id);
         }
 

@@ -19,14 +19,6 @@ module.exports = {
 		const level = await getLevel(interaction.guild.id, targetUser.id);
 		if ((level.xp == 0 || level.xp == null) && level.level == 0) return await interaction.reply(new ContainerMessage(messages.info.USER_HAS_NO_XP.replace('{user}', `<@${targetUser.id}>`)).build());
 
-		// await interaction.reply(new ContainerMessage(messages.info.USER_HAS_XP
-		// 	.replaceAll('{user}', `<@${targetUser.id}>`)
-		// 	.replaceAll('{level}', level.level.toLocaleString())
-		// 	.replaceAll('{xp}', level.xp.toLocaleString())
-		// 	.replaceAll('{nextLevelXp}', level.nextLevelXp.toLocaleString())
-		// 	.replaceAll('{totalXp}', level.totalXp.toLocaleString())
-		// ).build());
-
 		const serverConfig = await getServerConfig(interaction.guild.id);
 		const userData = await getUserData(interaction.guild.id, targetUser.id)
 
