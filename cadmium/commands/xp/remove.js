@@ -17,7 +17,7 @@ module.exports = {
 
         const user = interaction.options.getUser('member');
         const oldData = await getLevel(interaction.guild.id, interaction.user.id);
-        await forceAddXp(interaction.guild.id, user.id, amount);
+        await forceRemoveXp(interaction.guild.id, user.id, amount);
         const newData = await getLevel(interaction.guild.id, interaction.user.id);
         
         await interaction.reply(new ContainerMessage(messages.success.REMOVED_XP
