@@ -34,6 +34,8 @@ module.exports = {
 			rank: 'Coming Soon'
 		})
 
+		return console.log(levelCard)
+
 		await interaction.reply({
 			flags: MessageFlags.IsComponentsV2,
 			components: [
