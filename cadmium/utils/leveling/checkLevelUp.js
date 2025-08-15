@@ -34,6 +34,7 @@ async function checkLevelUp(serverId, userId, channel = null) {
         }
 
         let response = new ContainerBuilder();
+        let user = await getDiscUserById(userId);
 
         let levelUpMessage = serverConfig.level_up_message
             .replaceAll('{user}', `<@${userId}>`)
@@ -50,7 +51,6 @@ async function checkLevelUp(serverId, userId, channel = null) {
             .replaceAll('{oldLevel}', userData.level)
             .replaceAll('{newLevel}', newUserData.level);
 
-        let user = await getDiscUserById(userId);
 
         if (serverConfig.level_up_message != '<empty>') {
             response
