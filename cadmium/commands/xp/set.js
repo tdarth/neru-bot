@@ -1,4 +1,4 @@
-const { SlashCommandSubcommandBuilder } = require('discord.js');
+const { SlashCommandSubcommandBuilder, PermissionsBitField } = require('discord.js');
 const { forceSetXp } = require('../../utils/leveling/forceSetXp');
 const { getLevel } = require('../../utils/leveling/getLevel');
 const { formatNumber } = require('../../utils/formatNumber');
@@ -12,6 +12,7 @@ module.exports = {
         .addUserOption(option => option.setName('member').setDescription('The member to modify').setRequired(true))
         .addStringOption(option => option.setName('amount').setDescription('The amount').setRequired(true)),
 	async execute(interaction) {
+        if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).build());
         const amount = formatNumber(Math.max(parseInt(interaction.options.getString('amount'), 10), 0));
         if (isNaN(amount)) return interaction.reply(new ContainerMessage(messages.errors.MUST_BE_NUMBER.replaceAll('{argument}', 'amount')).isEphemeral().build());
 

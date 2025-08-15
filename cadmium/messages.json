@@ -16,7 +16,7 @@
 
         "errors": {
             "CATCH_ALL_ERROR_COMMAND": ":x: **Error:** an `unknown` error occurred.",
-            "MISSING_PERMISSION": ":x: **Error:* Missing permission: `{permission}`.",
+            "MISSING_PERMISSION": ":x: **Error:** Missing permission: `{permission}`.",
             "MUST_BE_NUMBER": ":x: **Error:** `{argument}` must be a number.",
             "CANNOT_LEVELCHECK_BOT": ":x: **Error:** Viewing the level of `bots` is **disabled**.",
             "NOT_HEXADECIMAL_COLOR": ":x: **Error:** Input `{input}` was not a **hexadecimal** number."
