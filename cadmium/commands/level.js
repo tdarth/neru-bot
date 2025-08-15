@@ -26,7 +26,8 @@ module.exports = {
 		// ).build());
 
 		const levelCard = await generateLevelCard({
-			userName: targetUser.userName || 'User',
+			userName: targetUser.username || 'User',
+			avatar: `https://cdn.discordapp.com/avatars/${targetUser.id}/${targetUser.avatar}.png`,
 			level: level.level,
 			currentXp: level.xp,
 			nextLevelXp: level.nextLevelXp,
