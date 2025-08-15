@@ -7,6 +7,11 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const getFiles = require('./utils/getFiles');
 const loadCommands = require('./utils/loadCommands');
 
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers] });
+client.commands = new Collection();
+
+module.exports = { client };
+
 (async () => {
     try {
         await initDatabase();
@@ -21,10 +26,6 @@ const loadCommands = require('./utils/loadCommands');
 })();
 
 function startBot() {
-  const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers] });
-
-  client.commands = new Collection();
-
   const commandsPath = path.join(__dirname, 'commands');
   const commands = loadCommands(commandsPath);
   for (const command of commands) {

@@ -1,6 +1,8 @@
+const { ChannelType } = require('discord.js');
 const { getServerConfig } = require('../../utils/server/getServerConfig');
 const { getUserData } = require('../user/getUserData');
 const { updateUserData } = require('../../utils/user/updateUserData');
+const { client } = require('../../index');
 const ContainerMessage = require('../classes/ContainerMessage');
 
 async function checkLevelUp(serverId, userId, channel = null) {
@@ -16,7 +18,12 @@ async function checkLevelUp(serverId, userId, channel = null) {
 
         let newUserData = await getUserData(serverId, userId);
 
-        if (levelUpLocation == '1' && channel) {
+
+        if (levelUpLocation != 1) {
+            try { channel = client.channels.fetch(levelUpLocation) } catch (err) { return; }
+        }
+
+        if (channel?.type === ChannelType.GuildText) {
             await channel.send(new ContainerMessage(serverConfig.level_up_message
                 .replaceAll('{user}', `<@${userId}>`)
                 .replaceAll('{xp}', userData.xp)
