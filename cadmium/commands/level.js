@@ -11,7 +11,7 @@ module.exports = {
 	async execute(interaction) {
 		const targetUser = interaction?.options?.getUser('member') || interaction.user;
 
-		if (targetUser.bot) return await interaction.reply(new ContainerMessage().build());
+		if (targetUser.bot) return await interaction.reply(new ContainerMessage(messages.errors.CANNOT_LEVELCHECK_BOT).build());
 
 		const level = await getLevel(interaction.guild.id, targetUser.id);
 		if ((level.xp == 0 || level.xp == null) && level.level == 0) return await interaction.reply(new ContainerMessage(messages.info.USER_HAS_NO_XP.replace('{user}', `<@${targetUser.id}>`)).build());
