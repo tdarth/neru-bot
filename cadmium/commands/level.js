@@ -1,6 +1,7 @@
 const { SlashCommandSubcommandBuilder, ContainerBuilder, MessageFlags, SectionBuilder, TextDisplayBuilder, MediaGalleryBuilder } = require('discord.js');
 const { getLevel } = require('../utils/leveling/getLevel');
 const { generateLevelCard } = require('../utils/leveling/generateCard');
+const { getServerConfig } = require('../utils/server/getServerConfig');
 const { messages } = require('../messages.json');
 const ContainerMessage = require('../utils/classes/ContainerMessage');
 
@@ -25,6 +26,8 @@ module.exports = {
 		// 	.replaceAll('{totalXp}', level.totalXp.toLocaleString())
 		// ).build());
 
+		const serverConfig = getServerConfig(interaction.guild.id);
+
 		const levelCard = await generateLevelCard({
 			userName: targetUser.username || 'User',
 			avatar: `https://cdn.discordapp.com/avatars/${targetUser.id}/${targetUser.avatar}.png`,
@@ -42,7 +45,7 @@ module.exports = {
 
 					.addTextDisplayComponents(
 						new TextDisplayBuilder()
-							.setContent(messages.info.USER_HAS_XP
+							.setContent(serverConfig.level_command_message
 								.replaceAll('{user}', `<@${targetUser.id}>`)
 								.replaceAll('{level}', level.level.toLocaleString())
 								.replaceAll('{xp}', level.xp.toLocaleString())
