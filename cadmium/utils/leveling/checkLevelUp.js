@@ -12,7 +12,7 @@ async function checkLevelUp(serverId, userId, channel = null) {
 
     const levelUpLocation = serverConfig.level_up_message_location;
 
-    while (userData.xp >= userData.next_level_xp) {
+    if (userData.xp >= userData.next_level_xp) {
         await updateUserData(serverId, userId, 'xp', userData.xp - userData.next_level_xp);
         await updateUserData(serverId, userId, 'level', userData.level + 1);
         await updateUserData(serverId, userId, 'next_level_xp', serverConfig.xp_levelup_mode == 'fixed' ? serverConfig.xp_levelup_amount : Math.floor(serverConfig.xp_levelup_amount * Math.pow(serverConfig.xp_levelup_multiplier, newUserData.level)));
