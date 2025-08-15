@@ -16,7 +16,7 @@ module.exports = {
 					{ name: 'Exponential', value: 'exponential' },
 				)),
 	async execute(interaction) {
-		if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).build());
+		if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).isEphemeral().build());
 		const mode = interaction.options.getString('mode');
 
 		await updateServerConfig(interaction.guild.id, 'xp_levelup_mode', mode);
