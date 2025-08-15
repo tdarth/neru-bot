@@ -19,6 +19,7 @@ const serverColumns = [
     'xp_cooldown INT DEFAULT 30',
     'level_up_message_location VARCHAR(255) DEFAULT 1',
     `level_up_message VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT "Congrats {user}, you reached level {level}!"`,
+    'enable_level_command_card INT DEFAULT 1',
     'level_command_message VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT ":stars: {user}\n-# **Level**: `{level}`\n-# **XP**: `{xp}`/`{nextLevelXp}` ({totalXp} total)"',
     'xp_levelup_mode ENUM("fixed","exponential") DEFAULT "fixed"',
     'xp_levelup_amount INT DEFAULT 100',

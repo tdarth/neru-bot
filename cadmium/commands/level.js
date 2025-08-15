@@ -38,33 +38,39 @@ module.exports = {
 			rank: 'Coming Soon'
 		});
 
+		let response = new ContainerBuilder()
+
+		if (serverConfig.level_command_message != '<empty>') {
+			response
+				.addTextDisplayComponents(
+					new TextDisplayBuilder()
+						.setContent(serverConfig.level_command_message
+							.replaceAll('{user}', `<@${targetUser.id}>`)
+							.replaceAll('{level}', level.level.toLocaleString())
+							.replaceAll('{xp}', level.xp.toLocaleString())
+							.replaceAll('{nextLevelXp}', level.nextLevelXp.toLocaleString())
+							.replaceAll('{totalXp}', level.totalXp.toLocaleString()))
+				)
+		}
+
+		if (serverConfig.enable_level_command_card == 1) {
+			response
+				.addMediaGalleryComponents(
+					new MediaGalleryBuilder({
+						items: [
+							{
+								media: {
+									url: levelCard,
+								},
+							},
+						],
+					})
+				)
+		}
+
 		await interaction.reply({
 			flags: MessageFlags.IsComponentsV2,
-			components: [
-				new ContainerBuilder()
-					.addTextDisplayComponents(
-						serverConfig.level_command_message == '<empty>' ? null :
-							new TextDisplayBuilder()
-								.setContent(serverConfig.level_command_message
-									.replaceAll('{user}', `<@${targetUser.id}>`)
-									.replaceAll('{level}', level.level.toLocaleString())
-									.replaceAll('{xp}', level.xp.toLocaleString())
-									.replaceAll('{nextLevelXp}', level.nextLevelXp.toLocaleString())
-									.replaceAll('{totalXp}', level.totalXp.toLocaleString()))
-					)
-
-					.addMediaGalleryComponents(
-						new MediaGalleryBuilder({
-							items: [
-								{
-									media: {
-										url: levelCard,
-									},
-								},
-							],
-						})
-					)
-			],
+			components: [response],
 			allowedMentions: { parse: [] }
 		})
 	}
