@@ -42,15 +42,15 @@ module.exports = {
 			flags: MessageFlags.IsComponentsV2,
 			components: [
 				new ContainerBuilder()
-
 					.addTextDisplayComponents(
-						new TextDisplayBuilder()
-							.setContent(serverConfig.level_command_message
-								.replaceAll('{user}', `<@${targetUser.id}>`)
-								.replaceAll('{level}', level.level.toLocaleString())
-								.replaceAll('{xp}', level.xp.toLocaleString())
-								.replaceAll('{nextLevelXp}', level.nextLevelXp.toLocaleString())
-								.replaceAll('{totalXp}', level.totalXp.toLocaleString()))
+						serverConfig.level_command_message == '<empty>' ? null :
+							new TextDisplayBuilder()
+								.setContent(serverConfig.level_command_message
+									.replaceAll('{user}', `<@${targetUser.id}>`)
+									.replaceAll('{level}', level.level.toLocaleString())
+									.replaceAll('{xp}', level.xp.toLocaleString())
+									.replaceAll('{nextLevelXp}', level.nextLevelXp.toLocaleString())
+									.replaceAll('{totalXp}', level.totalXp.toLocaleString()))
 					)
 
 					.addMediaGalleryComponents(
@@ -64,7 +64,8 @@ module.exports = {
 							],
 						})
 					)
-			]
+			],
+			allowedMentions: { parse: [] }
 		})
 	}
 };
