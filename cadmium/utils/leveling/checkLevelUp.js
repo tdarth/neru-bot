@@ -18,7 +18,7 @@ async function checkLevelUp(serverId, userId, channel = null) {
 
         let newUserData = await getUserData(serverId, userId);
 
-        if (levelUpLocation != 1 && !levelUpLocation) {
+        if (levelUpLocation == 1 && levelUpLocation != 0) {
             channel = client.channels.cache.get(levelUpLocation);
 
             if (!channel) {
@@ -31,7 +31,6 @@ async function checkLevelUp(serverId, userId, channel = null) {
             }
         }
 
-        if (!channel) return;
         if (channel?.type === ChannelType.GuildText) {
             await channel.send(new ContainerMessage(serverConfig.level_up_message
                 .replaceAll('{user}', `<@${userId}>`)
