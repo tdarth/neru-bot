@@ -9,7 +9,7 @@ module.exports = {
 		.setDescription("View you or a user's level")
 		.addUserOption(option => option.setName('member').setDescription('The member to view').setRequired(false)),
 	async execute(interaction) {
-		const targetUser = interaction?.options?.getUser('member') || interaction.user.id;
+		const targetUser = interaction?.options?.getUser('member') || interaction.user;
 
 		if (targetUser.bot) return await interaction.reply(new ContainerMessage().build());
 
