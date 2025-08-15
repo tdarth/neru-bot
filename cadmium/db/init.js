@@ -58,6 +58,12 @@ async function initDatabase() {
         await pool.query(`ALTER TABLE server_settings ADD COLUMN IF NOT EXISTS ${col}`);
     }
 
+    await pool.query(`
+        CREATE INDEX IF NOT EXISTS idx_level_xp
+        ON users (level DESC, xp DESC)
+    `);
+
+
     console.log('[CADMIUM] Database initialized.');
 }
 
