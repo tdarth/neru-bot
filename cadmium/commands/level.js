@@ -29,7 +29,7 @@ module.exports = {
 			userName: targetUser.userName || 'User',
 			level: level.level,
 			currentXp: level.xp,
-			nextLevelXp: nextLevelXp,
+			nextLevelXp: level.nextLevelXp,
 			bg_color: "#202024",
 			rank: 'Coming Soon'
 		})
