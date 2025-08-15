@@ -23,7 +23,7 @@ async function checkLevelUp(serverId, userId, channel = null) {
                 .replaceAll('{totalXp}', userData.total_xp)
                 .replaceAll('{oldLevel}', userData.level)
                 .replaceAll('{newLevel}', newUserData.level)
-            ).setMentions({}).build());
+            ).setMentions({ parse: ['users'] }).build());
         }
     }
 }
