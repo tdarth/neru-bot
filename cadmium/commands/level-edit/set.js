@@ -20,7 +20,7 @@ module.exports = {
         await updateUserData(interaction.guild.id, interaction.user.id, 'level', amount);
         const newData = await getLevel(interaction.guild.id, interaction.user.id);
 
-        await interaction.reply(new ContainerMessage(messages.success.REMOVED_LEVEL
+        await interaction.reply(new ContainerMessage(messages.success.SET_LEVEL
             .replaceAll('{amount}', amount.toLocaleString())
             .replaceAll('{user}', `<@${user.id}>`)
             .replaceAll('{oldLevel}', `${oldData.level.toLocaleString()}`)
