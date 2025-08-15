@@ -1,9 +1,12 @@
 {
     "messages": {
         "success": {
-            "ADDED_XP": ":sparkles: Added `{amount}` **XP** to {user}.\n-# {old_amount} -> {new_amount}",
-            "REMOVED_XP": ":sparkles: Removed `{amount}` **XP** from {user}.\n-# {old_amount} -> {new_amount}",
-            "SET_XP": ":sparkles: Set **XP** of {user} to `{amount}`.\n-# {old_amount} -> {new_amount}",
+            "ADDED_XP": ":sparkles: Added `{amount}` **XP** to {user}.\n-# {oldAmount} -> {newAmount}",
+            "REMOVED_XP": ":sparkles: Removed `{amount}` **XP** from {user}.\n-# {oldAmount} -> {newAmount}",
+            "SET_XP": ":sparkles: Set **XP** of {user} to `{amount}`.\n-# {oldAmount} -> {newAmount}",
+            "ADDED_LEVEL": ":sparkles: Added `{amount}` **Levels** to {user}.\n-# {oldLevel} -> {newLevel}",
+            "REMOVED_LEVEL": ":sparkles: Removed `{amount}` **Levels** from {user}.\n-# {oldLevel} -> {newLevel}",
+            "SET_LEVEL": ":sparkles: Set **Level** of {user} to {amount}.\n-# {oldLevel} -> {newLevel}",
             "UPDATE_CONFIG_VALUE": ":white_check_mark: **{config}** updated. New value: `{value}`."
         },
 

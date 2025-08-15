@@ -1,5 +1,5 @@
 const { SlashCommandSubcommandBuilder } = require('discord.js');
-const { forceRemoveXp } = require('../../utils/leveling/forceRemoveXp');
+const { updateUserData } = require('../../utils/user/updateUserData');
 const { getLevel } = require('../../utils/leveling/getLevel');
 const { formatNumber } = require('../../utils/formatNumber');
 const { messages } = require('../../messages.json');
@@ -8,7 +8,7 @@ const ContainerMessage = require('../../utils/classes/ContainerMessage');
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
         .setName('remove')
-        .setDescription("Remove XP from a member")
+        .setDescription("Remove Levels from a member")
         .addUserOption(option => option.setName('member').setDescription('The member to modify').setRequired(true))
         .addStringOption(option => option.setName('amount').setDescription('The amount').setRequired(true)),
 	async execute(interaction) {
@@ -17,14 +17,14 @@ module.exports = {
 
         const user = interaction.options.getUser('member');
         const oldData = await getLevel(interaction.guild.id, interaction.user.id);
-        await forceRemoveXp(interaction.guild.id, user.id, amount);
+        await updateUserData(interaction.guild.id, interaction.user.id, 'level', Math.max(oldData.level - amount, 0));
         const newData = await getLevel(interaction.guild.id, interaction.user.id);
-        
-        await interaction.reply(new ContainerMessage(messages.success.REMOVED_XP
+
+        await interaction.reply(new ContainerMessage(messages.success.REMOVED_LEVEL
             .replaceAll('{amount}', amount.toLocaleString())
             .replaceAll('{user}', `<@${user.id}>`)
-            .replaceAll('{oldAmount}', `${oldData.xp.toLocaleString()} (${oldData.totalXp.toLocaleString()} total)`)
-            .replaceAll('{newAmount}', `${newData.xp.toLocaleString()} (${newData.totalXp.toLocaleString()} total)`)
+            .replaceAll('{oldLevel}', `${oldData.level.toLocaleString()}`)
+            .replaceAll('{newLevel}', `${newData.level.toLocaleString()}`)
         ).build());
     }
 };
