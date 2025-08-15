@@ -17,13 +17,14 @@ module.exports = {
 
         const user = interaction.options.getUser('member');
         const oldData = await getLevel(interaction.guild.id, interaction.user.id);
-        const result = await forceAddXp(interaction.guild.id, user.id, amount);
+        await forceAddXp(interaction.guild.id, user.id, amount);
+        const newData = await getLevel(interaction.guild.id, interaction.user.id);
         
         await interaction.reply(new ContainerMessage(messages.success.REMOVED_XP
             .replaceAll('{amount}', amount.toLocaleString())
             .replaceAll('{user}', `<@${user.id}>`)
             .replaceAll('{old_amount}', `${oldData.xp.toLocaleString()} (${oldData.totalXp.toLocaleString()} total)`)
-            .replaceAll('{new_amount}', `${result.newXp.toLocaleString()} (${result.newTotal.toLocaleString()} total)`)
+            .replaceAll('{new_amount}', `${newData.xp.toLocaleString()} (${newData.totalXp.toLocaleString()} total)`)
         ).build());
     }
 };
