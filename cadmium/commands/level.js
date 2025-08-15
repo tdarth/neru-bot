@@ -32,9 +32,7 @@ module.exports = {
 			nextLevelXp: level.nextLevelXp,
 			bg_color: "#202024",
 			rank: 'Coming Soon'
-		})
-
-		return console.log(levelCard)
+		});
 
 		await interaction.reply({
 			flags: MessageFlags.IsComponentsV2,

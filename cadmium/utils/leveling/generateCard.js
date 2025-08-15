@@ -33,7 +33,7 @@ async function generateLevelCard(options = {}) {
         body
     });
 
-    if (response.ok) return response.json();
+    if (response.ok) return response.text();
     else return 'https://help.autodesk.com/sfdcarticles/img/0EM3g000004LgDI';
 }
 
