@@ -1,9 +1,10 @@
-const { ChannelType } = require('discord.js');
+const { ChannelType, MessageFlags, ContainerBuilder, TextDisplayBuilder, MediaGalleryBuilder } = require('discord.js');
 const { getServerConfig } = require('../../utils/server/getServerConfig');
 const { getUserData } = require('../user/getUserData');
 const { updateUserData } = require('../../utils/user/updateUserData');
+const { generateMessageCard } = require('../../utils/leveling/generateMessageCard');
+const { getDiscUserById } = require('../getDiscUserById');
 const { client } = require('../../index');
-const ContainerMessage = require('../classes/ContainerMessage');
 
 async function checkLevelUp(serverId, userId, channel = null) {
     const serverConfig = await getServerConfig(serverId);
@@ -32,15 +33,54 @@ async function checkLevelUp(serverId, userId, channel = null) {
             }
         }
 
-        if (channel?.type === ChannelType.GuildText) {
-            await channel.send(new ContainerMessage(serverConfig.level_up_message
-                .replaceAll('{user}', `<@${userId}>`)
-                .replaceAll('{xp}', userData.xp)
-                .replaceAll('{totalXp}', userData.total_xp)
-                .replaceAll('{oldLevel}', userData.level)
-                .replaceAll('{newLevel}', newUserData.level)
-            ).setMentions({ parse: ['users'] }).build());
+        let response = new ContainerBuilder();
+        let levelUpMessage = serverConfig.level_up_message.replaceAll('{user}', `<@${userId}>`)
+            .replaceAll('{xp}', userData.xp)
+            .replaceAll('{totalXp}', userData.total_xp)
+            .replaceAll('{oldLevel}', userData.level)
+            .replaceAll('{newLevel}', newUserData.level);
+        let user = await getDiscUserById(userId);
+
+        if (serverConfig.level_up_message != '<empty>') {
+            response
+                .addTextDisplayComponents(
+                    new TextDisplayBuilder()
+                        .setContent(levelUpMessage)
+                )
         }
+
+        if (serverConfig.level_up_message_card_enabled == 1) {
+            let messageCard = await generateMessageCard({
+                title: user.username,
+                description: levelUpMessage,
+                avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`,
+                bg_color: '#202024',
+                description_color: userData.card_bar_color
+
+            })
+
+            response
+                .addMediaGalleryComponents(
+                    new MediaGalleryBuilder({
+                        items: [
+                            {
+                                media: {
+                                    url: messageCard,
+                                },
+                            },
+                        ],
+                    })
+                )
+        }
+
+        if (channel?.type === ChannelType.GuildText) {
+            await channel.send({
+                flags: MessageFlags.IsComponentsV2,
+                components: [response],
+                allowedMentions: { parse: ['users'] }
+            });
+        }
+
     }
 }
 
