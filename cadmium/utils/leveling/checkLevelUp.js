@@ -34,11 +34,22 @@ async function checkLevelUp(serverId, userId, channel = null) {
         }
 
         let response = new ContainerBuilder();
-        let levelUpMessage = serverConfig.level_up_message.replaceAll('{user}', `<@${userId}>`)
+
+        let levelUpMessage = serverConfig.level_up_message
+            .replaceAll('{user}', `<@${userId}>`)
             .replaceAll('{xp}', userData.xp)
             .replaceAll('{totalXp}', userData.total_xp)
             .replaceAll('{oldLevel}', userData.level)
             .replaceAll('{newLevel}', newUserData.level);
+
+        let levelUpMessageCard = serverConfig.level_up_message_card
+            .replaceAll('{user}', user.username)
+            .replaceAll('{display}', user.displayName)
+            .replaceAll('{xp}', userData.xp)
+            .replaceAll('{totalXp}', userData.total_xp)
+            .replaceAll('{oldLevel}', userData.level)
+            .replaceAll('{newLevel}', newUserData.level);
+
         let user = await getDiscUserById(userId);
 
         if (serverConfig.level_up_message != '<empty>') {
@@ -52,11 +63,10 @@ async function checkLevelUp(serverId, userId, channel = null) {
         if (serverConfig.level_up_message_card_enabled == 1) {
             let messageCard = await generateMessageCard({
                 title: user.username,
-                description: levelUpMessage,
+                description: levelUpMessageCard,
                 avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`,
                 bg_color: '#202024',
                 description_color: userData.card_bar_color
-
             })
 
             response
