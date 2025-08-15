@@ -12,7 +12,7 @@ module.exports = {
         .addUserOption(option => option.setName('member').setDescription('The member to modify').setRequired(true))
         .addStringOption(option => option.setName('amount').setDescription('The amount').setRequired(true)),
 	async execute(interaction) {
-        const amount = formatNumber(parseInt(interaction.options.getString('amount'), 10));
+        const amount = formatNumber(Math.max(parseInt(interaction.options.getString('amount'), 10), 0));
         if (isNaN(amount)) return interaction.reply(new ContainerMessage(messages.errors.MUST_BE_NUMBER.replaceAll('{argument}', 'amount')).isEphemeral().build());
 
         const user = interaction.options.getUser('member');
