@@ -19,8 +19,7 @@ async function checkLevelUp(serverId, userId, channel = null) {
         let newUserData = await getUserData(serverId, userId);
 
         if (levelUpLocation == 0) return;
-        
-        if (levelUpLocation == 1) {
+        if (levelUpLocation != 1) {
             channel = client.channels.cache.get(levelUpLocation);
 
             if (!channel) {
