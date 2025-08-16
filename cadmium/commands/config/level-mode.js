@@ -13,6 +13,7 @@ module.exports = {
 				.setRequired(true)
 				.addChoices(
 					{ name: 'Fixed Amount', value: 'fixed' },
+					{ name: 'Additive', value: 'additive' },
 					{ name: 'Exponential', value: 'exponential' },
 				)),
 	async execute(interaction) {

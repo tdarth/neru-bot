@@ -26,9 +26,9 @@ const serverColumns = [
     "level_up_message_card_enabled INT DEFAULT 1",
     'level_command_card_enabled INT DEFAULT 1',
     'level_command_message VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT ":stars: {user}\n-# **Level**: `{level}`\n-# **XP**: `{xp}`/`{nextLevelXp}` ({totalXp} total)"',
-    'xp_levelup_mode ENUM("fixed","exponential") DEFAULT "fixed"',
+    'xp_levelup_mode ENUM("fixed","additive","exponential") DEFAULT "fixed"',
     'xp_levelup_amount INT DEFAULT 100',
-    'xp_levelup_multiplier FLOAT DEFAULT 1.5'
+    'xp_levelup_multiplier FLOAT DEFAULT 1.1'
 ];
 
 async function initDatabase() {

@@ -15,7 +15,25 @@ async function checkLevelUp(serverId, userId, channel = null) {
     if (userData.xp >= userData.next_level_xp) {
         await updateUserData(serverId, userId, 'xp', userData.xp - userData.next_level_xp);
         await updateUserData(serverId, userId, 'level', userData.level + 1);
-        await updateUserData(serverId, userId, 'next_level_xp', serverConfig.xp_levelup_mode == 'fixed' ? serverConfig.xp_levelup_amount : Math.floor(serverConfig.xp_levelup_amount * Math.pow(serverConfig.xp_levelup_multiplier, userData.level + 1)));
+        
+        let amountToChange;
+
+        switch (serverConfig.xp_levelup_mode) {
+            case 'fixed':
+                amountToChange = serverConfig.xp_levelup_amount;
+                break;
+            case 'additive':
+                amountToChange = userData.next_level_up + serverConfig.xp_levelup_amount;
+                break;
+            case 'exponential':
+                amountToChange = Math.floor(serverConfig.xp_levelup_amount * Math.pow(serverConfig.xp_levelup_multiplier, userData.level + 1));
+                break;
+            default:
+                amountToChange = serverConfig.xp_levelup_amount;
+                break;
+        }
+
+        await updateUserData(serverId, userId, 'next_level_xp', amountToChange);
 
         let newUserData = await getUserData(serverId, userId);
 
