@@ -4,6 +4,7 @@ const { getLeaderboard } = require('../utils/leveling/getLeaderboard');
 const { generateLevelCard } = require('../utils/leveling/generateLevelCard');
 const { getDiscUserById } = require('../utils/getDiscUserById');
 const { getLevel } = require('../utils/leveling/getLevel');
+const { getUserData } = require('../utils/user/getUserData');
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
