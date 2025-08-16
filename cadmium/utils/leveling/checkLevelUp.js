@@ -23,7 +23,7 @@ async function checkLevelUp(serverId, userId, channel = null) {
                 amountToChange = serverConfig.xp_levelup_amount;
                 break;
             case 'additive':
-                amountToChange = userData.next_level_up + serverConfig.xp_levelup_amount;
+                amountToChange = userData.next_level_xp + serverConfig.xp_levelup_amount;
                 break;
             case 'exponential':
                 amountToChange = Math.floor(serverConfig.xp_levelup_amount * Math.pow(serverConfig.xp_levelup_multiplier, userData.level + 1));
