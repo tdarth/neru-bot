@@ -29,7 +29,7 @@ module.exports = {
             filledBarColor: topMemberUserData?.card_bar_color,
             background: topMemberUserData?.card_bg_image,
             rank: leaderboard[0].rank,
-            rankColor: rank == '1' ? '#ffcc00' : rank == '2' ? '#c0c0c0' : rank == '3' ? '#cd7f32' : null
+            rankColor: '#ffcc00'
         });
 
         let response = new ContainerBuilder();
