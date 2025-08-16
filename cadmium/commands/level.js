@@ -5,6 +5,7 @@ const { getServerConfig } = require('../utils/server/getServerConfig');
 const { getUserData } = require('../utils/user/getUserData');
 const { messages } = require('../messages.json');
 const ContainerMessage = require('../utils/classes/ContainerMessage');
+const { getRank } = require('../utils/leveling/getRank');
 
 module.exports = {
 	data: new SlashCommandSubcommandBuilder()
@@ -21,6 +22,7 @@ module.exports = {
 
 		const serverConfig = await getServerConfig(interaction.guild.id);
 		const userData = await getUserData(interaction.guild.id, targetUser.id)
+		const rank = await getRank(interaction.guild.id, targetUser.id) || 'Error';
 
 		const levelCard = await generateLevelCard({
 			userName: targetUser.username || 'User',
@@ -31,7 +33,7 @@ module.exports = {
 			bg_color: "#202024",
 			filledBarColor: userData?.card_bar_color,
 			background: userData?.card_bg_image,
-			rank: 'Coming Soon'
+			rank: rank
 		});
 
 		let response = new ContainerBuilder()
