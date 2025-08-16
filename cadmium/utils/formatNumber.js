@@ -1,5 +1,5 @@
-function formatNumber(number) {
-    return Math.min(2147483647, Math.max(-2147483647, number));
+function formatNumber(number, range = 2147483647) {
+    return Math.min(range, Math.max(-range, number));
 }
 
 module.exports = { formatNumber };
