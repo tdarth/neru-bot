@@ -1,6 +1,6 @@
 const { SlashCommandSubcommandBuilder, ContainerBuilder, MessageFlags, SectionBuilder, TextDisplayBuilder, MediaGalleryBuilder } = require('discord.js');
 const { getLevel } = require('../utils/leveling/getLevel');
-const { generateLevelCard } = require('../utils/leveling/generateCard');
+const { generateLevelCard } = require('../utils/leveling/generateLevelCard');
 const { getServerConfig } = require('../utils/server/getServerConfig');
 const { getUserData } = require('../utils/user/getUserData');
 const { messages } = require('../messages.json');
@@ -22,7 +22,7 @@ module.exports = {
 
 		const serverConfig = await getServerConfig(interaction.guild.id);
 		const userData = await getUserData(interaction.guild.id, targetUser.id);
-		
+
 		const rankInfo = await getRank(interaction.guild.id, targetUser.id);
 		const rank = rankInfo?.rank ?? 'Error';
 
