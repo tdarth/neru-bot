@@ -21,7 +21,8 @@ module.exports = {
 		if ((level?.xp == 0 || level?.xp == null) && level?.level == 0) return await interaction.reply(new ContainerMessage(messages.info.USER_HAS_NO_XP.replace('{user}', `<@${targetUser.id}>`)).build());
 
 		const serverConfig = await getServerConfig(interaction.guild.id);
-		const userData = await getUserData(interaction.guild.id, targetUser.id)
+		const userData = await getUserData(interaction.guild.id, targetUser.id);
+		
 		const rankInfo = await getRank(interaction.guild.id, targetUser.id);
 		const rank = rankInfo?.rank ?? 'Error';
 
