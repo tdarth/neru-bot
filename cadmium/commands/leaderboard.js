@@ -50,13 +50,13 @@ module.exports = {
                 })
             )
 
+        let leaderboardContents = [];
+
         for (const user of leaderboard.slice(1)) {
-            response
-                .addTextDisplayComponents(
-                    new TextDisplayBuilder()
-                        .setContent(`#${user.rank} <@${user.id}> - **${user.level}** (${user.xp}/${user.xpNeeded})\n`)
-                )
+            leaderboardContents.unshift(`#${user.rank} <@${user.id}> - **${user.level}** (${user.xp}/${user.xpNeeded})`);
         }
+
+        if (leaderboardContents.length > 0) response.addTextDisplayComponents(new TextDisplayBuilder().setContent(leaderboardContents.join('\n')));
 
         await interaction.reply({
             flags: MessageFlags.IsComponentsV2,
