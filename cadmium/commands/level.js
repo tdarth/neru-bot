@@ -22,7 +22,8 @@ module.exports = {
 
 		const serverConfig = await getServerConfig(interaction.guild.id);
 		const userData = await getUserData(interaction.guild.id, targetUser.id)
-		const rank = await getRank(interaction.guild.id, targetUser.id).rank || 'Error';
+		const rankInfo = await getRank(interaction.guild.id, targetUser.id);
+		const rank = rankInfo?.rank ?? 'Error';
 
 		const levelCard = await generateLevelCard({
 			userName: targetUser.username || 'User',
