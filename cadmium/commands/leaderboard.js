@@ -34,6 +34,12 @@ module.exports = {
         let response = new ContainerBuilder();
 
         response
+            .addTextDisplayComponents([
+                new TextDisplayBuilder()
+                    .setContent(`## ${interaction.guild.name} Level Leaderboard`),
+                new TextDisplayBuilder()
+                    .setContent(`:trophy: Top 1: <@${leaderboard[0].id}>`)
+            ])
             .addMediaGalleryComponents(
                 new MediaGalleryBuilder({
                     items: [
@@ -46,11 +52,11 @@ module.exports = {
                 })
             )
 
-        for (const user of leaderboard) {
+        for (const user of leaderboard.slice(1)) {
             response
                 .addTextDisplayComponents(
                     new TextDisplayBuilder()
-                        .setContent(`<@${user.id}> - Level: **${user.level}** (${user.xp}/${user.xpNeeded})\n`)
+                        .setContent(`#${user.rank} <@${user.id}> - **${user.level}** (${user.xp}/${user.xpNeeded})\n`)
                 )
         }
 
