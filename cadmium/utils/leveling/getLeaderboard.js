@@ -16,7 +16,7 @@ async function getLeaderboard(serverId, limit = 25) {
         rank: index + 1,
         level: row.level,
         xp: row.xp,
-        xpNeeded: row.next_level_up,
+        xpNeeded: row.next_level_xp,
         xpNextLevel: row.next_level_xp - row.xp
     }));
 }
