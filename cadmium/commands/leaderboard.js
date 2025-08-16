@@ -1,9 +1,9 @@
 const { SlashCommandSubcommandBuilder, MessageFlags, ContainerBuilder, MediaGalleryBuilder, TextDisplayBuilder } = require('discord.js');
-const { formatNumber } = require('../../utils/formatNumber');
+const { formatNumber } = require('../utils/formatNumber');
 const { getLeaderboard } = require('../utils/leveling/getLeaderboard');
 const { generateLevelCard } = require('../utils/leveling/generateLevelCard');
 const { getDiscUserById } = require('../utils/getDiscUserById');
-const { messages } = require('../../messages.json');
+const { messages } = require('../messages.json');
 const ContainerMessage = require('../utils/classes/ContainerMessage');
 
 module.exports = {
