@@ -56,6 +56,8 @@ module.exports = {
             leaderboardContents.push(`\`#${user.rank}\` <@${user.id}> - **${user.level}** (${user.xp}/${user.xpNeeded})`);
         }
 
+        leaderboardContents.push(`-# Showing the Top ${limit} members.`);
+
         if (leaderboardContents.length > 0) response.addTextDisplayComponents(new TextDisplayBuilder().setContent(leaderboardContents.join('\n')));
 
         await interaction.reply({
