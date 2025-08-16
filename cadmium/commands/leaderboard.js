@@ -12,10 +12,9 @@ module.exports = {
         .setDescription("View the leaderboard of the server")
         .addStringOption(option => option.setName('limit').setDescription('The amount of members to show, default 25').setRequired(false)),
     async execute(interaction) {
-        const limit = formatNumber(Math.max(parseInt(interaction.options.getString('limit'), 10), 0), 100);
-        if (isNaN(limit)) return interaction.reply(new ContainerMessage(messages.errors.MUST_BE_NUMBER.replaceAll('{argument}', 'limit')).isEphemeral().build());
+        const limit = formatNumber(Math.max(parseInt(interaction.options.getString('limit'), 10), 0), 100) || 25;
 
-        const leaderboard = await getLeaderboard();
+        const leaderboard = await getLeaderboard(interaction.guild.id, limit);
         const topMember = await getDiscUserById(leaderboard[0].id);
         const topMemberLevel = await getLevel(interaction.guild.id, topMember.id);
         const topMemberUserData = await getUserData(interaction.guild.id, topMember.id);
