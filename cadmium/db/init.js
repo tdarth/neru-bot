@@ -8,7 +8,7 @@ const userColumns = [
     'total_xp INT DEFAULT 0',
     'messages INT DEFAULT 0',
     'last_message DATETIME',
-    'card_bar_color VARCHAR(255) DEFAULT "#F35240"',
+    'card_bar_color VARCHAR(255) DEFAULT "#4D4D4D',
     'card_bg_image VARCHAR(255) DEFAULT 0'
 ];
 

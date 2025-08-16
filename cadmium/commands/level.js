@@ -35,7 +35,8 @@ module.exports = {
 			bg_color: "#202024",
 			filledBarColor: userData?.card_bar_color,
 			background: userData?.card_bg_image,
-			rank: rank
+			rank: rank,
+			rankColor: rank == '1' ? '#ffcc00' : rank == '2' ? '#c0c0c0' : rank == '3' ? '#cd7f32' : null
 		});
 
 		let response = new ContainerBuilder()
