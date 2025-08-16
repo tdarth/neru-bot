@@ -36,7 +36,7 @@ module.exports = {
         response
             .addTextDisplayComponents(
                 new TextDisplayBuilder()
-                    .setContent(`## ${interaction.guild.name} Level Leaderboard`)
+                    .setContent(`## ${interaction.guild.name} Leaderboard`)
             )
             .addMediaGalleryComponents(
                 new MediaGalleryBuilder({
