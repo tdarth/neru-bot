@@ -53,7 +53,7 @@ module.exports = {
         let leaderboardContents = [];
 
         for (const user of leaderboard.slice(1)) {
-            leaderboardContents.push(`#${user.rank} <@${user.id}> - **${user.level}** (${user.xp}/${user.xpNeeded})`);
+            leaderboardContents.push(`\`#${user.rank}\` <@${user.id}> - **${user.level}** (${user.xp}/${user.xpNeeded})`);
         }
 
         if (leaderboardContents.length > 0) response.addTextDisplayComponents(new TextDisplayBuilder().setContent(leaderboardContents.join('\n')));
