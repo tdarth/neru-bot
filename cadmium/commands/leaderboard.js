@@ -3,8 +3,7 @@ const { formatNumber } = require('../utils/formatNumber');
 const { getLeaderboard } = require('../utils/leveling/getLeaderboard');
 const { generateLevelCard } = require('../utils/leveling/generateLevelCard');
 const { getDiscUserById } = require('../utils/getDiscUserById');
-const { messages } = require('../messages.json');
-const ContainerMessage = require('../utils/classes/ContainerMessage');
+const { getLevel } = require('../utils/leveling/getLevel');
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
