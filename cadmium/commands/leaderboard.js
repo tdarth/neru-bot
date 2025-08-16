@@ -34,12 +34,10 @@ module.exports = {
         let response = new ContainerBuilder();
 
         response
-            .addTextDisplayComponents([
+            .addTextDisplayComponents(
                 new TextDisplayBuilder()
-                    .setContent(`## ${interaction.guild.name} Level Leaderboard`),
-                new TextDisplayBuilder()
-                    .setContent(`:trophy: Top 1: <@${leaderboard[0].id}>`)
-            ])
+                    .setContent(`## ${interaction.guild.name} Level Leaderboard`)
+            )
             .addMediaGalleryComponents(
                 new MediaGalleryBuilder({
                     items: [
