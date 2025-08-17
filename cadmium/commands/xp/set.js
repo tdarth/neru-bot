@@ -21,6 +21,7 @@ module.exports = {
         await forceSetXp(interaction.guild.id, user.id, amount);
         const newData = await getLevel(interaction.guild.id, user.id);
 
+        const levelsGained = newData.level - oldData.level;
         await interaction.reply(new ContainerMessage(messages.success.SET_XP
             .replaceAll('{amount}', amount.toLocaleString())
             .replaceAll('{user}', `<@${user.id}>`)
@@ -29,6 +30,7 @@ module.exports = {
             .replaceAll('{totalXp}', newData.totalXp.toLocaleString())
             .replaceAll('{oldLevel}', oldData.level.toLocaleString())
             .replaceAll('{newLevel}', newData.level.toLocaleString())
+            .replaceAll('{gainedLevels}', levelsGained)
         ).build());
     }
 };
