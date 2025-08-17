@@ -52,12 +52,15 @@ async function checkLevelUp(serverId, userId, channel = null) {
             let gained = 0;
             let tempXp = xp;
             let tempLevel = level;
-            let tempNextLevelXp = nextLevelXp;
+            let exponent = serverConfig.xp_levelup_exponent !== undefined ? serverConfig.xp_levelup_exponent : 2;
+            let tempNextLevelXp = serverConfig.xp_levelup_amount + serverConfig.xp_levelup_multiplier * Math.pow(tempLevel, exponent);
+            tempNextLevelXp = Math.floor(tempNextLevelXp);
             while (tempXp >= tempNextLevelXp) {
                 tempXp -= tempNextLevelXp;
                 tempLevel++;
                 gained++;
-                tempNextLevelXp = Math.floor(serverConfig.xp_levelup_amount * Math.pow(serverConfig.xp_levelup_multiplier, tempLevel));
+                tempNextLevelXp = serverConfig.xp_levelup_amount + serverConfig.xp_levelup_multiplier * Math.pow(tempLevel, exponent);
+                tempNextLevelXp = Math.floor(tempNextLevelXp);
             }
             if (gained > 0) {
                 xp = tempXp;
@@ -68,7 +71,6 @@ async function checkLevelUp(serverId, userId, channel = null) {
             break;
         }
         default: {
-            // fallback to fixed
             const xpPerLevel = serverConfig.xp_levelup_amount;
             levelsGained = Math.floor(xp / xpPerLevel);
             if (levelsGained > 0) {
