@@ -17,9 +17,9 @@ module.exports = {
         if (isNaN(amount)) return interaction.reply(new ContainerMessage(messages.errors.MUST_BE_NUMBER.replaceAll('{argument}', 'amount')).isEphemeral().build());
 
         const user = interaction.options.getUser('member');
-        const oldData = await getLevel(interaction.guild.id, interaction.user.id);
+        const oldData = await getLevel(interaction.guild.id, user.id);
         await updateUserData(interaction.guild.id, interaction.user.id, 'level', Math.max(oldData.level - amount, 0));
-        const newData = await getLevel(interaction.guild.id, interaction.user.id);
+        const newData = await getLevel(interaction.guild.id, user.id);
 
         await interaction.reply(new ContainerMessage(messages.success.REMOVED_LEVEL
             .replaceAll('{amount}', amount.toLocaleString())

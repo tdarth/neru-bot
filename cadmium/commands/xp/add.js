@@ -17,9 +17,9 @@ module.exports = {
         if (isNaN(amount)) return interaction.reply(new ContainerMessage(messages.errors.MUST_BE_NUMBER.replaceAll('{argument}', 'amount')).isEphemeral().build());
 
         const user = interaction.options.getUser('member');
-        const oldData = await getLevel(interaction.guild.id, interaction.user.id);
+        const oldData = await getLevel(interaction.guild.id, user.id);
         await forceAddXp(interaction.guild.id, user.id, amount);
-        const newData = await getLevel(interaction.guild.id, interaction.user.id);
+        const newData = await getLevel(interaction.guild.id, user.id);
 
         const levelsGained = newData.level - oldData.level;
         let replyMessage = messages.success.ADDED_XP
