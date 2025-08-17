@@ -12,189 +12,149 @@ async function checkLevelUp(serverId, userId, channel = null) {
     const levelUpLocation = serverConfig.level_up_message_location;
     let levelsGained = 0;
     let oldLevel = userData.level;
+    let xp = userData.xp;
+    let level = userData.level;
+    let nextLevelXp = userData.next_level_xp;
 
-    if (serverConfig.xp_levelup_mode === 'fixed') {
-        const xpPerLevel = serverConfig.xp_levelup_amount;
-        levelsGained = Math.floor(userData.xp / xpPerLevel);
-        if (levelsGained > 0) {
-            const newXp = userData.xp - levelsGained * xpPerLevel;
-            const newLevel = userData.level + levelsGained;
-            await updateUserData(serverId, userId, 'xp', newXp);
-            await updateUserData(serverId, userId, 'level', newLevel);
-            await updateUserData(serverId, userId, 'next_level_xp', xpPerLevel);
-            userData = await getUserData(serverId, userId);
+    switch (serverConfig.xp_levelup_mode) {
+        case 'fixed': {
+            const xpPerLevel = serverConfig.xp_levelup_amount;
+            levelsGained = Math.floor(xp / xpPerLevel);
+            if (levelsGained > 0) {
+                xp = xp - levelsGained * xpPerLevel;
+                level = level + levelsGained;
+                nextLevelXp = xpPerLevel;
+            }
+            break;
+        }
+        case 'additive': {
+            let gained = 0;
+            let tempXp = xp;
+            let tempLevel = level;
+            let tempNextLevelXp = nextLevelXp;
+            while (tempXp >= tempNextLevelXp) {
+                tempXp -= tempNextLevelXp;
+                tempLevel++;
+                gained++;
+                tempNextLevelXp = tempNextLevelXp + serverConfig.xp_levelup_amount;
+            }
+            if (gained > 0) {
+                xp = tempXp;
+                level = tempLevel;
+                nextLevelXp = tempNextLevelXp;
+                levelsGained = gained;
+            }
+            break;
+        }
+        case 'exponential': {
+            let gained = 0;
+            let tempXp = xp;
+            let tempLevel = level;
+            let tempNextLevelXp = nextLevelXp;
+            while (tempXp >= tempNextLevelXp) {
+                tempXp -= tempNextLevelXp;
+                tempLevel++;
+                gained++;
+                tempNextLevelXp = Math.floor(serverConfig.xp_levelup_amount * Math.pow(serverConfig.xp_levelup_multiplier, tempLevel));
+            }
+            if (gained > 0) {
+                xp = tempXp;
+                level = tempLevel;
+                nextLevelXp = tempNextLevelXp;
+                levelsGained = gained;
+            }
+            break;
+        }
+        default: {
+            // fallback to fixed
+            const xpPerLevel = serverConfig.xp_levelup_amount;
+            levelsGained = Math.floor(xp / xpPerLevel);
+            if (levelsGained > 0) {
+                xp = xp - levelsGained * xpPerLevel;
+                level = level + levelsGained;
+                nextLevelXp = xpPerLevel;
+            }
+            break;
+        }
+    }
 
-            if (levelUpLocation == 0) return;
-            if (levelUpLocation != 1) {
-                channel = client.channels.cache.get(levelUpLocation);
+    if (levelsGained > 0) {
+        await updateUserData(serverId, userId, 'xp', xp);
+        await updateUserData(serverId, userId, 'level', level);
+        await updateUserData(serverId, userId, 'next_level_xp', nextLevelXp);
+        userData = await getUserData(serverId, userId);
 
-                if (!channel) {
-                    try {
-                        channel = await client.channels.fetch(levelUpLocation);
-                    } catch (err) {
-                        console.error(`Failed to fetch channel with ID ${levelUpLocation}:`, err);
-                        return;
-                    }
+        if (levelUpLocation == 0) return;
+        if (levelUpLocation != 1) {
+            channel = client.channels.cache.get(levelUpLocation);
+
+            if (!channel) {
+                try {
+                    channel = await client.channels.fetch(levelUpLocation);
+                } catch (err) {
+                    console.error(`Failed to fetch channel with ID ${levelUpLocation}:`, err);
+                    return;
                 }
-            }
-
-            let response = new ContainerBuilder();
-            let user = await getDiscUserById(userId);
-
-            let levelUpMessage = serverConfig.level_up_message
-                .replaceAll('{user}', `<@${userId}>`)
-                .replaceAll('{display}', user.displayName)
-                .replaceAll('{xp}', userData.xp)
-                .replaceAll('{totalXp}', userData.total_xp)
-                .replaceAll('{oldLevel}', oldLevel)
-                .replaceAll('{newLevel}', userData.level);
-
-            let levelUpMessageCard = serverConfig.level_up_message_card
-                .replaceAll('{user}', user.username)
-                .replaceAll('{display}', user.displayName)
-                .replaceAll('{xp}', userData.xp)
-                .replaceAll('{totalXp}', userData.total_xp)
-                .replaceAll('{oldLevel}', oldLevel)
-                .replaceAll('{newLevel}', userData.level);
-
-
-            if (serverConfig.level_up_message != '<empty>') {
-                response
-                    .addTextDisplayComponents(
-                        new TextDisplayBuilder()
-                            .setContent(levelUpMessage)
-                    )
-            }
-
-            if (serverConfig.level_up_message_card_enabled == 1) {
-                let messageCard = await generateMessageCard({
-                    title: serverConfig.level_up_message_card_displayname_enabled == 1 ? user.displayName || user.username : user.username,
-                    description: levelUpMessageCard,
-                    avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`,
-                    bg_color: '#202024',
-                    description_color: userData.card_bar_color
-                })
-
-                response
-                    .addMediaGalleryComponents(
-                        new MediaGalleryBuilder({
-                            items: [
-                                {
-                                    media: {
-                                        url: messageCard,
-                                    },
-                                },
-                            ],
-                        })
-                    )
-            }
-
-            if (channel?.type === ChannelType.GuildText) {
-                await channel.send({
-                    flags: MessageFlags.IsComponentsV2,
-                    components: [response],
-                    allowedMentions: { parse: ['users'] }
-                });
             }
         }
-    } else {
-        if (userData.xp >= userData.next_level_xp) {
-            await updateUserData(serverId, userId, 'xp', userData.xp - userData.next_level_xp);
-            await updateUserData(serverId, userId, 'level', userData.level + 1);
-            
-            let amountToChange;
 
-            switch (serverConfig.xp_levelup_mode) {
-                case 'fixed':
-                    amountToChange = serverConfig.xp_levelup_amount;
-                    break;
-                case 'additive':
-                    amountToChange = userData.next_level_xp + serverConfig.xp_levelup_amount;
-                    break;
-                case 'exponential':
-                    amountToChange = Math.floor(serverConfig.xp_levelup_amount * Math.pow(serverConfig.xp_levelup_multiplier, userData.level + 1));
-                    break;
-                default:
-                    amountToChange = serverConfig.xp_levelup_amount;
-                    break;
-            }
+        let response = new ContainerBuilder();
+        let user = await getDiscUserById(userId);
 
-            await updateUserData(serverId, userId, 'next_level_xp', amountToChange);
+        let levelUpMessage = serverConfig.level_up_message
+            .replaceAll('{user}', `<@${userId}>`)
+            .replaceAll('{display}', user.displayName)
+            .replaceAll('{xp}', userData.xp)
+            .replaceAll('{totalXp}', userData.total_xp)
+            .replaceAll('{oldLevel}', oldLevel)
+            .replaceAll('{newLevel}', userData.level);
 
-            let newUserData = await getUserData(serverId, userId);
-
-            if (levelUpLocation == 0) return;
-            if (levelUpLocation != 1) {
-                channel = client.channels.cache.get(levelUpLocation);
-
-                if (!channel) {
-                    try {
-                        channel = await client.channels.fetch(levelUpLocation);
-                    } catch (err) {
-                        console.error(`Failed to fetch channel with ID ${levelUpLocation}:`, err);
-                        return;
-                    }
-                }
-            }
-
-            let response = new ContainerBuilder();
-            let user = await getDiscUserById(userId);
-
-            let levelUpMessage = serverConfig.level_up_message
-                .replaceAll('{user}', `<@${userId}>`)
-                .replaceAll('{display}', user.displayName)
-                .replaceAll('{xp}', userData.xp)
-                .replaceAll('{totalXp}', userData.total_xp)
-                .replaceAll('{oldLevel}', userData.level)
-                .replaceAll('{newLevel}', newUserData.level);
-
-            let levelUpMessageCard = serverConfig.level_up_message_card
-                .replaceAll('{user}', user.username)
-                .replaceAll('{display}', user.displayName)
-                .replaceAll('{xp}', userData.xp)
-                .replaceAll('{totalXp}', userData.total_xp)
-                .replaceAll('{oldLevel}', userData.level)
-                .replaceAll('{newLevel}', newUserData.level);
+        let levelUpMessageCard = serverConfig.level_up_message_card
+            .replaceAll('{user}', user.username)
+            .replaceAll('{display}', user.displayName)
+            .replaceAll('{xp}', userData.xp)
+            .replaceAll('{totalXp}', userData.total_xp)
+            .replaceAll('{oldLevel}', oldLevel)
+            .replaceAll('{newLevel}', userData.level);
 
 
-            if (serverConfig.level_up_message != '<empty>') {
-                response
-                    .addTextDisplayComponents(
-                        new TextDisplayBuilder()
-                            .setContent(levelUpMessage)
-                    )
-            }
+        if (serverConfig.level_up_message != '<empty>') {
+            response
+                .addTextDisplayComponents(
+                    new TextDisplayBuilder()
+                        .setContent(levelUpMessage)
+                )
+        }
 
-            if (serverConfig.level_up_message_card_enabled == 1) {
-                let messageCard = await generateMessageCard({
-                    title: serverConfig.level_up_message_card_displayname_enabled == 1 ? user.displayName || user.username : user.username,
-                    description: levelUpMessageCard,
-                    avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`,
-                    bg_color: '#202024',
-                    description_color: userData.card_bar_color
-                })
+        if (serverConfig.level_up_message_card_enabled == 1) {
+            let messageCard = await generateMessageCard({
+                title: serverConfig.level_up_message_card_displayname_enabled == 1 ? user.displayName || user.username : user.username,
+                description: levelUpMessageCard,
+                avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`,
+                bg_color: '#202024',
+                description_color: userData.card_bar_color
+            })
 
-                response
-                    .addMediaGalleryComponents(
-                        new MediaGalleryBuilder({
-                            items: [
-                                {
-                                    media: {
-                                        url: messageCard,
-                                    },
+            response
+                .addMediaGalleryComponents(
+                    new MediaGalleryBuilder({
+                        items: [
+                            {
+                                media: {
+                                    url: messageCard,
                                 },
-                            ],
-                        })
-                    )
-            }
+                            },
+                        ],
+                    })
+                )
+        }
 
-            if (channel?.type === ChannelType.GuildText) {
-                await channel.send({
-                    flags: MessageFlags.IsComponentsV2,
-                    components: [response],
-                    allowedMentions: { parse: ['users'] }
-                });
-            }
+        if (channel?.type === ChannelType.GuildText) {
+            await channel.send({
+                flags: MessageFlags.IsComponentsV2,
+                components: [response],
+                allowedMentions: { parse: ['users'] }
+            });
         }
     }
 }
