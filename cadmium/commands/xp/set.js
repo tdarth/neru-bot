@@ -24,8 +24,9 @@ module.exports = {
         await interaction.reply(new ContainerMessage(messages.success.SET_XP
             .replaceAll('{amount}', amount.toLocaleString())
             .replaceAll('{user}', `<@${user.id}>`)
-            .replaceAll('{oldXp}', `${oldData.xp.toLocaleString()} (${oldData.totalXp.toLocaleString()} total)`)
-            .replaceAll('{newXp}', `${newData.xp.toLocaleString()} (${newData.totalXp.toLocaleString()} total)`)
+            .replaceAll('{oldXp}', oldData.xp.toLocaleString())
+            .replaceAll('{newXp}', newData.xp.toLocaleString())
+            .replaceAll('{totalXp}', newData.totalXp.toLocaleString())
             .replaceAll('{oldLevel}', oldData.level.toLocaleString())
             .replaceAll('{newLevel}', newData.level.toLocaleString())
         ).build());
