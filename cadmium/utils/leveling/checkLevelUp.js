@@ -52,21 +52,28 @@ async function checkLevelUp(serverId, userId, channel = null) {
             let gained = 0;
             let tempXp = xp;
             let tempLevel = level;
-            let exponent = serverConfig.xp_levelup_exponent !== undefined ? serverConfig.xp_levelup_exponent : 2;
-            let tempNextLevelXp = serverConfig.xp_levelup_amount + serverConfig.xp_levelup_multiplier * Math.pow(tempLevel, exponent);
-            tempNextLevelXp = Math.floor(tempNextLevelXp);
-            while (tempXp >= tempNextLevelXp) {
-                tempXp -= tempNextLevelXp;
-                tempLevel++;
-                gained++;
-                tempNextLevelXp = serverConfig.xp_levelup_amount + serverConfig.xp_levelup_multiplier * Math.pow(tempLevel, exponent);
-                tempNextLevelXp = Math.floor(tempNextLevelXp);
-            }
-            if (gained > 0) {
-                xp = tempXp;
-                level = tempLevel;
-                nextLevelXp = tempNextLevelXp;
-                levelsGained = gained;
+            let tempNextLevelXp = nextLevelXp;
+            if (serverConfig.xp_levelup_multiplier > 1 && serverConfig.xp_levelup_amount >= 1) {
+                while (tempXp >= tempNextLevelXp) {
+                    tempXp -= tempNextLevelXp;
+                    tempLevel++;
+                    gained++;
+                    tempNextLevelXp = Math.floor(serverConfig.xp_levelup_amount * Math.pow(serverConfig.xp_levelup_multiplier, tempLevel));
+                }
+                if (gained > 0) {
+                    xp = tempXp;
+                    level = tempLevel;
+                    nextLevelXp = tempNextLevelXp;
+                    levelsGained = gained;
+                }
+            } else {
+                const xpPerLevel = serverConfig.xp_levelup_amount;
+                levelsGained = Math.floor(xp / xpPerLevel);
+                if (levelsGained > 0) {
+                    xp = xp - levelsGained * xpPerLevel;
+                    level = level + levelsGained;
+                    nextLevelXp = xpPerLevel;
+                }
             }
             break;
         }
