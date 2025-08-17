@@ -14,7 +14,7 @@ module.exports = {
 				.addChoices(
 					{ name: 'Fixed Amount', value: 'fixed' },
 					{ name: 'Additive', value: 'additive' },
-					{ name: 'Exponential', value: 'exponential' },
+					// { name: 'Exponential', value: 'exponential' },
 				)),
 	async execute(interaction) {
 		if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).isEphemeral().build());
