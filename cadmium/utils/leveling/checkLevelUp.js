@@ -16,6 +16,8 @@ async function checkLevelUp(serverId, userId, channel = null) {
     let level = userData.level;
     let nextLevelXp = userData.next_level_xp;
 
+    if (userData.level >= 2147483647) return;
+
     switch (serverConfig.xp_levelup_mode) {
         case 'fixed': {
             const xpPerLevel = serverConfig.xp_levelup_amount;
