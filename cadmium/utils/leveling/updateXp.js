@@ -12,8 +12,8 @@ async function updateXp(serverId, userId, updateFn) {
     if (userRows.length === 0) {
         oldXp = 0;
         oldTotal = 0;
-        newXp = updateFn(oldXp);
-        newTotal = newXp;
+        newXp = formatNumber(updateFn(oldXp));
+        newTotal = formatNumber(newXp);
 
         await pool.query(
             'INSERT INTO users (server_id, user_id, xp, total_xp, messages, last_message) VALUES (?, ?, ?, ?, ?, NOW())',
@@ -24,7 +24,7 @@ async function updateXp(serverId, userId, updateFn) {
         oldXp = user.xp;
         oldTotal = user.total_xp;
 
-        newXp = updateFn(oldXp);
+        newXp = formatNumber(updateFn(oldXp));
         newTotal = formatNumber(oldTotal + (newXp - oldXp));
         const newMessages = user.messages + 1;
 
