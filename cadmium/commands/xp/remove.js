@@ -13,7 +13,7 @@ module.exports = {
         .addStringOption(option => option.setName('amount').setDescription('The amount').setRequired(true)),
     async execute(interaction) {
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).isEphemeral().build());
-        const amount = formatNumber(parseInt(interaction.options.getString('amount'), 10), 10000);
+        const amount = formatNumber(parseInt(interaction.options.getString('amount'), 10));
         if (isNaN(amount)) return interaction.reply(new ContainerMessage(messages.errors.MUST_BE_NUMBER.replaceAll('{argument}', 'amount')).isEphemeral().build());
 
         const user = interaction.options.getUser('member');
