@@ -2,7 +2,7 @@ const pool = require('../../db/pool');
 
 async function getRank(serverId, userId) {
     const [userRows] = await pool.query(
-        `SELECT user_id, level, xp, next_level_xp
+        `SELECT user_id, level, xp, total_xp, next_level_xp
          FROM users
          WHERE server_id = ? AND user_id = ?
          LIMIT 1`,
@@ -28,7 +28,9 @@ async function getRank(serverId, userId) {
         rank: rankRows[0].rank,
         level: user.level,
         xp: user.xp,
-        xpNeeded: user.next_level_xp - user.xp
+        totalXp: user.total_xp,
+        xpNeeded: user.next_level_xp - user.xp,
+        xpNextLevel: user.next_level_xp - user.xp
     };
 }
 

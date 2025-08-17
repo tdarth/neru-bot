@@ -2,7 +2,7 @@ const pool = require('../../db/pool');
 
 async function getLeaderboard(serverId, limit = 25) {
     const [rows] = await pool.query(
-        `SELECT user_id, username, level, xp, next_level_xp 
+        `SELECT user_id, username, level, xp, total_xp, next_level_xp 
          FROM users 
          WHERE server_id = ? 
          ORDER BY level DESC, xp DESC 
@@ -16,6 +16,7 @@ async function getLeaderboard(serverId, limit = 25) {
         rank: index + 1,
         level: row.level,
         xp: row.xp,
+        totalXp: row.total_xp,
         xpNeeded: row.next_level_xp,
         xpNextLevel: row.next_level_xp - row.xp
     }));

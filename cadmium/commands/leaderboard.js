@@ -54,7 +54,7 @@ module.exports = {
         let leaderboardContents = [];
 
         for (const user of leaderboard.slice(1)) {
-            leaderboardContents.push(`\`#${user.rank}\` <@${user.id}> - **${user.level}** (${user.xp}/${user.xpNeeded})`);
+            leaderboardContents.push(`\`#${user.rank}\` <@${user.id}> - **${user.level}** (${user.xp}/${user.xpNeeded}) [${user.totalXp} total XP]`);
         }
 
         leaderboardContents.push(`-# Showing the top **${limit}** members.`);
