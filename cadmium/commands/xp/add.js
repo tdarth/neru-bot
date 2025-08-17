@@ -25,8 +25,8 @@ module.exports = {
         let replyMessage = messages.success.ADDED_XP
             .replaceAll('{amount}', amount.toLocaleString())
             .replaceAll('{user}', `<@${user.id}>`)
-            .replaceAll('{oldAmount}', `${oldData.xp.toLocaleString()} (${oldData.totalXp.toLocaleString()} total)`)
-            .replaceAll('{newAmount}', `${newData.xp.toLocaleString()} (${newData.totalXp.toLocaleString()} total)`)
+            .replaceAll('{oldXp}', `${oldData.xp.toLocaleString()} (${oldData.totalXp.toLocaleString()} total)`)
+            .replaceAll('{newXp}', `${newData.xp.toLocaleString()} (${newData.totalXp.toLocaleString()} total)`)
             .replaceAll('{oldLevel}', oldData.level.toLocaleString())
             .replaceAll('{newLevel}', newData.level.toLocaleString())
             .replaceAll('{gainedLevels}', levelsGained);

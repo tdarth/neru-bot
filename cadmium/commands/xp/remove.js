@@ -11,7 +11,7 @@ module.exports = {
         .setDescription("Remove XP from a member")
         .addUserOption(option => option.setName('member').setDescription('The member to modify').setRequired(true))
         .addStringOption(option => option.setName('amount').setDescription('The amount').setRequired(true)),
-	async execute(interaction) {
+    async execute(interaction) {
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).isEphemeral().build());
         const amount = formatNumber(parseInt(interaction.options.getString('amount'), 10), 10000);
         if (isNaN(amount)) return interaction.reply(new ContainerMessage(messages.errors.MUST_BE_NUMBER.replaceAll('{argument}', 'amount')).isEphemeral().build());
@@ -20,12 +20,12 @@ module.exports = {
         const oldData = await getLevel(interaction.guild.id, interaction.user.id);
         await forceRemoveXp(interaction.guild.id, user.id, amount);
         const newData = await getLevel(interaction.guild.id, interaction.user.id);
-        
+
         await interaction.reply(new ContainerMessage(messages.success.REMOVED_XP
-.replaceAll('{amount}', amount.toLocaleString())
+            .replaceAll('{amount}', amount.toLocaleString())
             .replaceAll('{user}', `<@${user.id}>`)
-            .replaceAll('{oldAmount}', `${oldData.xp.toLocaleString()} (${oldData.totalXp.toLocaleString()} total)`)
-            .replaceAll('{newAmount}', `${newData.xp.toLocaleString()} (${newData.totalXp.toLocaleString()} total)`)
+            .replaceAll('{oldXp}', `${oldData.xp.toLocaleString()} (${oldData.totalXp.toLocaleString()} total)`)
+            .replaceAll('{newXp}', `${newData.xp.toLocaleString()} (${newData.totalXp.toLocaleString()} total)`)
             .replaceAll('{oldLevel}', oldData.level.toLocaleString())
             .replaceAll('{newLevel}', newData.level.toLocaleString())
         ).build());
