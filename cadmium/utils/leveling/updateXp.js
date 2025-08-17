@@ -1,4 +1,5 @@
 const pool = require('../../db/pool');
+const { formatNumber } = require('../formatNumber');
 
 async function updateXp(serverId, userId, updateFn) {
     const [userRows] = await pool.query(
@@ -24,7 +25,7 @@ async function updateXp(serverId, userId, updateFn) {
         oldTotal = user.total_xp;
 
         newXp = updateFn(oldXp);
-        newTotal = oldTotal + (newXp - oldXp);
+        newTotal = formatNumber(oldTotal + (newXp - oldXp));
         const newMessages = user.messages + 1;
 
         await pool.query(
