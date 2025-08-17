@@ -21,11 +21,16 @@ module.exports = {
         await forceAddXp(interaction.guild.id, user.id, amount);
         const newData = await getLevel(interaction.guild.id, interaction.user.id);
 
-        await interaction.reply(new ContainerMessage(messages.success.ADDED_XP
+        const levelsGained = newData.level - oldData.level;
+        let replyMessage = messages.success.ADDED_XP
             .replaceAll('{amount}', amount.toLocaleString())
             .replaceAll('{user}', `<@${user.id}>`)
             .replaceAll('{oldAmount}', `${oldData.xp.toLocaleString()} (${oldData.totalXp.toLocaleString()} total)`)
             .replaceAll('{newAmount}', `${newData.xp.toLocaleString()} (${newData.totalXp.toLocaleString()} total)`)
-        ).build());
+            .replaceAll('{oldLevel}', oldData.level.toLocaleString())
+            .replaceAll('{newLevel}', newData.level.toLocaleString())
+            .replaceAll('{gainedLevels}', levelsGained);
+
+        await interaction.reply(new ContainerMessage(replyMessage).build());
     }
 };

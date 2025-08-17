@@ -22,10 +22,12 @@ module.exports = {
         const newData = await getLevel(interaction.guild.id, interaction.user.id);
         
         await interaction.reply(new ContainerMessage(messages.success.REMOVED_XP
-            .replaceAll('{amount}', amount.toLocaleString())
+.replaceAll('{amount}', amount.toLocaleString())
             .replaceAll('{user}', `<@${user.id}>`)
             .replaceAll('{oldAmount}', `${oldData.xp.toLocaleString()} (${oldData.totalXp.toLocaleString()} total)`)
             .replaceAll('{newAmount}', `${newData.xp.toLocaleString()} (${newData.totalXp.toLocaleString()} total)`)
+            .replaceAll('{oldLevel}', oldData.level.toLocaleString())
+            .replaceAll('{newLevel}', newData.level.toLocaleString())
         ).build());
     }
 };

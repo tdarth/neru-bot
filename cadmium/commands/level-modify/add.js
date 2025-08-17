@@ -24,8 +24,10 @@ module.exports = {
         await interaction.reply(new ContainerMessage(messages.success.ADDED_LEVEL
             .replaceAll('{amount}', amount.toLocaleString())
             .replaceAll('{user}', `<@${user.id}>`)
-            .replaceAll('{oldLevel}', `${oldData.level.toLocaleString()}`)
-            .replaceAll('{newLevel}', `${newData.level.toLocaleString()}`)
+            .replaceAll('{oldLevel}', oldData.level.toLocaleString())
+            .replaceAll('{newLevel}', newData.level.toLocaleString())
+            .replaceAll('{oldXp}', oldData.xp.toLocaleString())
+            .replaceAll('{newXp}', oldData.xp.toLocaleString())
         ).build());
     }
 };

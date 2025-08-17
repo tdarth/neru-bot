@@ -11,7 +11,7 @@ module.exports = {
         .setDescription("Sets the Level of a member")
         .addUserOption(option => option.setName('member').setDescription('The member to modify').setRequired(true))
         .addStringOption(option => option.setName('amount').setDescription('The amount').setRequired(true)),
-	async execute(interaction) {
+    async execute(interaction) {
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).isEphemeral().build());
         const amount = formatNumber(Math.max(parseInt(interaction.options.getString('amount'), 10), 0));
         if (isNaN(amount)) return interaction.reply(new ContainerMessage(messages.errors.MUST_BE_NUMBER.replaceAll('{argument}', 'amount')).isEphemeral().build());
@@ -24,8 +24,10 @@ module.exports = {
         await interaction.reply(new ContainerMessage(messages.success.SET_LEVEL
             .replaceAll('{amount}', amount.toLocaleString())
             .replaceAll('{user}', `<@${user.id}>`)
-            .replaceAll('{oldLevel}', `${oldData.level.toLocaleString()}`)
-            .replaceAll('{newLevel}', `${newData.level.toLocaleString()}`)
+            .replaceAll('{oldLevel}', oldData.level.toLocaleString())
+            .replaceAll('{newLevel}', newData.level.toLocaleString())
+            .replaceAll('{oldXp}', oldData.xp.toLocaleString())
+            .replaceAll('{newXp}', oldData.xp.toLocaleString())
         ).build());
     }
 };
