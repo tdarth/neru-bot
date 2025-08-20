@@ -19,12 +19,13 @@ module.exports = {
         const amount = formatNumber(parseInt(interaction.options.getString('amount'), 10));
         if (isNaN(amount)) return interaction.reply(new ContainerMessage(messages.errors.MUST_BE_NUMBER.replaceAll('{argument}', 'amount')).isEphemeral().build());
 
-        const serverConfig = await getServerConfig(interaction.guild.id);
+        const serverId = interaction.guild.id;
+        const serverConfig = await getServerConfig(serverId);
 
         const user = interaction.options.getUser('member');
-        const oldData = await getLevel(interaction.guild.id, user.id);
-        await updateUserData(interaction.guild.id, user.id, 'level', oldData.level + amount);
-        const newData = await getLevel(interaction.guild.id, user.id);
+        const oldData = await getLevel(serverId, user.id);
+        await updateUserData(serverId, user.id, 'level', oldData.level + amount);
+        const newData = await getLevel(serverId, user.id);
 
         const stack = serverConfig.stack_level_roles_enabled;
         const roles = await fetchLevelRoles(serverId, newData.level, stack);
