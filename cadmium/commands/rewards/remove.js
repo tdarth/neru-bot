@@ -18,6 +18,6 @@ module.exports = {
         if (isNaN(level)) return interaction.reply(new ContainerMessage(messages.errors.MUST_BE_NUMBER.replaceAll('{argument}', 'level')).isEphemeral().build());
 
 		await removeLevelRole(interaction.guild.id, role.id, level);
-		await interaction.reply(new ContainerMessage(messages.success.ROLE_REWARD_REMOVED.replaceAll('{role}', role.id).replaceAll('{level}', level)).build());
+		await interaction.reply(new ContainerMessage(messages.success.ROLE_REWARD_REMOVED.replaceAll('{role}', `<@&${role.id}>`).replaceAll('{level}', level)).build());
 	}
 };
