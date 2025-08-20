@@ -4,6 +4,7 @@ const { getServerConfig } = require('../../utils/server/getServerConfig');
 const { modifyLevelRolesForUser } = require('../../utils/level-roles/modifyLevelRolesForUser');
 const { fetchLevelRoles } = require('../../utils/level-roles/fetchLevelRoles');
 const { getLevel } = require('../../utils/leveling/getLevel');
+const { getDiscUserById } = require('../../utils/getDiscUserById');
 const { formatNumber } = require('../../utils/formatNumber');
 const { messages } = require('../../messages.json');
 const ContainerMessage = require('../../utils/classes/ContainerMessage');
@@ -23,13 +24,14 @@ module.exports = {
         const serverConfig = await getServerConfig(serverId);
 
         const user = interaction.options.getUser('member');
+        const member = await getDiscUserById(user.id, true, serverId);
         const oldData = await getLevel(serverId, user.id);
         await updateUserData(serverId, user.id, 'level', oldData.level + amount);
         const newData = await getLevel(serverId, user.id);
 
         const stack = serverConfig.stack_level_roles_enabled;
         const roles = await fetchLevelRoles(serverId, newData.level, stack);
-        await modifyLevelRolesForUser(user, roles, stack)
+        await modifyLevelRolesForUser(member, roles, stack);
 
         await interaction.reply(new ContainerMessage(messages.success.ADDED_LEVEL
             .replaceAll('{amount}', amount.toLocaleString())
