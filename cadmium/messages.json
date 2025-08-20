@@ -22,7 +22,7 @@
             "MUST_BE_NUMBER": ":x: **Error:** `{argument}` must be a number.",
             "CANNOT_LEVELCHECK_BOT": ":x: **Error:** Viewing the level of `bots` is **disabled**.",
             "NOT_HEXADECIMAL_COLOR": ":x: **Error:** Input `{input}` was not a **hexadecimal** number.",
-            "BOT_ROLE_TOO_LOW": ":x: **Error:** Please move the ${botRole} above ${role}."
+            "BOT_ROLE_TOO_LOW": ":x: **Error:** Please move the {botRole} above {role}."
         }
     }
 }
