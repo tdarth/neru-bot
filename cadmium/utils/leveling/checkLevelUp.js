@@ -1,4 +1,4 @@
-const { ChannelType, MessageFlags, ContainerBuilder, TextDisplayBuilder, MediaGalleryBuilder, Guild } = require('discord.js');
+const { ChannelType, MessageFlags, ContainerBuilder, TextDisplayBuilder, MediaGalleryBuilder } = require('discord.js');
 const { getServerConfig } = require('../../utils/server/getServerConfig');
 const { getUserData } = require('../user/getUserData');
 const { updateUserData } = require('../../utils/user/updateUserData');
@@ -11,7 +11,6 @@ async function checkLevelUp(serverId, userId, channel = null) {
     const serverConfig = await getServerConfig(serverId);
     let userData = await getUserData(serverId, userId);
     const levelUpLocation = serverConfig.level_up_message_location;
-    let levelsGained = 0;
     let oldLevel = userData.level;
     let xp = userData.xp;
     let level = userData.level;
@@ -22,35 +21,34 @@ async function checkLevelUp(serverId, userId, channel = null) {
     switch (serverConfig.xp_levelup_mode) {
         case 'fixed': {
             const xpPerLevel = serverConfig.xp_levelup_amount;
-            levelsGained = Math.floor(xp / xpPerLevel);
-            if (levelsGained > 0) {
-                xp = xp - levelsGained * xpPerLevel;
-                level = level + levelsGained;
+            const levelsGained = Math.floor(xp / xpPerLevel);
+            if (levelsGained !== 0) {
+                xp -= levelsGained * xpPerLevel;
+                level += levelsGained;
                 nextLevelXp = xpPerLevel;
             }
             break;
         }
         case 'additive': {
-            let gained = 0;
             let tempXp = xp;
             let tempLevel = level;
             let tempNextLevelXp = nextLevelXp;
             while (tempXp >= tempNextLevelXp) {
                 tempXp -= tempNextLevelXp;
                 tempLevel++;
-                gained++;
-                tempNextLevelXp = tempNextLevelXp + serverConfig.xp_levelup_amount;
+                tempNextLevelXp += serverConfig.xp_levelup_amount;
             }
-            if (gained > 0) {
-                xp = tempXp;
-                level = tempLevel;
-                nextLevelXp = tempNextLevelXp;
-                levelsGained = gained;
+            while (tempXp < 0 && tempLevel > 0) {
+                tempLevel--;
+                tempNextLevelXp -= serverConfig.xp_levelup_amount;
+                tempXp += tempNextLevelXp;
             }
+            xp = tempXp;
+            level = tempLevel;
+            nextLevelXp = tempNextLevelXp;
             break;
         }
         case 'exponential': {
-            let gained = 0;
             let tempXp = xp;
             let tempLevel = level;
             let tempNextLevelXp = nextLevelXp;
@@ -58,42 +56,44 @@ async function checkLevelUp(serverId, userId, channel = null) {
                 while (tempXp >= tempNextLevelXp) {
                     tempXp -= tempNextLevelXp;
                     tempLevel++;
-                    gained++;
                     tempNextLevelXp = Math.floor(serverConfig.xp_levelup_amount * Math.pow(serverConfig.xp_levelup_multiplier, tempLevel));
                 }
-                if (gained > 0) {
-                    xp = tempXp;
-                    level = tempLevel;
-                    nextLevelXp = tempNextLevelXp;
-                    levelsGained = gained;
+                while (tempXp < 0 && tempLevel > 0) {
+                    tempLevel--;
+                    tempNextLevelXp = Math.floor(serverConfig.xp_levelup_amount * Math.pow(serverConfig.xp_levelup_multiplier, tempLevel));
+                    tempXp += tempNextLevelXp;
                 }
             } else {
                 const xpPerLevel = serverConfig.xp_levelup_amount;
-                levelsGained = Math.floor(xp / xpPerLevel);
-                if (levelsGained > 0) {
-                    xp = xp - levelsGained * xpPerLevel;
-                    level = level + levelsGained;
+                const levelsGained = Math.floor(xp / xpPerLevel);
+                if (levelsGained !== 0) {
+                    xp -= levelsGained * xpPerLevel;
+                    level += levelsGained;
                     nextLevelXp = xpPerLevel;
                 }
             }
+            xp = tempXp;
+            level = tempLevel;
+            nextLevelXp = tempNextLevelXp;
             break;
         }
         default: {
             const xpPerLevel = serverConfig.xp_levelup_amount;
-            levelsGained = Math.floor(xp / xpPerLevel);
-            if (levelsGained > 0) {
-                xp = xp - levelsGained * xpPerLevel;
-                level = level + levelsGained;
+            const levelsGained = Math.floor(xp / xpPerLevel);
+            if (levelsGained !== 0) {
+                xp -= levelsGained * xpPerLevel;
+                level += levelsGained;
                 nextLevelXp = xpPerLevel;
             }
             break;
         }
     }
 
-    if (levelsGained > 0) {
+    if (level !== oldLevel) {
         await updateUserData(serverId, userId, 'xp', xp);
         await updateUserData(serverId, userId, 'level', level);
         await updateUserData(serverId, userId, 'next_level_xp', nextLevelXp);
+
         let userData = await getUserData(serverId, userId);
         let user = await getDiscUserById(userId);
         let member = await getDiscUserById(userId, true, serverId);
@@ -103,33 +103,25 @@ async function checkLevelUp(serverId, userId, channel = null) {
 
         if (serverConfig.stack_level_roles_enabled) {
             const rolesToAdd = roles.filter(roleId => !memberRoles.includes(roleId));
-            if (rolesToAdd.length > 0) await member.roles.add(rolesToAdd);
+            const rolesToRemove = memberRoles.filter(roleId => !roles.includes(roleId) && roleId !== member.guild.id);
+            if (rolesToAdd.length) await member.roles.add(rolesToAdd);
+            if (rolesToRemove.length) await member.roles.remove(rolesToRemove);
         } else {
-            if (roles.length === 0) return;
-
-            const highestRoleId = roles[roles.length - 1];
-            const rolesToRemove = memberRoles.filter(roleId => roleId !== highestRoleId);
-
-            if (rolesToRemove.length > 0) await member.roles.remove(rolesToRemove);
-
-            if (!memberRoles.includes(highestRoleId)) {
-                await member.roles.add(highestRoleId);
+            if (roles.length === 0) {
+                const rolesToRemove = memberRoles.filter(roleId => roleId !== member.guild.id);
+                if (rolesToRemove.length) await member.roles.remove(rolesToRemove);
+            } else {
+                const highestRoleId = roles[roles.length - 1];
+                const rolesToRemove = memberRoles.filter(roleId => roleId !== highestRoleId && roleId !== member.guild.id);
+                if (rolesToRemove.length) await member.roles.remove(rolesToRemove);
+                if (!memberRoles.includes(highestRoleId)) await member.roles.add(highestRoleId);
             }
         }
 
-
         if (levelUpLocation == 0) return;
         if (levelUpLocation != 1) {
-            channel = client.channels.cache.get(levelUpLocation);
-
-            if (!channel) {
-                try {
-                    channel = await client.channels.fetch(levelUpLocation);
-                } catch (err) {
-                    console.error(`Failed to fetch channel with ID ${levelUpLocation}:`, err);
-                    return;
-                }
-            }
+            channel = client.channels.cache.get(levelUpLocation) || await client.channels.fetch(levelUpLocation).catch(() => null);
+            if (!channel) return;
         }
 
         let response = new ContainerBuilder();
@@ -150,13 +142,8 @@ async function checkLevelUp(serverId, userId, channel = null) {
             .replaceAll('{oldLevel}', oldLevel)
             .replaceAll('{newLevel}', userData.level);
 
-
         if (serverConfig.level_up_message != '<empty>') {
-            response
-                .addTextDisplayComponents(
-                    new TextDisplayBuilder()
-                        .setContent(levelUpMessage)
-                )
+            response.addTextDisplayComponents(new TextDisplayBuilder().setContent(levelUpMessage));
         }
 
         if (serverConfig.level_up_message_card_enabled == 1) {
@@ -166,28 +153,12 @@ async function checkLevelUp(serverId, userId, channel = null) {
                 avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`,
                 bg_color: '#202024',
                 description_color: userData.card_bar_color
-            })
-
-            response
-                .addMediaGalleryComponents(
-                    new MediaGalleryBuilder({
-                        items: [
-                            {
-                                media: {
-                                    url: messageCard,
-                                },
-                            },
-                        ],
-                    })
-                )
+            });
+            response.addMediaGalleryComponents(new MediaGalleryBuilder({ items: [{ media: { url: messageCard } }] }));
         }
 
         if (channel?.type === ChannelType.GuildText) {
-            await channel.send({
-                flags: MessageFlags.IsComponentsV2,
-                components: [response],
-                allowedMentions: { parse: ['users'] }
-            });
+            await channel.send({ flags: MessageFlags.IsComponentsV2, components: [response], allowedMentions: { parse: ['users'] } });
         }
     }
 }
