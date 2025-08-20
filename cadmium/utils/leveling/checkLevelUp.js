@@ -5,7 +5,7 @@ const { updateUserData } = require('../../utils/user/updateUserData');
 const { generateMessageCard } = require('../../utils/leveling/generateMessageCard');
 const { fetchLevelRoles } = require('../../utils/level-roles/fetchLevelRoles');
 const { getDiscUserById } = require('../getDiscUserById');
-const { updateMemberRoles } = require('../../utils/level-roles/updateMemberRoles');
+const { modifyLevelRolesForUser } = require('../../utils/level-roles/modifyLevelRolesForUser');
 const { client } = require('../../index');
 
 async function checkLevelUp(serverId, userId, channel = null) {
@@ -102,7 +102,7 @@ async function checkLevelUp(serverId, userId, channel = null) {
         const stack = serverConfig.stack_level_roles_enabled;
 
         const roles = await fetchLevelRoles(serverId, userData.level, stack);
-        await updateMemberRoles(member, roles, stack);
+        await modifyLevelRolesForUser(member, roles, stack);
 
         if (levelUpLocation == 0) return;
         if (levelUpLocation != 1) {
