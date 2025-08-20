@@ -19,7 +19,7 @@ module.exports = {
         const amount = formatNumber(Math.max(parseInt(interaction.options.getString('amount'), 10), 0));
         if (isNaN(amount)) return interaction.reply(new ContainerMessage(messages.errors.MUST_BE_NUMBER.replaceAll('{argument}', 'amount')).isEphemeral().build());
 
-        const serverId = serverId;
+        const serverId = interaction.guild.id;
         const serverConfig = await getServerConfig(serverId);
 
         const user = interaction.options.getUser('member');
