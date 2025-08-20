@@ -34,7 +34,10 @@ const serverColumns = [
 const serverLevelRolesColumns = [
     'server_id VARCHAR(20) NOT NULL',
     'level INT NOT NULL',
-    'role_id VARCHAR(20) NOT NULL',
+    'role_id VARCHAR(20) NOT NULL'
+];
+
+const serverLevelRolesConstraints = [
     'UNIQUE KEY unique_server_level (server_id, level)'
 ];
 
@@ -72,7 +75,15 @@ async function initDatabase() {
     }
 
     for (const col of serverLevelRolesColumns) {
-        await pool.query(`ALTER TABLE server_level_roles ADD ${col}`);
+        await pool.query(`ALTER TABLE server_level_roles ADD COLUMN IF NOT EXISTS ${col}`);
+    }
+
+    for (const constraint of serverLevelRolesConstraints) {
+        try {
+            await pool.query(`ALTER TABLE server_level_roles ADD ${constraint}`);
+        } catch (err) {
+            if (err.code !== 'ER_DUP_KEYNAME') throw err;
+        }
     }
 
     try {
@@ -81,9 +92,7 @@ async function initDatabase() {
             ON users (server_id, level, xp)
         `);
     } catch (err) {
-        if (err.code !== 'ER_DUP_KEYNAME') {
-            throw err;
-        }
+        if (err.code !== 'ER_DUP_KEYNAME') throw err;
     }
 
     console.log('[CADMIUM] Database initialized.');
