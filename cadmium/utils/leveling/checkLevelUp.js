@@ -1,8 +1,9 @@
-const { ChannelType, MessageFlags, ContainerBuilder, TextDisplayBuilder, MediaGalleryBuilder } = require('discord.js');
+const { ChannelType, MessageFlags, ContainerBuilder, TextDisplayBuilder, MediaGalleryBuilder, Guild } = require('discord.js');
 const { getServerConfig } = require('../../utils/server/getServerConfig');
 const { getUserData } = require('../user/getUserData');
 const { updateUserData } = require('../../utils/user/updateUserData');
 const { generateMessageCard } = require('../../utils/leveling/generateMessageCard');
+const { fetchLevelRoles } = require('../../utils/level-roles/fetchLevelRoles');
 const { getDiscUserById } = require('../getDiscUserById');
 const { client } = require('../../index');
 
@@ -93,7 +94,15 @@ async function checkLevelUp(serverId, userId, channel = null) {
         await updateUserData(serverId, userId, 'xp', xp);
         await updateUserData(serverId, userId, 'level', level);
         await updateUserData(serverId, userId, 'next_level_xp', nextLevelXp);
-        userData = await getUserData(serverId, userId);
+        let userData = await getUserData(serverId, userId);
+        let user = await getDiscUserById(userId);
+        let member = await getDiscUserById(userId, true, serverId);
+
+        const roles = await fetchLevelRoles(serverId, userData.level, serverConfig.stack_level_roles_enabled);
+        const memberRoles = member.roles.cache.map(role => role.id);
+
+        const rolesToAdd = roles.filter(roleId => !memberRoles.includes(roleId));
+        if (rolesToAdd.length > 0) await member.roles.add(rolesToAdd);
 
         if (levelUpLocation == 0) return;
         if (levelUpLocation != 1) {
@@ -110,7 +119,6 @@ async function checkLevelUp(serverId, userId, channel = null) {
         }
 
         let response = new ContainerBuilder();
-        let user = await getDiscUserById(userId);
 
         let levelUpMessage = serverConfig.level_up_message
             .replaceAll('{user}', `<@${userId}>`)
