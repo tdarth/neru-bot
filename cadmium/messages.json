@@ -7,7 +7,9 @@
             "ADDED_LEVEL": ":sparkles: Added `{amount}` **Levels** to {user}.\n-# {oldLevel} -> {newLevel}",
             "REMOVED_LEVEL": ":sparkles: Removed `{amount}` **Levels** from {user}.\n-# {oldLevel} -> {newLevel}",
             "SET_LEVEL": ":sparkles: Set **Level** of {user} to {amount}.\n-# {oldLevel} -> {newLevel}",
-            "UPDATE_CONFIG_VALUE": ":white_check_mark: **{config}** updated. New value: `{value}`."
+            "UPDATE_CONFIG_VALUE": ":white_check_mark: **{config}** updated. New value: `{value}`.",
+            "ROLE_REWARD_ADDED": ":white_check_mark: {role} will be given on Level **{level}**.",
+            "ROLE_REWARD_REMOVED": ":white_check_mark: {role} was removed from Level **{level}**."
         },
 
         "info": {

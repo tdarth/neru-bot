@@ -19,6 +19,6 @@ module.exports = {
         if (interaction.client.id.roles.highest.position <= role.position) return interaction.reply(new ContainerMessage(messages.errors.BOT_ROLE_TOO_LOW.replaceAll('{botRole}', `<@&${interaction.client.id}>`).replaceAll('{role}', `<@&${role.id}>`)).isEphemeral().build());
 
 		await addLevelRole(interaction.guild.id, role.id, level);
-		await interaction.reply(new ContainerMessage(messages.success.UPDATE_CONFIG_VALUE.replaceAll('{config}', config).replaceAll('{value}', value)).build());
+		await interaction.reply(new ContainerMessage(messages.success.ROLE_REWARD_ADDED.replaceAll('{role}', role.id).replaceAll('{level}', level)).build());
 	}
 };
