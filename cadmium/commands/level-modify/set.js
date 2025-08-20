@@ -1,5 +1,8 @@
 const { SlashCommandSubcommandBuilder, PermissionsBitField } = require('discord.js');
 const { updateUserData } = require('../../utils/user/updateUserData');
+const { getServerConfig } = require('../../utils/server/getServerConfig');
+const { modifyLevelRolesForUser } = require('../../utils/level-roles/modifyLevelRolesForUser');
+const { fetchLevelRoles } = require('../../utils/level-roles/fetchLevelRoles');
 const { getLevel } = require('../../utils/leveling/getLevel');
 const { formatNumber } = require('../../utils/formatNumber');
 const { messages } = require('../../messages.json');
@@ -16,10 +19,16 @@ module.exports = {
         const amount = formatNumber(Math.max(parseInt(interaction.options.getString('amount'), 10), 0));
         if (isNaN(amount)) return interaction.reply(new ContainerMessage(messages.errors.MUST_BE_NUMBER.replaceAll('{argument}', 'amount')).isEphemeral().build());
 
+        const serverConfig = await getServerConfig(interaction.guild.id);
+
         const user = interaction.options.getUser('member');
         const oldData = await getLevel(interaction.guild.id, user.id);
         await updateUserData(interaction.guild.id, interaction.user.id, 'level', amount);
         const newData = await getLevel(interaction.guild.id, user.id);
+
+        const stack = serverConfig.stack_level_roles_enabled;
+        const roles = await fetchLevelRoles(serverId, newData.level, stack);
+        await modifyLevelRolesForUser(user, roles, stack)
 
         await interaction.reply(new ContainerMessage(messages.success.SET_LEVEL
             .replaceAll('{amount}', amount.toLocaleString())

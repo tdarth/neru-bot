@@ -5,6 +5,7 @@ const { updateUserData } = require('../../utils/user/updateUserData');
 const { generateMessageCard } = require('../../utils/leveling/generateMessageCard');
 const { fetchLevelRoles } = require('../../utils/level-roles/fetchLevelRoles');
 const { getDiscUserById } = require('../getDiscUserById');
+const { updateMemberRoles } = require('../../utils/level-roles/updateMemberRoles');
 const { client } = require('../../index');
 
 async function checkLevelUp(serverId, userId, channel = null) {
@@ -98,25 +99,10 @@ async function checkLevelUp(serverId, userId, channel = null) {
         let user = await getDiscUserById(userId);
         let member = await getDiscUserById(userId, true, serverId);
 
-        const roles = await fetchLevelRoles(serverId, userData.level, serverConfig.stack_level_roles_enabled);
-        const memberRoles = member.roles.cache.map(role => role.id);
+        const stack = serverConfig.stack_level_roles_enabled;
 
-        if (serverConfig.stack_level_roles_enabled) {
-            const rolesToAdd = roles.filter(roleId => !memberRoles.includes(roleId));
-            const rolesToRemove = memberRoles.filter(roleId => !roles.includes(roleId) && roleId !== member.guild.id);
-            if (rolesToAdd.length) await member.roles.add(rolesToAdd);
-            if (rolesToRemove.length) await member.roles.remove(rolesToRemove);
-        } else {
-            if (roles.length === 0) {
-                const rolesToRemove = memberRoles.filter(roleId => roleId !== member.guild.id);
-                if (rolesToRemove.length) await member.roles.remove(rolesToRemove);
-            } else {
-                const highestRoleId = roles[roles.length - 1];
-                const rolesToRemove = memberRoles.filter(roleId => roleId !== highestRoleId && roleId !== member.guild.id);
-                if (rolesToRemove.length) await member.roles.remove(rolesToRemove);
-                if (!memberRoles.includes(highestRoleId)) await member.roles.add(highestRoleId);
-            }
-        }
+        const roles = await fetchLevelRoles(serverId, userData.level, stack);
+        await updateMemberRoles(member, roles, stack);
 
         if (levelUpLocation == 0) return;
         if (levelUpLocation != 1) {
