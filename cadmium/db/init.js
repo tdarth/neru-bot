@@ -31,6 +31,13 @@ const serverColumns = [
     'xp_levelup_multiplier FLOAT DEFAULT 1.1'
 ];
 
+const serverLevelRolesColumns = [
+    'server_id VARCHAR(20) NOT NULL',
+    'level INT NOT NULL',
+    'role_id VARCHAR(20) NOT NULL',
+    'UNIQUE KEY unique_server_level (server_id, level)'
+];
+
 async function initDatabase() {
     await pool.query(`
         CREATE TABLE IF NOT EXISTS users (
@@ -50,12 +57,22 @@ async function initDatabase() {
         ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
     `);
 
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS server_level_roles (
+            id INT AUTO_INCREMENT PRIMARY KEY
+        ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+    `);
+
     for (const col of userColumns) {
         await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS ${col}`);
     }
 
     for (const col of serverColumns) {
         await pool.query(`ALTER TABLE server_settings ADD COLUMN IF NOT EXISTS ${col}`);
+    }
+
+    for (const col of serverLevelRolesColumns) {
+        await pool.query(`ALTER TABLE server_level_roles ADD ${col}`);
     }
 
     try {
@@ -74,5 +91,14 @@ async function initDatabase() {
 
 const serverColumnNames = serverColumns.map(col => col.split(' ')[0]);
 const userColumnNames = userColumns.map(col => col.split(' ')[0]);
+const serverLevelRolesColumnNames = serverLevelRolesColumns.map(col => col.split(' ')[0]);
 
-module.exports = { initDatabase, serverColumns, serverColumnNames, userColumnNames };
+module.exports = { 
+    initDatabase, 
+    serverColumns, 
+    serverColumnNames, 
+    userColumns, 
+    userColumnNames, 
+    serverLevelRolesColumns,
+    serverLevelRolesColumnNames
+};

@@ -11,7 +11,7 @@ module.exports = {
 	async execute(interaction) {
 		const image = interaction.options.getString('image-link');
 
-        updateUserData(interaction.guild.id, interaction.user.id, 'card_bg_image', image);
+        await updateUserData(interaction.guild.id, interaction.user.id, 'card_bg_image', image);
 		await interaction.reply(new ContainerMessage(messages.success.UPDATE_CONFIG_VALUE.replaceAll('{config}', 'Card Image').replaceAll('{value}', image)).isEphemeral().build());
 	}
 };

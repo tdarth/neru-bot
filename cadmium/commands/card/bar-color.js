@@ -14,7 +14,7 @@ module.exports = {
 
         if (!hexMatch) return await interaction.reply(new ContainerMessage(messages.errors.NOT_HEXADECIMAL_COLOR.replaceAll('{input}', 'color')).isEphemeral().build());
         
-        updateUserData(interaction.guild.id, interaction.user.id, 'card_bar_color', color);
+        await updateUserData(interaction.guild.id, interaction.user.id, 'card_bar_color', color);
 		await interaction.reply(new ContainerMessage(messages.success.UPDATE_CONFIG_VALUE.replaceAll('{config}', 'Card Bar Color').replaceAll('{value}', color)).isEphemeral().build());
 	}
 };
