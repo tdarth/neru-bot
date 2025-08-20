@@ -101,8 +101,22 @@ async function checkLevelUp(serverId, userId, channel = null) {
         const roles = await fetchLevelRoles(serverId, userData.level, serverConfig.stack_level_roles_enabled);
         const memberRoles = member.roles.cache.map(role => role.id);
 
-        const rolesToAdd = roles.filter(roleId => !memberRoles.includes(roleId));
-        if (rolesToAdd.length > 0) await member.roles.add(rolesToAdd);
+        if (serverConfig.stack_level_roles_enabled) {
+            const rolesToAdd = roles.filter(roleId => !memberRoles.includes(roleId));
+            if (rolesToAdd.length > 0) await member.roles.add(rolesToAdd);
+        } else {
+            if (roles.length === 0) return;
+
+            const highestRoleId = roles[roles.length - 1];
+            const rolesToRemove = memberRoles.filter(roleId => roleId !== highestRoleId);
+
+            if (rolesToRemove.length > 0) await member.roles.remove(rolesToRemove);
+
+            if (!memberRoles.includes(highestRoleId)) {
+                await member.roles.add(highestRoleId);
+            }
+        }
+
 
         if (levelUpLocation == 0) return;
         if (levelUpLocation != 1) {
