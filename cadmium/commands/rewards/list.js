@@ -7,7 +7,9 @@ module.exports = {
 		.setName('list')
 		.setDescription("Lists all current level rewards"),
 	async execute(interaction) {
-        const roles = await listLevelRoles(interaction.guild.id);
-		await interaction.reply(new ContainerMessage(JSON.stringify(roles)).build());
+		const roles = await listLevelRoles(interaction.guild.id);
+
+		await interaction.reply(new ContainerMessage(roles.map(r => `\`${r.level}\`: <@&${r.roleId}>`)
+			.join('\n')).build());
 	}
 };
