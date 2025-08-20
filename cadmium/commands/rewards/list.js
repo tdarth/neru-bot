@@ -8,6 +8,6 @@ module.exports = {
 		.setDescription("Lists all current level rewards"),
 	async execute(interaction) {
         const roles = await listLevelRoles(interaction.guild.id);
-		await interaction.reply(new ContainerMessage(roles).build());
+		await interaction.reply(new ContainerMessage(roles.join('\n')).build());
 	}
 };
