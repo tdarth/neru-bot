@@ -1,5 +1,4 @@
 const { Events } = require('discord.js');
-const { messages } = require('../../messages.json');
 const { getServerConfig } = require('../../utils/server/getServerConfig');
 const { getUserData } = require('../../utils/user/getUserData');
 const { updateUserData } = require('../../utils/user/updateUserData');
@@ -15,7 +14,7 @@ module.exports = {
         let userData = await getUserData(message.guild.id, message.author.id);
 
         if (!userData?.last_message) {
-            await updateUserData(message.guild.id, message.author.id, 'last_message', toMySQLDate(Date.now()));
+            await updateUserData(message.guild.id, message.author.id, 'last_message', toMySQLDate(Date.now() - serverConfig.xp_cooldown * 1000));
             await updateUserData(message.guild.id, message.author.id, 'username', message.author.username);
             userData = await getUserData(message.guild.id, message.author.id);
         }
