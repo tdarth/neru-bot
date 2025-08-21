@@ -22,10 +22,10 @@ module.exports = {
 
         const container = new ContainerBuilder();
 
-        container.addSectionComponents(new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(`${reportPingRoles.map(id => `<@&${id}>`).join(' ')}\n## Report against <@${authorId}> \`${authorId}\`\n* __Submitted By__: <@${message.author.id}>. \`${message.author.id}\`\n* __In Channel__: <#${message.channel.id}>.\n* __Timestamp__: <t:${Math.floor(Date.now() / 1000)}:f>.\n\n:notepad_spiral: **Reason:** \`${reportReason}\`\n:pencil2: **Attached Message**: \`\`\`${referencedMessage.content || 'Empty or contains an image.'}\`\`\`\n-# Below are recent messages sent by the reported user.`)).setThumbnailAccessory(new ThumbnailBuilder().setURL(`https://cdn.discordapp.com/avatars/${authorId}/${referencedMessage.author.avatar}.png`))).addSeparatorComponents(new SeparatorBuilder());
+        container.addSectionComponents(new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(`${reportPingRoles.map(id => `<@&${id}>`).join(' ')}\n## Report against <@${authorId}> \`${authorId}\`\n* __Submitted By__: <@${message.author.id}>. \`${message.author.id}\`\n* __In Channel__: <#${message.channel.id}>.\n* __Timestamp__: <t:${Math.floor(Date.now() / 1000)}:f>.\n\n:notepad_spiral: **Reason:** \`${reportReason}\`\n:pencil2: **Attached Message**: \`\`\`${referencedMessage.content || 'Message contains an attachment.'}\`\`\`\n-# Below are recent messages sent by the reported user.`)).setThumbnailAccessory(new ThumbnailBuilder().setURL(`https://cdn.discordapp.com/avatars/${authorId}/${referencedMessage.author.avatar}.png`))).addSeparatorComponents(new SeparatorBuilder());
 
         for (const userMessage of userMessages) {
-            let content = userMessage.content || "Empty or contains an image.";
+            let content = userMessage.content || "*Contains attachment..*";
             if (content.length > 4000) {
                 content = content.slice(0, 3997) + '...';
             }
