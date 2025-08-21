@@ -29,6 +29,7 @@ module.exports = {
                 console.log(
                     `[CADMIUM] Left guild ${guild.name} (${guild.id}) (${guild.memberCount} members) (${guild.ownerId} Owner ID), not on whitelist.`
                 );
+                return;
             }
 
             await initServerData(guild.id);
