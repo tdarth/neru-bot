@@ -8,7 +8,8 @@ module.exports = {
         try {
             const filePath = path.join(__dirname, '../allowed_servers.json');
             const data = await fs.readFile(filePath, 'utf8');
-            const servers = JSON.parse(data);
+            const json = JSON.parse(data);
+            const servers = json.servers;
 
             if (!servers.includes(guild.id)) {
                 const owner = await guild.client.users.fetch(guild.ownerId);
