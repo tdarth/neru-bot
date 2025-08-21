@@ -1,5 +1,6 @@
 const fs = require('fs').promises;
 const path = require('path');
+const { initServerData } = require('../db/initServer');
 const ContainerMessage = require('../utils/classes/ContainerMessage');
 
 module.exports = {
@@ -29,6 +30,8 @@ module.exports = {
                     `[CADMIUM] Left guild ${guild.name} (${guild.id}) (${guild.memberCount} members) (${guild.ownerId} Owner ID), not on whitelist.`
                 );
             }
+
+            await initServerData(guild.id);
         } catch (err) {
             console.error('[CADMIUM] Failed to read allowed_servers.json:', err);
         }
