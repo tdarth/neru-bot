@@ -10,7 +10,7 @@ module.exports = {
 	async execute(interaction) {
 		const roles = await listLevelRoles(interaction.guild.id);
 
-		await interaction.reply(new ContainerMessage(roles.map(r => `\`${r.level}\`: <@&${r.roleId}>`)
+		await interaction.reply(new ContainerMessage(roles.map(r => `\`${r.level.toLocaleString()}\`: <@&${r.roleId}>`)
 			.join('\n') || messages.errors.NO_LEVEL_ROLES).build());
 	}
 };
