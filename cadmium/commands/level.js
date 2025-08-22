@@ -40,6 +40,9 @@ module.exports = {
 					new TextDisplayBuilder()
 						.setContent(serverConfig.level_command_message
 							.replaceAll('{user}', `<@${targetUser?.id}>`)
+							.replaceAll('{userId}', targetUser.id)
+							.replaceAll('{username}', targetUser.username)
+							.replaceAll('{displayname}', targetUser.displayName)
 							.replaceAll('{level}', level?.level.toLocaleString())
 							.replaceAll('{xp}', level?.xp.toLocaleString())
 							.replaceAll('{nextLevelXp}', level?.nextLevelXp.toLocaleString())
