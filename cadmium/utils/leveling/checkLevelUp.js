@@ -104,7 +104,7 @@ async function checkLevelUp(serverId, userId, channel = null) {
         const roles = await fetchLevelRoles(serverId, userData.level, stack);
         await modifyLevelRolesForUser(member, roles, stack);
 
-        if (levelUpLocation == 0) return;
+        if (levelUpLocation == 0 || (serverConfig.level_up_message == '<empty>' && !serverConfig.level_up_message_card_enabled)) return;
         if (levelUpLocation != 1) {
             channel = client.channels.cache.get(levelUpLocation) || await client.channels.fetch(levelUpLocation).catch(() => null);
             if (!channel) return;
@@ -131,8 +131,6 @@ async function checkLevelUp(serverId, userId, channel = null) {
 
         if (serverConfig.level_up_message != '<empty>') {
             response.addTextDisplayComponents(new TextDisplayBuilder().setContent(levelUpMessage));
-
-            if (!levelUpMessage) return;
         }
 
         if (serverConfig.level_up_message_card_enabled == 1) {
