@@ -7,7 +7,7 @@
             "ADDED_LEVEL": ":sparkles: Added `{amount}` **Levels** to {user}.\n-# {oldLevel} -> {newLevel}",
             "REMOVED_LEVEL": ":sparkles: Removed `{amount}` **Levels** from {user}.\n-# {oldLevel} -> {newLevel}",
             "SET_LEVEL": ":sparkles: Set **Level** of {user} to {amount}.\n-# {oldLevel} -> {newLevel}",
-            "UPDATE_CONFIG_VALUE": ":white_check_mark: **{config}** updated. New value: `{value}`.",
+            "UPDATE_CONFIG_VALUE": ":white_check_mark: **{config}** updated:\n```{value}```",
             "ROLE_REWARD_ADDED": ":white_check_mark: {role} will be given on Level **{level}**.",
             "ROLE_REWARD_REMOVED": ":white_check_mark: {role} was removed from Level **{level}**."
         },
@@ -23,7 +23,8 @@
             "CANNOT_LEVELCHECK_BOT": ":x: **Error:** Viewing the level of `bots` is **disabled**.",
             "NOT_HEXADECIMAL_COLOR": ":x: **Error:** Input `{input}` was not a **hexadecimal** number.",
             "BOT_ROLE_TOO_LOW": ":x: **Error:** Please move the {botRole} role above {role}.",
-            "NO_LEVEL_ROLES": ":x: **There are no leveling roles in this server.**"
+            "NO_LEVEL_ROLES": ":x: **There are no leveling roles in this server.**",
+            "NEED_TO_PASS_CHANNEL": ":x: **Error:** `${expected}` matched, missing required argument `{required}`."
         }
     }
 }

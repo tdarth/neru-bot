@@ -5,22 +5,22 @@ const ContainerMessage = require('../../utils/classes/ContainerMessage');
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
-        .setName('levelup-card-displayname')
-        .setDescription("Toggles if the level up card displays the username or displayname")
+        .setName('levelup-card-visibility')
+        .setDescription("Toggles if the level up card is displayed or not")
         .addStringOption(option =>
             option.setName('mode')
-                .setDescription('The card display mode')
+                .setDescription('The card visibility')
                 .setRequired(true)
                 .addChoices(
-                    { name: 'Username', value: 'username' },
-                    { name: 'Displayname', value: 'displayname' },
+                    { name: 'Show', value: 'show' },
+                    { name: 'Hide', value: 'hide' },
                 )),
     async execute(interaction) {
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).isEphemeral().build());
         const mode = interaction.options.getString('mode');
-        const configChange = (mode == 'displayname') ? '1' : '0';
+        const configChange = (mode == 'show') ? '1' : '0';
 
-        await updateServerConfig(interaction.guild.id, 'level_up_message_card_displayname_enabled', configChange);
-        await interaction.reply(new ContainerMessage(messages.success.UPDATE_CONFIG_VALUE.replaceAll('{config}', 'Level Up Card Displayname').replaceAll('{value}', configChange)).build());
+        await updateServerConfig(interaction.guild.id, 'level_up_message_card_enabled', configChange);
+        await interaction.reply(new ContainerMessage(messages.success.UPDATE_CONFIG_VALUE.replaceAll('{config}', 'Level Up Card Visibility').replaceAll('{value}', mode)).build());
     }
 };

@@ -5,22 +5,22 @@ const ContainerMessage = require('../../utils/classes/ContainerMessage');
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
-        .setName('stack-rewards')
-        .setDescription("Toggles if past level roles should be given, or the highest only")
+        .setName('levelup-card-titlename')
+        .setDescription("Toggles if the level up card title displays the username or displayname")
         .addStringOption(option =>
             option.setName('mode')
-                .setDescription('The leveling mode')
+                .setDescription('The card title display mode')
                 .setRequired(true)
                 .addChoices(
-                    { name: 'All Roles Given', value: 'all' },
-                    { name: 'Highest Role Only', value: 'only' },
+                    { name: 'Username', value: 'username' },
+                    { name: 'Displayname', value: 'displayname' },
                 )),
     async execute(interaction) {
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).isEphemeral().build());
         const mode = interaction.options.getString('mode');
-        const configChange = (mode == 'all') ? '1' : '0';
+        const configChange = (mode == 'displayname') ? '1' : '0';
 
-        await updateServerConfig(interaction.guild.id, 'stack_level_roles_enabled', configChange);
-        await interaction.reply(new ContainerMessage(messages.success.UPDATE_CONFIG_VALUE.replaceAll('{config}', 'Stack Level Roles').replaceAll('{value}', mode)).build());
+        await updateServerConfig(interaction.guild.id, 'level_up_message_card_displayname_enabled', configChange);
+        await interaction.reply(new ContainerMessage(messages.success.UPDATE_CONFIG_VALUE.replaceAll('{config}', 'Level Up Card Title').replaceAll('{value}', mode)).build());
     }
 };

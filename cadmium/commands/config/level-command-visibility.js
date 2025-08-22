@@ -5,22 +5,22 @@ const ContainerMessage = require('../../utils/classes/ContainerMessage');
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
-        .setName('stack-rewards')
-        .setDescription("Toggles if past level roles should be given, or the highest only")
+        .setName('level-command-visibility')
+        .setDescription("Toggles if the level card is shown in /level")
         .addStringOption(option =>
             option.setName('mode')
-                .setDescription('The leveling mode')
+                .setDescription('The level card visibility')
                 .setRequired(true)
                 .addChoices(
-                    { name: 'All Roles Given', value: 'all' },
-                    { name: 'Highest Role Only', value: 'only' },
+                    { name: 'Show', value: 'show' },
+                    { name: 'Hide', value: 'hide' },
                 )),
     async execute(interaction) {
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).isEphemeral().build());
         const mode = interaction.options.getString('mode');
-        const configChange = (mode == 'all') ? '1' : '0';
+        const configChange = (mode == 'show') ? '1' : '0';
 
-        await updateServerConfig(interaction.guild.id, 'stack_level_roles_enabled', configChange);
-        await interaction.reply(new ContainerMessage(messages.success.UPDATE_CONFIG_VALUE.replaceAll('{config}', 'Stack Level Roles').replaceAll('{value}', mode)).build());
+        await updateServerConfig(interaction.guild.id, 'level_command_card_enabled', configChange);
+        await interaction.reply(new ContainerMessage(messages.success.UPDATE_CONFIG_VALUE.replaceAll('{config}', 'Level Up Command Visibility').replaceAll('{value}', mode)).build());
     }
 };
