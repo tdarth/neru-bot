@@ -75,6 +75,14 @@ module.exports = {
 				)
 		}
 
+		if (serverConfig.level_command_message == '<empty>' && serverConfig.level_command_card_enabled == 0) {
+			response
+				.addTextDisplayComponents(
+					new TextDisplayBuilder()
+						.setContent(':x: **This command is disabled.**')
+				)
+		}
+
 		await interaction.reply({
 			flags: MessageFlags.IsComponentsV2,
 			components: [response],
