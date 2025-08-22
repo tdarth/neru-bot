@@ -15,7 +15,7 @@ module.exports = {
                     { name: 'Current Channel', value: 'current' },
                     { name: 'External Channel', value: 'external' },
                 ))
-        .addChannelOption(option => option.setName('channel').setDescription('The channel to send level up message')).setRequired(false),
+        .addChannelOption(option => option.setName('channel').setDescription('The channel to send level up message').setRequired(false)),
     async execute(interaction) {
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).isEphemeral().build());
         const mode = interaction.options.getString('mode');
