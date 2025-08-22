@@ -7,7 +7,7 @@ module.exports = {
 	data: new SlashCommandSubcommandBuilder()
 		.setName('levelup-card-message')
 		.setDescription("Sets the message that is sent on the levelup card")
-		.addStringOption(option => option.setName('message').setDescription('The message. Placeholders: {user} {xp} {totalXp} {oldLevel} {newLevel}').setRequired(true)),
+		.addStringOption(option => option.setName('message').setDescription('The message. Placeholders: {user} {xp} {totalXp} {oldLevel} {newLevel}')),
 	async execute(interaction) {
 		if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).isEphemeral().build());
 		const message = interaction.options.getString('message');
