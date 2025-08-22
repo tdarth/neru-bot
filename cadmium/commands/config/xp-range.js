@@ -48,7 +48,7 @@ module.exports = {
 
         await interaction.reply(
             new ContainerMessage(
-                messages.success.UPDATE_CONFIG_VALUE.replaceAll('{config}', 'XP Range').replaceAll('{value}', value)
+                messages.success.UPDATE_CONFIG_VALUE.replaceAll('{config}', 'XP Range').replaceAll('{value}', value.join(', '))
             ).build()
         );
     }
