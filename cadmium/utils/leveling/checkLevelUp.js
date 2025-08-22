@@ -116,7 +116,7 @@ async function checkLevelUp(serverId, userId, channel = null) {
             .replaceAll('{user}', `<@${userId}>`)
             .replaceAll('{userId}', user.id)
             .replaceAll('{username}', user.username)
-            .replaceAll('{displayname}', targetUser.displayName)
+            .replaceAll('{displayname}', user.displayName)
             .replaceAll('{xp}', userData.xp)
             .replaceAll('{totalXp}', userData.total_xp)
             .replaceAll('{oldLevel}', oldLevel)
