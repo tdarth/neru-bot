@@ -32,19 +32,6 @@ module.exports = {
 		const rankInfo = await getRank(interaction.guild.id, targetUser.id);
 		const rank = rankInfo?.rank ?? 'Error';
 
-		const levelCard = await generateLevelCard({
-			userName: targetUser.username || 'User',
-			avatar: `https://cdn.discordapp.com/avatars/${targetUser.id}/${targetUser.avatar}.png`,
-			level: level?.level,
-			currentXp: level?.xp,
-			nextLevelXp: level?.nextLevelXp,
-			bg_color: "#202024",
-			filledBarColor: userData?.card_bar_color,
-			background: userData?.card_bg_image,
-			rank: rank,
-			rankColor: rank == '1' ? '#ffcc00' : rank == '2' ? '#c0c0c0' : rank == '3' ? '#cd7f32' : null
-		});
-
 		let response = new ContainerBuilder()
 
 		if (serverConfig.level_command_message != '<empty>') {
@@ -62,6 +49,19 @@ module.exports = {
 		}
 
 		if (serverConfig.level_command_card_enabled == 1) {
+			const levelCard = await generateLevelCard({
+				userName: targetUser.username || 'User',
+				avatar: `https://cdn.discordapp.com/avatars/${targetUser.id}/${targetUser.avatar}.png`,
+				level: level?.level,
+				currentXp: level?.xp,
+				nextLevelXp: level?.nextLevelXp,
+				bg_color: "#202024",
+				filledBarColor: userData?.card_bar_color,
+				background: userData?.card_bg_image,
+				rank: rank,
+				rankColor: rank == '1' ? '#ffcc00' : rank == '2' ? '#c0c0c0' : rank == '3' ? '#cd7f32' : null
+			});
+			
 			response
 				.addMediaGalleryComponents(
 					new MediaGalleryBuilder({
