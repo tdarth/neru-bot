@@ -57,7 +57,7 @@ module.exports = {
 							.replaceAll('{xp}', level?.xp.toLocaleString())
 							.replaceAll('{nextLevelXp}', level?.nextLevelXp.toLocaleString())
 							.replaceAll('{totalXp}', level?.totalXp.toLocaleString())
-							.replaceAll(/\n/g, '  \n'))
+							.replaceAll('\\n', '\n'))
 				)
 		}
 
