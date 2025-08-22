@@ -25,7 +25,7 @@ module.exports = {
             level: topMemberLevel?.level,
             currentXp: topMemberLevel?.xp,
             nextLevelXp: topMemberLevel?.nextLevelXp,
-            bg_color: "#202024",
+            bg_color: "#242429",
             filledBarColor: topMemberUserData?.card_bar_color,
             background: topMemberUserData?.card_bg_image,
             rank: leaderboard[0].rank,

@@ -140,7 +140,7 @@ async function checkLevelUp(serverId, userId, channel = null) {
                 title: serverConfig.level_up_message_card_displayname_enabled == 1 ? user.displayName || user.username : user.username,
                 description: levelUpMessageCard,
                 avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`,
-                bg_color: '#202024',
+                bg_color: '#242429',
                 description_color: userData.card_bar_color
             });
             response.addMediaGalleryComponents(new MediaGalleryBuilder({ items: [{ media: { url: messageCard } }] }));
