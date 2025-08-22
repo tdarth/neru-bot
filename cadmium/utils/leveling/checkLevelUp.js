@@ -131,6 +131,8 @@ async function checkLevelUp(serverId, userId, channel = null) {
 
         if (serverConfig.level_up_message != '<empty>') {
             response.addTextDisplayComponents(new TextDisplayBuilder().setContent(levelUpMessage));
+
+            if (!levelUpMessage) return;
         }
 
         if (serverConfig.level_up_message_card_enabled == 1) {
