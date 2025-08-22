@@ -3,7 +3,7 @@
         "success": {
             "ADDED_XP": ":sparkles: Added `{amount}` **XP** to {user}.\n-# XP: {oldXp} -> {newXp}\n-# Level: {oldLevel} -> {newLevel} ({gainedLevels})",
             "REMOVED_XP": ":sparkles: Removed `{amount}` **XP** from {user}.\n-# {oldXp} -> {newXp}",
-            "SET_XP": ":sparkles: Set **XP** of {user} to `{amount}`.\n-# {oldXp} -> {newXp}\n-# XP: {oldXp} -> {newXp}\n-# Level: {oldLevel} -> {newLevel} ({gainedLevels})",
+            "SET_XP": ":sparkles: Set **XP** of {user} to `{amount}`.\n-# XP: {oldXp} -> {newXp}\n-# Level: {oldLevel} -> {newLevel} ({gainedLevels})",
             "ADDED_LEVEL": ":sparkles: Added `{amount}` **Levels** to {user}.\n-# {oldLevel} -> {newLevel}",
             "REMOVED_LEVEL": ":sparkles: Removed `{amount}` **Levels** from {user}.\n-# {oldLevel} -> {newLevel}",
             "SET_LEVEL": ":sparkles: Set **Level** of {user} to {amount}.\n-# {oldLevel} -> {newLevel}",
