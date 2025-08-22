@@ -58,7 +58,7 @@ module.exports = {
 				level: level?.level,
 				currentXp: level?.xp,
 				nextLevelXp: level?.nextLevelXp,
-				bg_color: "#202024",
+				bg_color: "#242429",
 				filledBarColor: userData?.card_bar_color,
 				background: userData?.card_bg_image,
 				rank: rank,
