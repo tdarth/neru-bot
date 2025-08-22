@@ -12,7 +12,7 @@ module.exports = {
     async execute(interaction) {
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).isEphemeral().build());
         const cooldown = formatNumber(parseInt(interaction.options.getString('cooldown'), 10));
-        if (isNaN(cooldown)) return interaction.reply(new ContainerMessage(messages.errors.MUST_BE_NUMBER.replaceAll('{argument}', 'cooldown')).isEphemeral().build());
+        if (isNaN(cooldown) || cooldown < 0) return interaction.reply(new ContainerMessage(messages.errors.MUST_BE_NUMBER.replaceAll('{argument}', 'cooldown')).isEphemeral().build());
 
         await updateServerConfig(interaction.guild.id, 'xp_cooldown', cooldown);
         await interaction.reply(new ContainerMessage(messages.success.UPDATE_CONFIG_VALUE.replaceAll('{config}', 'XP Cooldown').replaceAll('{value}', cooldown)).build());
