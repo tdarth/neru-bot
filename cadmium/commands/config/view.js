@@ -11,6 +11,6 @@ module.exports = {
 		if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).isEphemeral().build());
 
 		const config = await getServerConfig(interaction.guild.id);
-		await interaction.reply(new ContainerMessage(`${JSON.stringify(config)}`).build());
+		await interaction.reply(new ContainerMessage(`${JSON.stringify(config, null, 4)}`).build());
 	}
 };
