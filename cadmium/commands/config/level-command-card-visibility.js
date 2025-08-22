@@ -5,7 +5,7 @@ const ContainerMessage = require('../../utils/classes/ContainerMessage');
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
-        .setName('level-command-visibility')
+        .setName('level-command-card-visibility')
         .setDescription("Toggles if the level card is shown in /level")
         .addStringOption(option =>
             option.setName('mode')
