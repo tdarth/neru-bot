@@ -118,7 +118,8 @@ async function checkLevelUp(serverId, userId, channel = null) {
             .replaceAll('{xp}', userData.xp)
             .replaceAll('{totalXp}', userData.total_xp)
             .replaceAll('{oldLevel}', oldLevel)
-            .replaceAll('{newLevel}', userData.level);
+            .replaceAll('{newLevel}', userData.level)
+            .replaceAll('\\n', '\n');
 
         let levelUpMessageCard = serverConfig.level_up_message_card
             .replaceAll('{user}', user.username)
