@@ -24,7 +24,7 @@
             "NOT_HEXADECIMAL_COLOR": ":x: **Error:** Input `{input}` was not a **hexadecimal** number.",
             "BOT_ROLE_TOO_LOW": ":x: **Error:** Please move the {botRole} role above {role}.",
             "NO_LEVEL_ROLES": ":x: **There are no leveling roles in this server.**",
-            "NEED_TO_PASS_CHANNEL": ":x: **Error:** `${expected}` matched, missing required argument `{required}`."
+            "NEED_TO_PASS_CHANNEL": ":x: **Error:** `{expected}` matched, missing required argument `{required}`."
         }
     }
 }

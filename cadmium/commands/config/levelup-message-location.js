@@ -24,7 +24,7 @@ module.exports = {
 
         if (mode == 'current') configChange = '1';
         else if (mode == 'external' && channel) configChange = channel.id;
-        else return await interaction.reply(new ContainerMessage(messages.errors.NEED_TO_PASS_CHANNEL.replaceAll('{expected}', mode).replaceAll('{required}', 'channel')).build());
+        else return await interaction.reply(new ContainerMessage(messages.errors.NEED_TO_PASS_CHANNEL.replaceAll('{expected}', mode).replaceAll('{required}', 'channel')).isEphemeral().build());
 
         await updateServerConfig(interaction.guild.id, 'level_up_message_location', configChange);
         await interaction.reply(new ContainerMessage(messages.success.UPDATE_CONFIG_VALUE.replaceAll('{config}', 'Level Up Message Location').replaceAll('{value}', mode)).build());
