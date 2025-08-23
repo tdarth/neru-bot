@@ -8,8 +8,9 @@ const { DefaultWebSocketManagerOptions: { identifyProperties } } = require("@dis
 
 // CADMIUM IMPORTS
 const crypto = require("crypto");
+const mysql = require('mysql2/promise');
 
-const { AES_SECRET_KEY } = process.env;
+const AES_SECRET_KEY = process.env.AES_SECRET_KEY;
 
 function encryptJSON(json) {
   const text = JSON.stringify(json);
@@ -29,8 +30,6 @@ function encryptJSON(json) {
     tag: authTag.toString("base64"),
   };
 }
-
-const mysql = require('mysql2/promise');
 
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
