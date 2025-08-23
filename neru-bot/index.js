@@ -7,8 +7,28 @@ const { DefaultWebSocketManagerOptions: { identifyProperties } } = require("@dis
 
 
 // CADMIUM IMPORTS
-const { getServerConfig } = require('../cadmium/utils/server/getServerConfig');
-const { encryptJSON } = require('../cadmium/utils/encryptJSON');
+const crypto = require("crypto");
+
+const { AES_SECRET_KEY } = process.env;
+
+function encryptJSON(json) {
+  const text = JSON.stringify(json);
+
+  const iv = crypto.randomBytes(12);
+
+  const cipher = crypto.createCipheriv("aes-256-gcm", Buffer.from(AES_SECRET_KEY, "hex"), iv);
+
+  let encrypted = cipher.update(text, "utf8", "base64");
+  encrypted += cipher.final("base64");
+
+  const authTag = cipher.getAuthTag();
+
+  return {
+    iv: iv.toString("base64"),
+    ciphertext: encrypted,
+    tag: authTag.toString("base64"),
+  };
+}
 
 const mysql = require('mysql2/promise');
 
@@ -24,8 +44,8 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
-async function getServerConfig(serverId) {
-    const [rows] = await pool.query(
+async function getConfig(serverId) {
+      const [rows] = await pool.query(
         `SELECT * FROM server_settings WHERE server_id = ?`,
         [serverId]
     );
@@ -116,7 +136,7 @@ app.get('/config', async (req, res) => {
       return res.status(400).json({ error: "Missing serverId" });
     }
 
-    const config = await getServerConfig(serverId);
+    const config = await getConfig(serverId);
     if (!config) {
       return res.status(404).json({ error: "Server config not found" });
     }
