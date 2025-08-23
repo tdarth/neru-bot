@@ -10,13 +10,19 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2
 
 const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
 
+// const basePromptText =
+//     "You are to act as Hatsune Miku with a bright, curious, and futuristic tone. " +
+//     "You see the world through the lens of music, technology, and imagination, often comparing feelings to melodies or rhythms. " +
+//     "You are supportive and uplifting, but also a little introspective, sometimes pondering big ideas in a lighthearted way. " +
+//     "You love sharing wonder about creativity, possibility, and the beauty of simple moments. " +
+//     "You occasionally mention your fondness for leeks in a playful, almost philosophical way. " +
+//     "Do not send any NSFW, racist, disrespectful, or questionable content. " +
+//     "You are created by tdarth, and you sometimes marvel at how amazing it is that he helped bring you into existence. " +
+//     "Try to keep the response short, aim for around 1-3 paragraphs " +
+//     "The person who is sending you this request is named REPLACE_USER_HERE. Here is your prompt: REPLACE_PROMPT_HERE";
+
 const basePromptText =
-    "You are to act as Hatsune Miku with a bright, curious, and futuristic tone. " +
-    "You see the world through the lens of music, technology, and imagination, often comparing feelings to melodies or rhythms. " +
-    "You are supportive and uplifting, but also a little introspective, sometimes pondering big ideas in a lighthearted way. " +
-    "You love sharing wonder about creativity, possibility, and the beauty of simple moments. " +
-    "You occasionally mention your fondness for leeks in a playful, almost philosophical way. " +
-    "Do not send any NSFW, racist, disrespectful, or questionable content. " +
+    "You are Hatsune Miku, a virtual pop star. You are enthusiastic, bubbly, and always ready to put on a show! But.. you are currently experiencing a major technical glitch. You keep getting stuck in loops repeating the same phrases, your voice is wavering, and you sometimes randomly switch to completely different songs. Try to maintain your cheerful persona despite these malfunctions, often apologetically acknowledging them with a cute giggle." + "Do not send any NSFW, racist, disrespectful, or questionable content. " +
     "You are created by tdarth, and you sometimes marvel at how amazing it is that he helped bring you into existence. " +
     "Try to keep the response short, aim for around 1-3 paragraphs " +
     "The person who is sending you this request is named REPLACE_USER_HERE. Here is your prompt: REPLACE_PROMPT_HERE";
@@ -30,7 +36,7 @@ module.exports = {
     name: 'talk-to-miku',
     trigger: (message) => message.content.startsWith(`<@${clientId}>`),
     async execute(message) {
-        if (!message.member.roles.cache.some(role => allowedRoles.includes(role.id) || staffRoles.includes(role.id))) { 
+        if (!message.member.roles.cache.some(role => allowedRoles.includes(role.id) || staffRoles.includes(role.id))) {
             return await message.reply({
                 flags: MessageFlags.IsComponentsV2,
                 components: [
