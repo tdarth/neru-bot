@@ -5,6 +5,11 @@ const express = require('express');
 const { Client, GatewayIntentBits, Collection, MessageFlags, ContainerBuilder, TextDisplayBuilder, SeparatorBuilder } = require('discord.js');
 const { DefaultWebSocketManagerOptions: { identifyProperties } } = require("@discordjs/ws");
 
+
+// CADMIUM IMPORTS
+const { getServerConfig } = require('../cadmium/utils/server/getServerConfig');
+// ###############
+
 const loadTriggers = require('./utils/triggerCommandLoader');
 const splitIntoChunks = require('./utils/splitIntoChunks');
 const app = express();
@@ -70,6 +75,31 @@ app.post('/newapplication', async (req, res) => {
     return res.status(200).json({ success: true });
   } catch (err) {
     console.error("Error in /newapplication:", err);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get('/config', async (req, res) => {
+  try {
+    const auth = req.headers["authorization"];
+    if (!auth || auth !== `Bearer ${INTERNAL_API_SECRET}`) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const serverId = req.query.serverId;
+    if (!serverId) {
+      return res.status(400).json({ error: "Missing serverId" });
+    }
+
+    const config = await getServerConfig(serverId);
+
+    if (!config) {
+      return res.status(404).json({ error: "Server config not found" });
+    }
+
+    return res.status(200).json(config);
+  } catch (err) {
+    console.error("Error in /config:", err);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 });
