@@ -149,24 +149,6 @@ app.get('/config', async (req, res) => {
   }
 });
 
-app.use((req, res, next) => {
-    console.log(`[REQUEST] ${req.method} ${req.originalUrl}`);
-    console.log(`Headers:`, req.headers);
-    if (req.body && Object.keys(req.body).length > 0) {
-        console.log(`Body:`, req.body);
-    }
-
-    const originalSend = res.send;
-    res.send = function (body) {
-        console.log(`[RESPONSE] Status: ${res.statusCode}`);
-        console.log(`Body:`, body);
-        originalSend.call(this, body);
-    };
-
-    next();
-});
-
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
