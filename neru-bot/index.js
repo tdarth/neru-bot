@@ -9,6 +9,30 @@ const { DefaultWebSocketManagerOptions: { identifyProperties } } = require("@dis
 // CADMIUM IMPORTS
 const { getServerConfig } = require('../cadmium/utils/server/getServerConfig');
 const { encryptJSON } = require('../cadmium/utils/encryptJSON');
+
+const mysql = require('mysql2/promise');
+
+const pool = mysql.createPool({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    charset: 'utf8mb4',
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
+
+async function getServerConfig(serverId) {
+    const [rows] = await pool.query(
+        `SELECT * FROM server_settings WHERE server_id = ?`,
+        [serverId]
+    );
+
+    if (rows.length === 0) return null;
+    return rows[0];
+}
 // ###############
 
 const loadTriggers = require('./utils/triggerCommandLoader');
