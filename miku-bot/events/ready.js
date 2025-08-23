@@ -8,7 +8,7 @@ module.exports = {
 
         client.user.setPresence({
             activities: [{
-                name: 'Eating bread. 🥖',
+                name: 'you can call me miku 🎤',
                 type: ActivityType.Custom,
             }],
             status: 'dnd'
