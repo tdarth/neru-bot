@@ -8,6 +8,7 @@ const { DefaultWebSocketManagerOptions: { identifyProperties } } = require("@dis
 
 // CADMIUM IMPORTS
 const { getServerConfig } = require('../cadmium/utils/server/getServerConfig');
+const { encryptJSON } = require('../cadmium/utils/encryptJSON');
 // ###############
 
 const loadTriggers = require('./utils/triggerCommandLoader');
@@ -92,17 +93,19 @@ app.get('/config', async (req, res) => {
     }
 
     const config = await getServerConfig(serverId);
-
     if (!config) {
       return res.status(404).json({ error: "Server config not found" });
     }
 
-    return res.status(200).json(config);
+    const encrypted = encryptJSON(config);
+
+    return res.status(200).json(encrypted);
   } catch (err) {
     console.error("Error in /config:", err);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
