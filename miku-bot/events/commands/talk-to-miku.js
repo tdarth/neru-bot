@@ -30,7 +30,6 @@ module.exports = {
     name: 'talk-to-miku',
     trigger: (message) => message.content.startsWith(`<@${clientId}>`),
     async execute(message) {
-        if (message.guild.id == guildId) return;
         if (!message.member.roles.cache.some(role => allowedRoles.includes(role.id) || staffRoles.includes(role.id))) { 
             return await message.reply({
                 flags: MessageFlags.IsComponentsV2,
