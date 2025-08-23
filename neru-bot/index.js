@@ -26,7 +26,7 @@ function encryptJSON(json) {
 
   return {
     iv: iv.toString("base64"),
-    ciphertext: encrypted,
+    config: encrypted,
     tag: authTag.toString("base64"),
   };
 }
