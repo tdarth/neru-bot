@@ -9,9 +9,9 @@ module.exports = {
         client.user.setPresence({
             activities: [{
                 name: 'you can call me miku 🎤',
-                type: ActivityType.Streaming,
+                type: ActivityType.Custom,
             }],
-            status: 'dnd'
+            status: 'online'
         });
     },
 };

@@ -27,7 +27,7 @@ const staffRoles = ['1370790301572272370', '1369249545959247932', '1369834138634
 // staff (colorless), neru (staff), baka (smod), triple (admin), akita (owner)
 
 module.exports = {
-    name: 'talk-to-neru',
+    name: 'talk-to-miku',
     trigger: (message) => message.content.startsWith(`<@${clientId}>`),
     async execute(message) {
         if (message.guild.id == guildId) return;

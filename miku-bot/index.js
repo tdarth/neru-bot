@@ -63,10 +63,10 @@ if (fs.existsSync(eventsPath)) {
 
 loadTriggers(client);
 
-console.log("[TETO] Attempting to login..");
+console.log("[MIKU] Attempting to login..");
 client.login(token)
-  .then(() => console.log("[TETO] Login success"))
-  .catch(err => console.error("[TETO] Login error:", err));
+  .then(() => console.log("[MIKU] Login success"))
+  .catch(err => console.error("[MIKU] Login error:", err));
 
 process.on('unhandledRejection', (reason, promise) => {
     console.error('Unhandled Rejection at:', promise, 'reason:', reason);
