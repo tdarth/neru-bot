@@ -36,7 +36,7 @@ module.exports = {
             data = await response.json();
         } catch (err) {
             console.error("Error fetching loadconfig:", err);
-            return interaction.reply(new ContainerMessage(messages.errors.LOAD_CONFIG.build()).isEphemeral().build());
+            return interaction.reply(new ContainerMessage(messages.errors.LOAD_CONFIG).isEphemeral().build());
         }
 
         const newConfig = data.config;
