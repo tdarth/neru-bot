@@ -49,7 +49,7 @@ module.exports = {
             if (!serverColumnNames.includes(key)) continue;
 
             const currentValue = currentConfig[key]?.value;
-            if (currentValue !== newValue) {
+            if (currentValue != newValue) {
                 await updateServerConfig(interaction.guild.id, key, newValue);
                 changes.push(`${key}: ${newValue}`);
             }
