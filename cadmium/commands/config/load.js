@@ -15,19 +15,30 @@ module.exports = {
 
         const key = interaction.options.getString('key');
 
-        const response = await fetch(`https://api.leveling.workers.dev/loadconfig`, {
-            method: "POST",
-            body: JSON.stringify({
-                configKey: key,
-                serverId: interaction.guild.id,
-                apiSecret: process.env.LOAD_CONFIG_SECRET
-            }),
-            headers: { 'Content-Type': 'application/json' }
-        });
+        let data;
+        try {
+            const response = await fetch(`https://api.leveling.workers.dev/loadconfig`, {
+                method: "POST",
+                body: JSON.stringify({
+                    configKey: key,
+                    serverId: interaction.guild.id,
+                    apiSecret: process.env.LOAD_CONFIG_SECRET
+                }),
+                headers: { 'Content-Type': 'application/json' }
+            });
 
-        if (!response.ok) return interaction.reply(new ContainerMessage(messages.errors.LOAD_CONFIG).isEphemeral().build());
+            if (!response.ok) {
+                const errorBody = await response.text();
+                console.error(`LoadConfig failed: ${response.status} ${response.statusText} - ${errorBody}`);
+                return interaction.reply(new ContainerMessage(messages.errors.LOAD_CONFIG.build()).isEphemeral().build());
+            }
 
-        const data = await response.json();
+            data = await response.json();
+        } catch (err) {
+            console.error("Error fetching loadconfig:", err);
+            return interaction.reply(new ContainerMessage(messages.errors.LOAD_CONFIG.build()).isEphemeral().build());
+        }
+
         const newConfig = data.config;
 
         const currentConfig = await getServerConfig(interaction.guild.id);
