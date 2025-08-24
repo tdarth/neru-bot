@@ -34,21 +34,21 @@ module.exports = {
             );
         }
 
-        let value = [];
+        let values = [];
 
         if (min !== null) {
             await updateServerConfig(interaction.guild.id, 'xp_random_min', min);
-            value.push(`min: ${min}`);
+            values.push(`min: ${min}`);
         }
 
         if (max !== null) {
             await updateServerConfig(interaction.guild.id, 'xp_random_max', max);
-            value.push(`max: ${max}`);
+            values.push(`max: ${max}`);
         }
 
         await interaction.reply(
             new ContainerMessage(
-                messages.success.UPDATE_CONFIG_VALUE.replaceAll('{config}', 'XP Range').replaceAll('{value}', value.join(', '))
+                messages.success.UPDATE_CONFIG_VALUE.replaceAll('{config}', 'XP Range').replaceAll('{value}', values.join(', '))
             ).build()
         );
     }

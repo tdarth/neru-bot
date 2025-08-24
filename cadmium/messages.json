@@ -25,7 +25,9 @@
             "BOT_ROLE_TOO_LOW": ":x: **Error:** Please move the {botRole} role above {role}.",
             "NO_LEVEL_ROLES": ":x: **There are no leveling roles in this server.**",
             "NEED_TO_PASS_CHANNEL": ":x: **Error:** `{expected}` matched, missing required argument `{required}`.",
-            "MISSING_ARGUMENT": ":x: **Error:** Missing argument(s): `{arguments}`"
+            "MISSING_ARGUMENT": ":x: **Error:** Missing argument(s): `{arguments}`",
+            "LOAD_CONFIG": ":x: **Error:** An error occurred while loading that config.",
+            "SAME_CONFIG": ":x: **Error:** Loaded config matched current config."
         }
     }
 }
