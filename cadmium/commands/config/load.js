@@ -25,7 +25,7 @@ module.exports = {
             headers: { 'Content-Type': 'application/json' }
         });
 
-        if (!response.ok) return interaction.reply(new ContainerMessage(messages.errors.LOAD_CONFIG.build()).isEphemeral().build());
+        if (!response.ok) return interaction.reply(new ContainerMessage(messages.errors.LOAD_CONFIG).isEphemeral().build());
 
         const data = await response.json();
         const newConfig = data.config;
@@ -44,7 +44,7 @@ module.exports = {
             }
         }
 
-        if (!changes.length) return interaction.reply(new ContainerMessage(messages.errors.SAME_CONFIG.build()).isEphemeral().build());
+        if (!changes.length) return interaction.reply(new ContainerMessage(messages.errors.SAME_CONFIG).isEphemeral().build());
 
         await interaction.reply(new ContainerMessage(messages.success.UPDATE_CONFIG_VALUE.replaceAll('{config}', 'Dashboard Config').replaceAll('{value}', changes.join(', '))).build());
     }
