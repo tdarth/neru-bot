@@ -30,7 +30,7 @@ module.exports = {
             if (!response.ok) {
                 const errorBody = await response.text();
                 console.error(`LoadConfig failed: ${response.status} ${response.statusText} - ${errorBody}`);
-                return interaction.reply(new ContainerMessage(messages.errors.LOAD_CONFIG.build()).isEphemeral().build());
+                return interaction.reply(new ContainerMessage(messages.errors.LOAD_CONFIG).isEphemeral().build());
             }
 
             data = await response.json();
