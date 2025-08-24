@@ -57,6 +57,6 @@ module.exports = {
 
         if (!changes.length) return interaction.reply(new ContainerMessage(messages.errors.SAME_CONFIG).isEphemeral().build());
 
-        await interaction.reply(new ContainerMessage(messages.success.UPDATE_CONFIG_VALUE.replaceAll('{config}', 'Dashboard Config').replaceAll('{value}', changes.join(', '))).build());
+        await interaction.reply(new ContainerMessage(messages.success.UPDATE_CONFIG_VALUE.replaceAll('{config}', 'Dashboard Config').replaceAll('{value}', changes.join('\n'))).build());
     }
 };
