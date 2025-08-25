@@ -1,6 +1,6 @@
 module.exports = {
     name: 'baguette',
-    trigger: (message) => message.content.toLowerCase().replaceAll(' leek', '').replaceAll(' job', '') == 'baguette',
+    trigger: (message) => message.content.toLowerCase() == 'baguette' || message.content.toLowerCase().match(/^(?=.*\bjob\b)(?=.*\bbaguette\b)(?=.*\bleek\b)\b(job|baguette|leek)\b(?:\s+(job|baguette|leek)\b){2}$/),
     async execute(message) {
         await message.reply(':french_bread:');
     },
