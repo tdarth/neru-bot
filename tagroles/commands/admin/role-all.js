@@ -11,7 +11,7 @@ module.exports = {
         await interaction.deferReply();
 
         const rolesData = await readData(interaction.guild.id);
-        const members = await interaction.guild.members.fetch();
+        const members = await interaction.guild.members.fetch({ force: true });
         const statusMessage = await interaction.editReply('starting..');
 
         let processed = 0;
