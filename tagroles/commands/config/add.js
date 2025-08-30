@@ -40,6 +40,6 @@ module.exports = {
 
         await writeData(interaction.guild.id, tag, role.id, serverId);
 
-        await interaction.reply(new ContainerMessage(`:star: <@&${role.id}> will be given out for the tag: \`${tag}\`.`).build());
+        await interaction.reply(new ContainerMessage(messages.success.ADDED_ROLE_REWARD.replaceAll('{role}', role.id).replaceAll('{tag}', tag)).build());
     }
 };

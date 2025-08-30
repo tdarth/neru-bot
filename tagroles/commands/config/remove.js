@@ -6,8 +6,8 @@ const { deleteData } = require('../../utils/dataHelper');
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
         .setName('remove')
-        .setDescription("Remvoes a role to give out")
-        .addRoleOption(option => option.setName('role').setDescription('The role to give out').setRequired(true))
+        .setDescription("Removes a role that is given out")
+        .addRoleOption(option => option.setName('role').setDescription('The role to remove').setRequired(true))
         .addStringOption(option => option.setName('tag').setDescription('The tag required to receive the role').setRequired(true))
         .addStringOption(option => option.setName('server-id').setDescription('The server id/invite that contains the guild tag').setRequired(true)),
     async execute(interaction) {
@@ -37,11 +37,11 @@ module.exports = {
 
         if (deleted) {
             await interaction.reply(
-                new ContainerMessage(`:wastebasket: <@&${role.id}> will no longer be given out for: \`${tag}\`.\n-# From Server ID: \`${serverId}\`.`).build()
+                new ContainerMessage(messages.success.REMOVED_ROLE_REWARD.replaceAll('{role}', role.id).replaceAll('{tag}', tag).replaceAll('{serverId}', serverId)).build()
             );
         } else {
             await interaction.reply(
-                new ContainerMessage(`❌ No role found for \`${tag}\` with that serverId.`).isEphemeral().build()
+                new ContainerMessage(messages.errors.ROLE_WITH_SERVER_ID_NOT_FOUND.replaceAll('{tag}', tag)).isEphemeral().build()
             );
         }
     }

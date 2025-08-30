@@ -1,11 +1,21 @@
 {
     "messages": {
+        "success": {
+            "ADDED_ROLE_REWARD": ":star: <@&{role}> will be given out for the tag: {tag}.",
+            "REMOVED_ROLE_REWARD": ":wastebasket: <@&{role}> will no longer be given out for: {tag}.\n-# From Server ID: ${serverId}."
+        },
+
+        "info": {
+            "NO_ROLES_SETUP": ":x: No role rewards found."
+        },
+
         "errors": {
             "MISSING_PERMISSION": ":x: **Error:** Missing permission: `{permission}`.",
             "BOT_ROLE_TOO_LOW": ":x: **Error:** Please move the {botRole} role above {role}.",
             "GUILD_INVITE_NOT_FOUND": ":x: **Error:** Guild Invite not found. Please use the `serverId` instead.",
             "GUILD_INVITE_ERROR": ":x: **Error:** An error occurred while fetching that guild's data.",
-            "INVALID_TAG": ":x: **Error:** Invalid tag. Server tags are between 1-4 characters."
+            "INVALID_TAG": ":x: **Error:** Invalid tag. Server tags are between 1-4 characters.",
+            "ROLE_WITH_SERVER_ID_NOT_FOUND": ":x: **Error:** No role found for {tag} with that serverId."
         }
     }
 }
