@@ -8,6 +8,9 @@ module.exports = {
             if (!oldUser?.primaryGuild || !newUser?.primaryGuild) return;
             if (oldUser.primaryGuild.tag === newUser.primaryGuild.tag) return;
 
+            const oldTag = oldUser.primaryGuild.tag;
+            const newTag = newUser.primaryGuild.tag;
+
             console.log(`[UserUpdate] Tag changed for ${newUser.id}: ${oldUser.primaryGuild.tag} → ${newUser.primaryGuild.tag}`);
 
             for (const [guildId, guild] of newUser.client.guilds.cache) {
@@ -17,7 +20,6 @@ module.exports = {
                 const primaryGuild = member.user.primaryGuild;
                 if (!primaryGuild) continue;
 
-                const tag = primaryGuild.tag;
                 const identityGuildId = primaryGuild.identityGuildId;
 
                 const rolesData = await readData(guild.id);
@@ -35,16 +37,20 @@ module.exports = {
                     if (!role) continue;
 
                     const hasRole = member.roles.cache.has(roleId);
-                    const shouldHaveRole = allowedTags.has(tag);
+                    const shouldHaveRole = allowedTags.has(newTag);
+                    const hadRoleBefore = allowedTags.has(oldTag);
+
+                    console.log(`Role ${role.name}: hasRole=${hasRole}, shouldHaveRole=${shouldHaveRole}, hadRoleBefore=${hadRoleBefore}`);
 
                     if (shouldHaveRole && !hasRole) {
-                        await member.roles.add(role).catch(() => {});
-                        console.log(`[UserUpdate] Added role ${role.name} (${roleId}) to ${newUser.id} for tag ${tag}`);
-                    } else if (!shouldHaveRole && hasRole) {
-                        await member.roles.remove(role).catch(() => {});
-                        console.log(`[UserUpdate] Removed role ${role.name} (${roleId}) from ${newUser.id} for tag ${tag}`);
+                        await member.roles.add(role).catch(() => { });
+                        console.log(`[UserUpdate] Added role ${role.name} (${roleId}) to ${newUser.id} for tag ${newTag}`);
+                    } else if (!shouldHaveRole && hasRole && hadRoleBefore) {
+                        await member.roles.remove(role).catch(() => { });
+                        console.log(`[UserUpdate] Removed role ${role.name} (${roleId}) from ${newUser.id} for tag ${newTag}`);
                     }
                 }
+
             }
         } catch (err) {
             console.error(`[UserUpdate] Failed to process ${newUser.id}:`, err);
