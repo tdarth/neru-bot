@@ -20,10 +20,10 @@ module.exports = {
 
         const roleToTags = new Map();
         for (const [dbTag, info] of Object.entries(rolesData)) {
-            const { roleIds } = info;
+            const { roleIds, serverId } = info;
             for (const roleId of roleIds) {
-                if (!roleToTags.has(roleId)) roleToTags.set(roleId, new Set());
-                roleToTags.get(roleId).add(dbTag);
+                if (!roleToTags.has(roleId)) roleToTags.set(roleId, []);
+                roleToTags.get(roleId).push({ tag: dbTag, serverId });
             }
         }
 
@@ -33,11 +33,16 @@ module.exports = {
                 const primaryGuild = member.user.primaryGuild;
                 if (!primaryGuild) continue;
                 const tag = primaryGuild.tag;
+                const identityGuildId = primaryGuild.identityGuildId;
 
-                for (const [roleId, allowedTags] of roleToTags) {
+                for (const [roleId, tagInfos] of roleToTags) {
                     const role = interaction.guild.roles.cache.get(roleId);
                     if (!role) continue;
-                    const shouldHaveRole = allowedTags.has(tag);
+
+                    const shouldHaveRole = tagInfos.some(info =>
+                        info.tag === tag &&
+                        info.serverId === identityGuildId
+                    );
 
                     if (shouldHaveRole) {
                         if (!member.roles.cache.has(roleId)) {
