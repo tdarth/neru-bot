@@ -11,7 +11,7 @@ module.exports = {
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).isEphemeral().build());
         await interaction.deferReply();
         const rolesData = await readData(interaction.guild.id);
-        const members = await interaction.guild.members.fetch({ force: true });
+        const members = await interaction.guild.members.fetch({ limit: 50, force: true });
         const statusMessage = await interaction.editReply('Starting..');
 
         let processed = 0;
