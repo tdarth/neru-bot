@@ -26,7 +26,6 @@ module.exports = {
 
                 const roleToTags = new Map();
                 for (const [dbTag, info] of Object.entries(rolesData)) {
-                    if (info.serverId !== identityGuildId) continue;
                     for (const roleId of info.roleIds) {
                         if (!roleToTags.has(roleId)) roleToTags.set(roleId, new Set());
                         roleToTags.get(roleId).add(dbTag);
