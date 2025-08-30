@@ -5,7 +5,8 @@ module.exports = {
     name: Events.UserUpdate,
     async execute(oldUser, newUser) {
         try {
-            if (oldUser?.primaryGuild?.tag === newUser?.primaryGuild?.tag) return;
+            if (!oldUser?.primaryGuild || !newUser?.primaryGuild) return;
+            if (oldUser.primaryGuild.tag === newUser.primaryGuild.tag) return;
 
             for (const [guildId, guild] of newUser.client.guilds.cache) {
                 const member = await guild.members.fetch(newUser.id).catch(() => null);
@@ -35,13 +36,9 @@ module.exports = {
                     const shouldHaveRole = allowedTags.has(tag);
 
                     if (shouldHaveRole) {
-                        if (!member.roles.cache.has(roleId)) {
-                            await member.roles.add(role).catch(() => {});
-                        }
+                        if (!member.roles.cache.has(roleId)) await member.roles.add(role).catch(() => {});
                     } else {
-                        if (member.roles.cache.has(roleId)) {
-                            await member.roles.remove(role).catch(() => {});
-                        }
+                        if (member.roles.cache.has(roleId)) await member.roles.remove(role).catch(() => {});
                     }
                 }
             }
