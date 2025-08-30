@@ -33,12 +33,13 @@ module.exports = {
                     const role = guild.roles.cache.get(roleId);
                     if (!role) continue;
 
+                    const hasRole = member.roles.cache.has(roleId);
                     const shouldHaveRole = allowedTags.has(tag);
 
-                    if (shouldHaveRole) {
-                        if (!member.roles.cache.has(roleId)) await member.roles.add(role).catch(() => {});
-                    } else {
-                        if (member.roles.cache.has(roleId)) await member.roles.remove(role).catch(() => {});
+                    if (shouldHaveRole && !hasRole) {
+                        await member.roles.add(role).catch(() => {});
+                    } else if (!shouldHaveRole && hasRole) {
+                        await member.roles.remove(role).catch(() => {});
                     }
                 }
             }
