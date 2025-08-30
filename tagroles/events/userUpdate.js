@@ -5,7 +5,7 @@ module.exports = {
     name: Events.UserUpdate,
     async execute(oldUser, newUser) {
         try {
-            if (!newUser.primaryGuild) {
+            if (!newUser.primaryGuild || !oldUser.primaryGuild) {
                 for (const [guildId, guild] of newUser.client.guilds.cache) {
                     const member = await guild.members.fetch(newUser.id, { force: true }).catch(() => null);
                     if (member && member.user.primaryGuild) {
