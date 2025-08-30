@@ -65,7 +65,7 @@ module.exports = {
 
             if (processed % 10 === 0) {
                 await statusMessage.edit(
-                    new ContainerMessage(`Processed ${processed}/${members.size} members...\nAdded: ${added}, Removed: ${removed}`).build()
+                    `Processed ${processed}/${members.size} members...\nAdded: ${added}, Removed: ${removed}`
                 );
             }
         }
