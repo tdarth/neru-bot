@@ -1,5 +1,5 @@
 const { Events } = require('discord.js');
-const { readData } = require('../../utils/dataHelper');
+const { readData } = require('../utils/dataHelper');
 
 module.exports = {
     name: Events.UserUpdate,
