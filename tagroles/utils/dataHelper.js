@@ -6,6 +6,7 @@ const pool = mysql.createPool({
     user: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+    charset: 'utf8mb4',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
@@ -19,7 +20,7 @@ async function init() {
             serverId VARCHAR(32) NOT NULL,
             roleId VARCHAR(32) NOT NULL,
             PRIMARY KEY (guildId, tag, roleId)
-        )
+        ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
     `;
     const conn = await pool.getConnection();
     await conn.query(sql);

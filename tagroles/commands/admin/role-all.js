@@ -12,7 +12,7 @@ module.exports = {
 
         const rolesData = await readData(interaction.guild.id);
         const members = await interaction.guild.members.fetch();
-        const statusMessage = await interaction.editReply(new ContainerMessage('starting..').build());
+        const statusMessage = await interaction.editReply('starting..');
 
         let processed = 0;
         let added = 0;
