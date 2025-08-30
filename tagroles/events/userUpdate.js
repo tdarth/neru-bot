@@ -5,22 +5,29 @@ module.exports = {
     name: Events.UserUpdate,
     async execute(oldUser, newUser) {
         try {
+            const client = newUser.client;
+
+            if (!oldUser?.primaryGuild) {
+                oldUser = await client.users.fetch(oldUser.id, { force: true }).catch(() => oldUser);
+            }
+            if (!newUser?.primaryGuild) {
+                newUser = await client.users.fetch(newUser.id, { force: true }).catch(() => newUser);
+            }
+
             if (!oldUser?.primaryGuild || !newUser?.primaryGuild) return;
             if (oldUser.primaryGuild.tag === newUser.primaryGuild.tag) return;
 
             const oldTag = oldUser.primaryGuild.tag;
             const newTag = newUser.primaryGuild.tag;
 
-            console.log(`[UserUpdate] Tag changed for ${newUser.id}: ${oldUser.primaryGuild.tag} → ${newUser.primaryGuild.tag}`);
+            console.log(`[UserUpdate] Tag changed for ${newUser.id}: ${oldTag} → ${newTag}`);
 
-            for (const [guildId, guild] of newUser.client.guilds.cache) {
+            for (const [guildId, guild] of client.guilds.cache) {
                 const member = await guild.members.fetch(newUser.id, { force: true }).catch(() => null);
                 if (!member) continue;
 
                 const primaryGuild = member.user.primaryGuild;
                 if (!primaryGuild) continue;
-
-                const identityGuildId = primaryGuild.identityGuildId;
 
                 const rolesData = await readData(guild.id);
 
@@ -50,7 +57,6 @@ module.exports = {
                         console.log(`[UserUpdate] Removed role ${role.name} (${roleId}) from ${newUser.id} for tag ${newTag}`);
                     }
                 }
-
             }
         } catch (err) {
             console.error(`[UserUpdate] Failed to process ${newUser.id}:`, err);
