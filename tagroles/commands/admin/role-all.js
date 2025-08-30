@@ -1,4 +1,4 @@
-const { SlashCommandSubcommandBuilder, AttachmentBuilder } = require('discord.js');
+const { SlashCommandSubcommandBuilder, AttachmentBuilder, PermissionsBitField } = require('discord.js');
 const ContainerMessage = require('../../utils/ContainerMessage');
 const { messages } = require('../../messages.json');
 const { readData } = require('../../utils/dataHelper');
@@ -8,6 +8,7 @@ module.exports = {
         .setName('role-all')
         .setDescription("Fetches all members, assigning or removing roles"),
     async execute(interaction) {
+        if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSION.replaceAll('{permission}', 'administrator')).isEphemeral().build());
         await interaction.deferReply();
         const rolesData = await readData(interaction.guild.id);
         const members = await interaction.guild.members.fetch({ force: true });
