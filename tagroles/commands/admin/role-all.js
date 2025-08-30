@@ -31,7 +31,7 @@ module.exports = {
 
                 for (const [dbTag, info] of Object.entries(rolesData)) {
                     const { roleIds, serverId } = info;
-                    if (identityGuildId !== serverId) continue;
+                    // if (identityGuildId !== serverId) continue;
 
                     const shouldHaveRole = tag === dbTag;
 
