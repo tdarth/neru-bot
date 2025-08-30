@@ -36,18 +36,20 @@ module.exports = {
                     if (!role) continue;
 
                     const hasRole = member.roles.cache.has(roleId);
-                    const shouldHaveRole = allowedTags.has(tag);
+                    const shouldHaveRole = allowedTags.has(newTag);
+                    const hadRoleBefore = allowedTags.has(oldTag);
 
-                    console.log(`Role ${role.name}: hasRole=${hasRole}, shouldHaveRole=${shouldHaveRole}`);
+                    console.log(`Role ${role.name}: hasRole=${hasRole}, shouldHaveRole=${shouldHaveRole}, hadRoleBefore=${hadRoleBefore}`);
 
                     if (shouldHaveRole && !hasRole) {
-                        await member.roles.add(role).catch(() => {});
-                        console.log(`[UserUpdate] Added role ${role.name} (${roleId}) to ${newUser.id} for tag ${tag}`);
-                    } else if (!shouldHaveRole && hasRole) {
-                        await member.roles.remove(role).catch(() => {});
-                        console.log(`[UserUpdate] Removed role ${role.name} (${roleId}) from ${newUser.id} for tag ${tag}`);
+                        await member.roles.add(role).catch(() => { });
+                        console.log(`[UserUpdate] Added role ${role.name} (${roleId}) to ${newUser.id} for tag ${newTag}`);
+                    } else if (!shouldHaveRole && hasRole && hadRoleBefore) {
+                        await member.roles.remove(role).catch(() => { });
+                        console.log(`[UserUpdate] Removed role ${role.name} (${roleId}) from ${newUser.id} for tag ${newTag}`);
                     }
                 }
+
             }
         } catch (err) {
             console.error(`[UserUpdate] Failed to process ${newUser.id}:`, err);
