@@ -11,7 +11,7 @@ module.exports = {
         await interaction.deferReply();
         const rolesData = await readData(interaction.guild.id);
         const members = await interaction.guild.members.fetch({ force: true });
-        const statusMessage = await interaction.editReply('Starting...');
+        const statusMessage = await interaction.editReply('Starting..');
 
         let processed = 0;
         let added = 0;
@@ -69,7 +69,7 @@ module.exports = {
         });
 
         await statusMessage.edit({
-            content: `Finished processing ${members.size} members.\nAdded roles: ${added}, Removed roles: ${removed}`,
+            content: `${members.size} members.\nAdded roles: ${added}, Removed roles: ${removed}`,
             files: [logAttachment]
         });
     }
