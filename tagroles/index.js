@@ -6,6 +6,8 @@ const loadCommands = require('./utils/loadCommands');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers] });
 
+const token = process.env.TOKEN;
+
 client.commands = new Collection();
 
 const commandsPath = path.join(__dirname, 'commands');
@@ -42,4 +44,21 @@ process.on('uncaughtException', (error) => {
 
 client.on('error', (error) => {
     console.error('Discord.js client error:', error);
+});
+
+process.stdin.setEncoding('utf8');
+process.stdin.resume();
+
+process.stdin.on('data', (input) => {
+    const trimmed = input.toString().trim();
+
+    if (trimmed === 'tagrolesReload') {
+        console.log('[TAGROLES] Running deploy-commands.js...');
+
+        const child = spawn('node', ['./deploy-commands.js'], { stdio: 'inherit' });
+
+        child.on('close', (code) => {
+            console.log(`[TAGROLES] deploy-commands.js exited with code ${code}`);
+        });
+    }
 });
