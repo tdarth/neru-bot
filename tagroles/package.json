@@ -12,6 +12,7 @@
   "type": "commonjs",
   "dependencies": {
     "discord.js": "^14.22.1",
-    "dotenv": "^17.0.1"
+    "dotenv": "^17.0.1",
+    "mysql2": "^3.14.3"
   }
 }
