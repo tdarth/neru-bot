@@ -5,15 +5,11 @@ module.exports = {
     name: Events.UserUpdate,
     async execute(oldUser, newUser) {
         try {
-            if (!oldUser?.primaryGuild || !newUser?.primaryGuild) return;
-            if (oldUser.primaryGuild.tag === newUser.primaryGuild.tag &&
-                oldUser.primaryGuild.identityGuildId === newUser.primaryGuild.identityGuildId) return;
+            const primaryGuild = newUser.primaryGuild;
+            if (!primaryGuild) return;
 
-            const oldTag = oldUser.primaryGuild.tag;
-            const newTag = newUser.primaryGuild.tag;
-            const identityGuildId = newUser.primaryGuild.identityGuildId;
-
-            console.log(`[UserUpdate] Tag changed for ${newUser.id}: ${oldTag} → ${newTag}`);
+            const tag = primaryGuild.tag;
+            const identityGuildId = primaryGuild.identityGuildId;
 
             for (const [guildId, guild] of newUser.client.guilds.cache) {
                 const member = await guild.members.fetch(newUser.id).catch(() => null);
@@ -35,12 +31,7 @@ module.exports = {
                     if (!role) continue;
 
                     const shouldHaveRole = tagInfos.some(info =>
-                        info.tag === newTag &&
-                        info.serverId === identityGuildId
-                    );
-
-                    const hadRoleBefore = tagInfos.some(info =>
-                        info.tag === oldTag &&
+                        info.tag === tag &&
                         info.serverId === identityGuildId
                     );
 
@@ -48,10 +39,8 @@ module.exports = {
 
                     if (shouldHaveRole && !hasRole) {
                         await member.roles.add(role).catch(() => {});
-                        console.log(`[UserUpdate] Added role ${role.name} (${roleId}) to ${newUser.id}`);
-                    } else if (!shouldHaveRole && hasRole && hadRoleBefore) {
+                    } else if (!shouldHaveRole && hasRole) {
                         await member.roles.remove(role).catch(() => {});
-                        console.log(`[UserUpdate] Removed role ${role.name} (${roleId}) from ${newUser.id}`);
                     }
                 }
             }
