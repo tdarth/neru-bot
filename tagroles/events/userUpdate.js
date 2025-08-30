@@ -38,6 +38,8 @@ module.exports = {
                     const hasRole = member.roles.cache.has(roleId);
                     const shouldHaveRole = allowedTags.has(tag);
 
+                    console.log(`Role ${role.name}: hasRole=${hasRole}, shouldHaveRole=${shouldHaveRole}`);
+
                     if (shouldHaveRole && !hasRole) {
                         await member.roles.add(role).catch(() => {});
                         console.log(`[UserUpdate] Added role ${role.name} (${roleId}) to ${newUser.id} for tag ${tag}`);
