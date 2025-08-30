@@ -11,7 +11,7 @@ module.exports = {
             console.log(`[UserUpdate] Tag changed for ${newUser.id}: ${oldUser.primaryGuild.tag} → ${newUser.primaryGuild.tag}`);
 
             for (const [guildId, guild] of newUser.client.guilds.cache) {
-                const member = await guild.members.fetch(newUser.id).catch(() => null);
+                const member = await guild.members.fetch(newUser.id, { force: true }).catch(() => null);
                 if (!member) continue;
 
                 const primaryGuild = member.user.primaryGuild;
