@@ -5,6 +5,16 @@ module.exports = {
     name: Events.UserUpdate,
     async execute(oldUser, newUser) {
         try {
+            if (!newUser.primaryGuild) {
+                for (const [guildId, guild] of newUser.client.guilds.cache) {
+                    const member = await guild.members.fetch(newUser.id, { force: true }).catch(() => null);
+                    if (member && member.user.primaryGuild) {
+                        newUser = member.user;
+                        break;
+                    }
+                }
+            }
+
             const primaryGuild = newUser.primaryGuild;
             if (!primaryGuild) return;
 
@@ -12,7 +22,7 @@ module.exports = {
             const identityGuildId = primaryGuild.identityGuildId;
 
             for (const [guildId, guild] of newUser.client.guilds.cache) {
-                const member = await guild.members.fetch(newUser.id).catch(() => null);
+                const member = await guild.members.fetch(newUser.id, { force: true }).catch(() => null);
                 if (!member) continue;
 
                 const rolesData = await readData(guild.id);
