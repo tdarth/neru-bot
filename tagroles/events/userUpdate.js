@@ -8,6 +8,9 @@ module.exports = {
             if (!oldUser?.primaryGuild || !newUser?.primaryGuild) return;
             if (oldUser.primaryGuild.tag === newUser.primaryGuild.tag) return;
 
+            const oldTag = oldUser.primaryGuild.tag;
+            const newTag = newUser.primaryGuild.tag;
+
             console.log(`[UserUpdate] Tag changed for ${newUser.id}: ${oldUser.primaryGuild.tag} → ${newUser.primaryGuild.tag}`);
 
             for (const [guildId, guild] of newUser.client.guilds.cache) {
@@ -17,7 +20,6 @@ module.exports = {
                 const primaryGuild = member.user.primaryGuild;
                 if (!primaryGuild) continue;
 
-                const tag = primaryGuild.tag;
                 const identityGuildId = primaryGuild.identityGuildId;
 
                 const rolesData = await readData(guild.id);
