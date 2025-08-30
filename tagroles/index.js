@@ -1,5 +1,6 @@
 require('dotenv').config();
 const path = require('node:path');
+const { spawn } = require('child_process');
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const getFiles = require('./utils/getFiles');
 const loadCommands = require('./utils/loadCommands');
