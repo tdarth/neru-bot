@@ -8,6 +8,8 @@ module.exports = {
             if (!oldUser?.primaryGuild || !newUser?.primaryGuild) return;
             if (oldUser.primaryGuild.tag === newUser.primaryGuild.tag) return;
 
+            console.log(`[UserUpdate] Tag changed for ${newUser.id}: ${oldUser.primaryGuild.tag} → ${newUser.primaryGuild.tag}`);
+
             for (const [guildId, guild] of newUser.client.guilds.cache) {
                 const member = await guild.members.fetch(newUser.id).catch(() => null);
                 if (!member) continue;
@@ -38,13 +40,15 @@ module.exports = {
 
                     if (shouldHaveRole && !hasRole) {
                         await member.roles.add(role).catch(() => {});
+                        console.log(`[UserUpdate] Added role ${role.name} (${roleId}) to ${newUser.id} for tag ${tag}`);
                     } else if (!shouldHaveRole && hasRole) {
                         await member.roles.remove(role).catch(() => {});
+                        console.log(`[UserUpdate] Removed role ${role.name} (${roleId}) from ${newUser.id} for tag ${tag}`);
                     }
                 }
             }
         } catch (err) {
-            console.error(`Failed to process userUpdate for ${newUser.id}:`, err);
+            console.error(`[UserUpdate] Failed to process ${newUser.id}:`, err);
         }
     }
 };
