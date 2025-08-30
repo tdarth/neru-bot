@@ -38,7 +38,7 @@ module.exports = {
         const botMember = interaction.guild.members.me;
         if (botMember.roles.highest.position <= role.position) return interaction.reply(new ContainerMessage(messages.errors.BOT_ROLE_TOO_LOW.replaceAll('{botRole}', `${botMember.roles.cache.find(role => role.tags?.botId === botMember.id)}`).replaceAll('{role}', `<@&${role.id}>`)).isEphemeral().build());
 
-        await writeData(interaction.guild.id, 'roles', tag, role.id, serverId);
+        await writeData(interaction.guild.id, tag, role.id, serverId);
 
         await interaction.reply(new ContainerMessage(`:star: <@&${role.id}> will be given out for the tag: \`${tag}\`.`).build());
     }
