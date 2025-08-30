@@ -7,7 +7,7 @@ module.exports = {
         .setName('list')
         .setDescription("Lists the roles that will be given out"),
     async execute(interaction) {
-        const rolesData = readData(interaction.guild.id) || {};
+        const rolesData = await readData(interaction.guild.id);
         let reply = "";
 
         for (const [tag, info] of Object.entries(rolesData)) {

@@ -33,7 +33,7 @@ module.exports = {
             return interaction.reply(new ContainerMessage(messages.errors.GUILD_INVITE_ERROR).isEphemeral().build());
         }
 
-        const deleted = deleteData(interaction.guild.id, tag, role.id, serverId);
+        const deleted = await deleteData(interaction.guild.id, tag, role.id, serverId);
 
         if (deleted) {
             await interaction.reply(
