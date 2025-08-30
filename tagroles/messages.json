@@ -1,8 +1,8 @@
 {
     "messages": {
         "success": {
-            "ADDED_ROLE_REWARD": ":star: <@&{role}> will be given out for the tag: {tag}.",
-            "REMOVED_ROLE_REWARD": ":wastebasket: <@&{role}> will no longer be given out for: {tag}.\n-# From Server ID: ${serverId}."
+            "ADDED_ROLE_REWARD": ":star: <@&{role}> will be given out for the tag: `{tag}`.",
+            "REMOVED_ROLE_REWARD": ":wastebasket: <@&{role}> will no longer be given out for: `{tag}`.\n-# From Server ID: {serverId}."
         },
 
         "info": {
@@ -15,7 +15,7 @@
             "GUILD_INVITE_NOT_FOUND": ":x: **Error:** Guild Invite not found. Please use the `serverId` instead.",
             "GUILD_INVITE_ERROR": ":x: **Error:** An error occurred while fetching that guild's data.",
             "INVALID_TAG": ":x: **Error:** Invalid tag. Server tags are between 1-4 characters.",
-            "ROLE_WITH_SERVER_ID_NOT_FOUND": ":x: **Error:** No role found for {tag} with that serverId."
+            "ROLE_WITH_SERVER_ID_NOT_FOUND": ":x: **Error:** No role found for `{tag}` with that serverId."
         }
     }
 }
