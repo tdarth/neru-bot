@@ -33,13 +33,13 @@ module.exports = {
                     const { roleIds, serverId } = info;
                     if (identityGuildId !== serverId) continue;
 
-                    const hasTag = tag === dbTag;
+                    const shouldHaveRole = tag === dbTag;
 
                     for (const roleId of roleIds) {
                         const role = interaction.guild.roles.cache.get(roleId);
                         if (!role) continue;
 
-                        if (hasTag) {
+                        if (shouldHaveRole) {
                             if (!member.roles.cache.has(roleId)) {
                                 await member.roles.add(role);
                                 added++;
