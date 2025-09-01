@@ -11,10 +11,11 @@ module.exports = {
         const rolesData = await readData(interaction.guild.id);
         let reply = "";
 
-        for (const [tag, info] of Object.entries(rolesData)) {
-            const { roleIds, serverId } = info;
-            const mentions = roleIds.map(id => `<@&${id}>`).join(', ');
-            reply += `\`${tag}\` (ID: ${serverId}): ${mentions}\n`;
+        for (const [tag, servers] of Object.entries(rolesData)) {
+            for (const [serverId, info] of Object.entries(servers)) {
+                const mentions = info.roleIds.map(id => `<@&${id}>`).join(', ');
+                reply += `\`${tag}\` (ID: ${serverId}): ${mentions}\n`;
+            }
         }
 
         if (!reply) reply = messages.info.NO_ROLES_SETUP;
