@@ -18,11 +18,13 @@ module.exports = {
                 const rolesData = await readData(guild.id);
 
                 const roleToTags = new Map();
-                for (const [dbTag, info] of Object.entries(rolesData)) {
-                    const { roleIds, serverId } = info;
-                    for (const roleId of roleIds) {
-                        if (!roleToTags.has(roleId)) roleToTags.set(roleId, []);
-                        roleToTags.get(roleId).push({ tag: dbTag, serverId });
+                for (const [dbTag, servers] of Object.entries(rolesData)) {
+                    for (const [serverId, info] of Object.entries(servers)) {
+                        const { roleIds } = info;
+                        for (const roleId of roleIds) {
+                            if (!roleToTags.has(roleId)) roleToTags.set(roleId, []);
+                            roleToTags.get(roleId).push({ tag: dbTag, serverId });
+                        }
                     }
                 }
 
