@@ -20,11 +20,13 @@ module.exports = {
         const logs = [];
 
         const roleToTags = new Map();
-        for (const [dbTag, info] of Object.entries(rolesData)) {
-            const { roleIds, serverId } = info;
-            for (const roleId of roleIds) {
-                if (!roleToTags.has(roleId)) roleToTags.set(roleId, []);
-                roleToTags.get(roleId).push({ tag: dbTag, serverId });
+        for (const [dbTag, servers] of Object.entries(rolesData)) {
+            for (const [serverId, info] of Object.entries(servers)) {
+                const { roleIds } = info;
+                for (const roleId of roleIds) {
+                    if (!roleToTags.has(roleId)) roleToTags.set(roleId, []);
+                    roleToTags.get(roleId).push({ tag: dbTag, serverId });
+                }
             }
         }
 
@@ -33,6 +35,7 @@ module.exports = {
             try {
                 const primaryGuild = member.user.primaryGuild;
                 if (!primaryGuild) continue;
+
                 const tag = primaryGuild.tag;
                 const identityGuildId = primaryGuild.identityGuildId;
 
@@ -40,27 +43,26 @@ module.exports = {
                     const role = interaction.guild.roles.cache.get(roleId);
                     if (!role) continue;
 
-                    const shouldHaveRole = tagInfos.some(info =>
-                        info.tag === tag &&
-                        info.serverId === identityGuildId
+                    const shouldHaveRole = tagInfos.some(
+                        info => info.tag === tag && info.serverId === identityGuildId
                     );
 
-                    if (shouldHaveRole) {
-                        if (!member.roles.cache.has(roleId)) {
-                            await member.roles.add(role);
-                            added++;
-                            logs.push(`Added role to ${memberId}, tag: ${tag}, roleId: ${roleId}`);
-                        }
-                    } else {
-                        if (member.roles.cache.has(roleId)) {
-                            await member.roles.remove(role);
-                            removed++;
-                            logs.push(`Removed role from ${memberId}, tag: ${tag}, roleId: ${roleId}`);
-                        }
+                    const hasRole = member.roles.cache.has(roleId);
+
+                    if (shouldHaveRole && !hasRole) {
+                        await member.roles.add(role).catch(() => { });
+                        added++;
+                        logs.push(`Added role to ${memberId}, tag: ${tag}, roleId: ${roleId}`);
+                    } else if (!shouldHaveRole && hasRole) {
+                        await member.roles.remove(role).catch(() => { });
+                        removed++;
+                        logs.push(`Removed role from ${memberId}, tag: ${tag}, roleId: ${roleId}`);
                     }
                 }
             } catch {
-                logs.push(`Failed to process ${memberId}, tag: ${member.user.primaryGuild?.tag || 'unknown'}`);
+                logs.push(
+                    `Failed to process ${memberId}, tag: ${member.user.primaryGuild?.tag || 'unknown'}`
+                );
             }
 
             if (processed % 10 === 0) {
