@@ -19,7 +19,7 @@ async function init() {
             tag VARCHAR(100) NOT NULL,
             serverId VARCHAR(32) NOT NULL,
             roleId VARCHAR(32) NOT NULL,
-            PRIMARY KEY (guildId, tag, roleId)
+            PRIMARY KEY (guildId, tag, roleId, serverId)
         ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
     `;
     const conn = await pool.getConnection();
@@ -53,8 +53,9 @@ async function readData(guildId) {
     const result = {};
     for (const row of rows) {
         const { tag, serverId, roleId } = row;
-        if (!result[tag]) result[tag] = { serverId, roleIds: [] };
-        result[tag].roleIds.push(roleId);
+        if (!result[tag]) result[tag] = {};
+        if (!result[tag][serverId]) result[tag][serverId] = { roleIds: [] };
+        result[tag][serverId].roleIds.push(roleId);
     }
 
     return result;
