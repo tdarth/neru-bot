@@ -3,7 +3,7 @@ const { readData } = require('../utils/dataHelper');
 
 const userTagHistory = new Map();
 const PATTERN_LENGTH = 15;
-const TIME_TOLERANCE = 10000;
+const TIME_TOLERANCE = 20000;
 
 module.exports = {
     name: Events.UserUpdate,
