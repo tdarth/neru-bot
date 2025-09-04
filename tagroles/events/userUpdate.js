@@ -1,13 +1,55 @@
 const { Events } = require('discord.js');
 const { readData } = require('../utils/dataHelper');
 
+const tagSpammers = new Map();
+const WINDOW = 30000;
+const MIN_FLIPS = 30;
+const INTERVAL_TOLERANCE = 1000;
+
 module.exports = {
     name: Events.UserUpdate,
     async execute(oldUser, newUser) {
         try {
-            const primaryGuild = newUser.primaryGuild;
-            if (!primaryGuild) return;
+            if (!newUser.primaryGuild) return;
 
+            const oldTag = oldUser.primaryGuild?.tag;
+            const newTag = newUser.primaryGuild.tag;
+            if (oldTag === newTag) return;
+
+            const userId = newUser.id;
+            const now = Date.now();
+
+            let data = tagSpammers.get(userId);
+            if (!data) {
+                data = { timestamps: [], ignoring: false };
+                tagSpammers.set(userId, data);
+            }
+
+            data.timestamps.push(now);
+            data.timestamps = data.timestamps.filter(ts => now - ts <= WINDOW);
+
+            if (data.timestamps.length >= MIN_FLIPS) {
+                const intervals = [];
+                for (let i = 1; i < data.timestamps.length; i++) {
+                    intervals.push(data.timestamps[i] - data.timestamps[i - 1]);
+                }
+
+                const avgInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+                const consistent = intervals.every(interval =>
+                    Math.abs(interval - avgInterval) <= INTERVAL_TOLERANCE
+                );
+
+                if (consistent && avgInterval <= 1500) {
+                    data.ignoring = true;
+                    console.log(`[UserUpdate] Ignoring ${userId}.`);
+                } else {
+                    data.ignoring = false;
+                }
+            }
+
+            if (data.ignoring) return;
+
+            const primaryGuild = newUser.primaryGuild;
             const tag = primaryGuild.tag;
             const identityGuildId = primaryGuild.identityGuildId;
 
@@ -18,13 +60,11 @@ module.exports = {
                 const rolesData = await readData(guild.id);
 
                 const roleToTags = new Map();
-                for (const [dbTag, servers] of Object.entries(rolesData)) {
-                    for (const [serverId, info] of Object.entries(servers)) {
-                        const { roleIds } = info;
-                        for (const roleId of roleIds) {
-                            if (!roleToTags.has(roleId)) roleToTags.set(roleId, []);
-                            roleToTags.get(roleId).push({ tag: dbTag, serverId });
-                        }
+                for (const [dbTag, info] of Object.entries(rolesData)) {
+                    const { roleIds, serverId } = info;
+                    for (const roleId of roleIds) {
+                        if (!roleToTags.has(roleId)) roleToTags.set(roleId, []);
+                        roleToTags.get(roleId).push({ tag: dbTag, serverId });
                     }
                 }
 
@@ -46,6 +86,11 @@ module.exports = {
                     }
                 }
             }
+
+            if (data.timestamps.length === 0 && !data.ignoring) {
+                tagSpammers.delete(userId);
+            }
+
         } catch (err) {
             console.error(`[UserUpdate] Failed to process ${newUser.id}:`, err);
         }
