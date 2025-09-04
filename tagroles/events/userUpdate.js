@@ -1,57 +1,42 @@
 const { Events } = require('discord.js');
 const { readData } = require('../utils/dataHelper');
 
-const tagSpammers = new Map();
-const WINDOW = 30000;
-const MIN_FLIPS = 30;
-const INTERVAL_TOLERANCE = 1000;
+const userTagHistory = new Map();
+const PATTERN_LENGTH = 15;
+const TIME_TOLERANCE = 500;
 
 module.exports = {
     name: Events.UserUpdate,
     async execute(oldUser, newUser) {
         try {
-            if (!newUser.primaryGuild) return;
+            const primaryGuild = newUser.primaryGuild;
+            if (!primaryGuild) return;
 
-            const oldTag = oldUser.primaryGuild?.tag;
-            const newTag = newUser.primaryGuild.tag;
-            if (oldTag === newTag) return;
+            const tag = primaryGuild.tag;
+            const identityGuildId = primaryGuild.identityGuildId;
 
-            const userId = newUser.id;
-            const now = Date.now();
-
-            let data = tagSpammers.get(userId);
-            if (!data) {
-                data = { timestamps: [], ignoring: false };
-                tagSpammers.set(userId, data);
+            if (!userTagHistory.has(newUser.id)) {
+                userTagHistory.set(newUser.id, []);
             }
 
-            data.timestamps.push(now);
-            data.timestamps = data.timestamps.filter(ts => now - ts <= WINDOW);
+            const history = userTagHistory.get(newUser.id);
+            const now = Date.now();
+            history.push({ tag, time: now });
+            if (history.length > PATTERN_LENGTH) history.shift();
 
-            if (data.timestamps.length >= MIN_FLIPS) {
+            let skipRoleUpdate = false;
+
+            if (history.length === PATTERN_LENGTH) {
                 const intervals = [];
-                for (let i = 1; i < data.timestamps.length; i++) {
-                    intervals.push(data.timestamps[i] - data.timestamps[i - 1]);
+                for (let i = 1; i < history.length; i++) {
+                    intervals.push(history[i].time - history[i - 1].time);
                 }
 
                 const avgInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length;
-                const consistent = intervals.every(interval =>
-                    Math.abs(interval - avgInterval) <= INTERVAL_TOLERANCE
-                );
-
-                if (consistent && avgInterval <= 1500) {
-                    data.ignoring = true;
-                    console.log(`[UserUpdate] Ignoring ${userId}.`);
-                } else {
-                    data.ignoring = false;
-                }
+                skipRoleUpdate = intervals.every(interval => Math.abs(interval - avgInterval) <= TIME_TOLERANCE);
             }
 
-            if (data.ignoring) return;
-
-            const primaryGuild = newUser.primaryGuild;
-            const tag = primaryGuild.tag;
-            const identityGuildId = primaryGuild.identityGuildId;
+            if (skipRoleUpdate) return;
 
             for (const [guildId, guild] of newUser.client.guilds.cache) {
                 const member = await guild.members.fetch(newUser.id).catch(() => null);
@@ -60,11 +45,13 @@ module.exports = {
                 const rolesData = await readData(guild.id);
 
                 const roleToTags = new Map();
-                for (const [dbTag, info] of Object.entries(rolesData)) {
-                    const { roleIds, serverId } = info;
-                    for (const roleId of roleIds) {
-                        if (!roleToTags.has(roleId)) roleToTags.set(roleId, []);
-                        roleToTags.get(roleId).push({ tag: dbTag, serverId });
+                for (const [dbTag, servers] of Object.entries(rolesData)) {
+                    for (const [serverId, info] of Object.entries(servers)) {
+                        const { roleIds } = info;
+                        for (const roleId of roleIds) {
+                            if (!roleToTags.has(roleId)) roleToTags.set(roleId, []);
+                            roleToTags.get(roleId).push({ tag: dbTag, serverId });
+                        }
                     }
                 }
 
@@ -86,11 +73,6 @@ module.exports = {
                     }
                 }
             }
-
-            if (data.timestamps.length === 0 && !data.ignoring) {
-                tagSpammers.delete(userId);
-            }
-
         } catch (err) {
             console.error(`[UserUpdate] Failed to process ${newUser.id}:`, err);
         }
