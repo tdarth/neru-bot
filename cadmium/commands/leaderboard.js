@@ -10,9 +10,9 @@ module.exports = {
     data: new SlashCommandSubcommandBuilder()
         .setName('leaderboard')
         .setDescription("View the leaderboard of the server")
-        .addStringOption(option => option.setName('limit').setDescription('The amount of members to show, default 25').setRequired(false)),
+        .addStringOption(option => option.setName('limit').setDescription('The amount of members to show, default 10').setRequired(false)),
     async execute(interaction) {
-        const limit = formatNumber(Math.max(parseInt(interaction.options.getString('limit'), 10), 0), 100) || 25;
+        const limit = formatNumber(Math.max(parseInt(interaction.options.getString('limit'), 10), 0), 100) || 10;
 
         const leaderboard = await getLeaderboard(interaction.guild.id, limit);
         const topMember = await getDiscUserById(leaderboard[0].id);
