@@ -101,7 +101,7 @@ module.exports = {
                         new ContainerBuilder()
                             .addTextDisplayComponents(
                                 new TextDisplayBuilder()
-                                    .setContent(`:x: Questions or Concerns? Please directly message <@990500436047982602>.\n-# Your mute expiration time & reason have been directly messaged to you.`)
+                                    .setContent(`:x: Questions or Concerns? Please directly message <@1416282565001744518>.\n-# Your mute expiration time & reason have been directly messaged to you.`)
                             )
                     ],
                     allowedMentions: { parse: [] }
