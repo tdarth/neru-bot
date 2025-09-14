@@ -5,7 +5,7 @@
         },
 
         "info": {
-            "WELCOME_MESSAGE": "> `=` Sent anonymously to the user.\n> `-` Message ignored, not sent to user.",
+            "WELCOME_MESSAGE": "> `=` Sent anonymously to the user.\n> `-` Message ignored, not sent to user.\n> </modmail close:1416319768675356766> Close the ModMail optionally with a reason/silently.",
             "OPENED_MODMAIL": "Thank you for the message! We'll get back to you shortly."
         },
 
