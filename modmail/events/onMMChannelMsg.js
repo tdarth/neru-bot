@@ -29,7 +29,7 @@ module.exports = {
             const cleanedMessage = message.content.replace(/^=\s*/, "").trim();
 
             if (cleanedMessage.length > 0) {
-                embed.setDescription(cleanedContent);
+                embed.setDescription(cleanedMessage);
             }
 
             const files = message.attachments.size > 0 ? Array.from(message.attachments.values()) : undefined;
