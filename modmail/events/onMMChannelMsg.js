@@ -26,7 +26,12 @@ module.exports = {
             embed.setColor('#242429');
             embed.setTimestamp(Date.now());
 
-            if (message.content) embed.setDescription(message.content.replace(/^=\s*/, ""));
+            const cleanedMessage = message.content.replace(/^=\s*/, "").trim();
+
+            if (cleanedMessage.length > 0) {
+                embed.setDescription(cleanedContent);
+            }
+
             const files = message.attachments.size > 0 ? Array.from(message.attachments.values()) : undefined;
 
             try {
