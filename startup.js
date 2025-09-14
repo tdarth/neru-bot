@@ -17,11 +17,15 @@ run("npm", ["install"], "./neru-bot")
               .on("close", () => {
                 run("npm", ["install"], "./tagroles")
                   .on("close", () => {
-                    run("node", ["index.js"], "./neru-bot");
-                    run("node", ["index.js"], "./teto-bot");
-                    run("node", ["index.js"], "./cadmium");
-                    run("node", ["index.js"], "./miku-bot");
-                    run("node", ["index.js"], "./tagroles");
+                    run("npm", ["install"], "./modmail")
+                      .on("close", () => {
+                        run("node", ["index.js"], "./neru-bot");
+                        run("node", ["index.js"], "./teto-bot");
+                        run("node", ["index.js"], "./cadmium");
+                        run("node", ["index.js"], "./miku-bot");
+                        run("node", ["index.js"], "./tagroles");
+                        run("node", ["index.js"], "./modmail");
+                      });
                   });
               });
           });
