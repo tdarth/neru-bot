@@ -1,0 +1,18 @@
+{
+    "messages": {
+        "success": {
+            "MODMAIL_CLOSED": ":white_check_mark: **ModMail** closed"
+        },
+
+        "info": {
+            "WELCOME_MESSAGE": "> `=` Sent anonymously to the user.\n> `-` Message ignored, not sent to user.",
+            "OPENED_MODMAIL": "Thank you for the message! We'll get back to you shortly."
+        },
+
+        "errors": {
+            "MISSING_PERMISSION": ":x: **Error:** Missing permissions.",
+            "NOT_MODMAIL": ":x: **Error:** This command can only be used in a ModMail channel.",
+            "ALREADY_CLOSED": ":x: **Error:** This ModMail was already closed."
+        }
+    }
+}
