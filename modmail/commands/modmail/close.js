@@ -13,6 +13,7 @@ module.exports = {
         .addStringOption(option => option.setName('reason').setDescription('The reason to close the ModMail'))
         .addStringOption(option => option.setName('silent-close').setDescription('Prevent the user from being notified').addChoices( { name: 'Enable', value: 'enable' } )),
     async execute(interaction) {
+        if (!interaction.guild) return await interaction.reply({ flags: MessageFlags.Ephemeral, content: messages.errors.NOT_IN_SERVER });
         if (!interaction.member.roles.cache.some(role => staffRoles.includes(role.id))) return await interaction.reply({ flags: MessageFlags.Ephemeral, content: messages.errors.MISSING_PERMISSION });
         if (!interaction.channel.name.includes('modmail-') || (modmailChannelType == 1 && interaction.channel.parentId !== modmailChannelForThreadId)) return await interaction.reply({ flags: MessageFlags.Ephemeral, content: messages.errors.NOT_MODMAIL });
         if (modmailChannelType == 0 && interaction.channel.topic.includes('CLOSED')) return await interaction.reply({ flags: MessageFlags.Ephemeral, content: messages.errors.ALREADY_CLOSED }); 
