@@ -10,6 +10,7 @@
         },
 
         "errors": {
+            "CATCH_ALL_ERROR_COMMAND": ":x: **Error:** an `unknown` error occurred.",
             "MISSING_PERMISSION": ":x: **Error:** Missing permissions.",
             "NOT_MODMAIL": ":x: **Error:** This command can only be used in a ModMail channel.",
             "ALREADY_CLOSED": ":x: **Error:** This ModMail was already closed.",
