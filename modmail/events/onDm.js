@@ -82,8 +82,12 @@ module.exports = {
         embed.setColor('#242429');
         embed.setTimestamp(Date.now());
 
-        if (message.content) embed.setDescription(message.content);
-        else if (message.stickers.size > 0) embed.setDescription(message.stickers.map(sticker => `**__Sticker:__** ${sticker.url}`).join('\n'));
+        let toAdd = "";
+
+        if (message.content) toAdd += message.content;
+        if (message.stickers.size > 0) toAdd += message.stickers.map(sticker => `**__Sticker:__** ${sticker.url}`).join('\n');
+
+        if (toAdd) embed.setDescription(toAdd);
 
         const files = message.attachments.size > 0 ? Array.from(message.attachments.values()) : undefined;
 
