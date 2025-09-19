@@ -83,6 +83,7 @@ module.exports = {
         embed.setTimestamp(Date.now());
 
         if (message.content) embed.setDescription(message.content);
+        else if (message.stickers.size > 0) embed.setDescription(message.stickers.map(sticker => `**__Sticker:__** ${sticker.url}`).join('\n'));
 
         const files = message.attachments.size > 0 ? Array.from(message.attachments.values()) : undefined;
 
