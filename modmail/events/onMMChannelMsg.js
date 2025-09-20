@@ -38,7 +38,7 @@ module.exports = {
 
             const files = message.attachments.size > 0 ? Array.from(message.attachments.values()) : undefined;
 
-            if (message.stickers.size > 0 && message.attachments.size > 0) embed.setFooter(`Message contains ${message.stickers.size} + ${message.attachments.size} attachments.`);
+            if (message.stickers.size > 0 || message.attachments.size > 0) embed.setFooter(`Message contains ${message.stickers.size} + ${message.attachments.size} attachments.`);
 
             try {
                 await user.send({
