@@ -14,15 +14,15 @@ async function createChannel(guild, channelName, authorId, type = 0, channelId =
             topic: authorId,
             parent: modmailCategoryId
         });
-        
+
     } else if (type == 1) {
         channelToCreateThread = await getChannelFromId(client, channelId);
-        channel = await channelToCreateThread.threads.create( {
+        channel = await channelToCreateThread.threads.create({
             name: channelName,
             autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
             type: ChannelType.PrivateThread,
             invitable: false
-        } )
+        })
     }
 
     await addUserToChannel(guild.id, channel.id, authorId);
@@ -34,7 +34,10 @@ module.exports = {
     async execute(message) {
         if (message.channel.type !== ChannelType.DM) return;
         if (message.author.bot) return;
-        if (message.messageSnapshots.first()) return await message.reply(messages.errors.NO_FORWARDED_MESSAGES);
+        if (message.messageSnapshots.first()) {
+            await message.reply(messages.errors.NO_FORWARDED_MESSAGES);
+            return await message.react('❌');
+        }
 
         const client = message.client;
         const guild = client.guilds.cache.get(process.env.GUILD_ID);

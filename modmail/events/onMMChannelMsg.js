@@ -12,7 +12,10 @@ module.exports = {
         if (!message.channel.name.includes('modmail')) return;
         if (message.author.bot) return;
         if (message.content.startsWith(prefixes.IGNORE)) return;
-        if (message.messageSnapshots.first()) return await message.reply(messages.errors.NO_FORWARDED_MESSAGES);
+        if (message.messageSnapshots.first()) {
+            await message.reply(messages.errors.NO_FORWARDED_MESSAGES);
+            return await message.react('❌');
+        }
 
         console.log(message.content)
 
