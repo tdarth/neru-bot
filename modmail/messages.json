@@ -14,7 +14,8 @@
             "MISSING_PERMISSION": ":x: **Error:** Missing permissions.",
             "NOT_MODMAIL": ":x: **Error:** This command can only be used in a ModMail channel.",
             "ALREADY_CLOSED": ":x: **Error:** This ModMail was already closed.",
-            "NOT_IN_SERVER": ":x: **Error:** You cannot use this command here."
+            "NOT_IN_SERVER": ":x: **Error:** You cannot use this command here.",
+            "NO_FORWARDED_MESSAGES": ":x: **Error:** Forwarded messages are not supported. Please provide a screenshot or message link."
         }
     }
 }

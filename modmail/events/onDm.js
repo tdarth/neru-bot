@@ -34,6 +34,7 @@ module.exports = {
     async execute(message) {
         if (message.channel.type !== ChannelType.DM) return;
         if (message.author.bot) return;
+        if (message.messageSnapshots.first()) return await message.reply(messages.errors.NO_FORWARDED_MESSAGES);
 
         const client = message.client;
         const guild = client.guilds.cache.get(process.env.GUILD_ID);

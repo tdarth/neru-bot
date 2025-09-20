@@ -1,5 +1,6 @@
 const { Events, ChannelType, EmbedBuilder } = require('discord.js');
 const { getDiscUserById } = require('../utils/getDiscUserById');
+const { messages } = require('../messages.json');
 const { prefixes, modmailChannelType } = require('../config.json');
 const { getUserByChannel } = require('../db/utils/helper');
 
@@ -11,6 +12,7 @@ module.exports = {
         if (!message.channel.name.includes('modmail')) return;
         if (message.author.bot) return;
         if (message.content.startsWith(prefixes.IGNORE)) return;
+        if (message.messageSnapshots.first()) return await message.reply(messages.errors.NO_FORWARDED_MESSAGES);
 
         console.log(message.content)
 
