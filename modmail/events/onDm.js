@@ -14,15 +14,15 @@ async function createChannel(guild, channelName, authorId, type = 0, channelId =
             topic: authorId,
             parent: modmailCategoryId
         });
-        
+
     } else if (type == 1) {
         channelToCreateThread = await getChannelFromId(client, channelId);
-        channel = await channelToCreateThread.threads.create( {
+        channel = await channelToCreateThread.threads.create({
             name: channelName,
             autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
             type: ChannelType.PrivateThread,
             invitable: false
-        } )
+        })
     }
 
     await addUserToChannel(guild.id, channel.id, authorId);
@@ -82,25 +82,28 @@ module.exports = {
         embed.setColor('#242429');
         embed.setTimestamp(Date.now());
 
-        let toAdd = "";
-
-        if (message.content) toAdd += message.content;
-        // if (message.stickers.size > 0) toAdd += `\n\n${message.stickers.map(sticker => `**__Sticker:__** ${sticker.url}`).join('\n')}`;
-
-        if (toAdd) embed.setDescription(toAdd);
+        let toAdd = message.content || "";
 
         const files = message.attachments.size > 0 ? Array.from(message.attachments.values()) : undefined;
-        const stickers = message.stickers.size > 0 ? Array.from(message.stickers.values()) : undefined;
+
+        const stickers = message.stickers.size > 0
+            ? Array.from(message.stickers.values()).filter(sticker => sticker.available)
+            : undefined;
+
+        if ((!stickers || stickers.length === 0) && message.stickers.size > 0) {
+            const stickerText = message.stickers.map(s => `**__Sticker:__** ${s.name}`).join('\n');
+            toAdd += toAdd ? `\n\n${stickerText}` : stickerText;
+        }
 
         try {
             await modmailChannel.send({
-                embeds: [embed],
+                embeds: [embed.setDescription(toAdd || "")],
                 ...(files && { files }),
-                ...(stickers && { stickers } )
+                ...(stickers && stickers.length > 0 && { stickers })
             });
             await message.react('✅');
         } catch (err) {
-            console.log(`[MODMAIL] Error in sending message to ${modmailChannel.id}: ${err}`);
+            console.log(`[MODMAIL] Error sending message to ${modmailChannel.id}: ${err}`);
             await message.react('❌');
         }
     },
