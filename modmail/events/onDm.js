@@ -95,7 +95,7 @@ module.exports = {
         let availableStickers = [];
 
         stickers.forEach(sticker => {
-            if (sticker.avaliable) availableStickers.push(sticker);
+            if (sticker.available) availableStickers.push(sticker);
             else toAdd += `\n\n${message.stickers.map(sticker => `**__Sticker:__** ${sticker.url}`).join('\n')}`;
         });
 
@@ -103,7 +103,7 @@ module.exports = {
             await modmailChannel.send({
                 embeds: [embed],
                 ...(files && { files }),
-                ...(stickers && { availableStickers } )
+                ...(availableStickers.length > 0 && { stickers: availableStickers })
             });
             await message.react('✅');
         } catch (err) {
