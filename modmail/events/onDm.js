@@ -85,9 +85,6 @@ module.exports = {
         let toAdd = "";
 
         if (message.content) toAdd += message.content;
-        // if (message.stickers.size > 0) toAdd += `\n\n${message.stickers.map(sticker => `**__Sticker:__** ${sticker.url}`).join('\n')}`;
-
-        if (toAdd) embed.setDescription(toAdd);
 
         const files = message.attachments.size > 0 ? Array.from(message.attachments.values()) : undefined;
         const stickers = message.stickers.size > 0 ? Array.from(message.stickers.values()) : undefined;
@@ -98,6 +95,8 @@ module.exports = {
             if (sticker.available) availableStickers.push(sticker);
             else toAdd += `\n\n${message.stickers.map(sticker => `**__Sticker:__** ${sticker.url}`).join('\n')}`;
         });
+
+        if (toAdd) embed.setDescription(toAdd);
 
         try {
             await modmailChannel.send({
