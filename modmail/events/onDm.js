@@ -92,7 +92,7 @@ module.exports = {
         let availableStickers = [];
 
         stickers.forEach(sticker => {
-            if (sticker.available) availableStickers.push(sticker);
+            if (sticker.available) availableStickers.push(sticker.id);
             else toAdd += `\n\n**__Sticker:__** ${sticker.url}`;
         });
 
