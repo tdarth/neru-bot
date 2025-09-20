@@ -28,8 +28,12 @@ module.exports = {
 
             const cleanedMessage = message.content.replace(/^=\s*/, "").trim();
 
-            if (cleanedMessage.length > 0) {
-                embed.setDescription(cleanedMessage);
+            let toAdd = cleanedMessage;
+
+            if (message.stickers.size > 0) toAdd += `\n\n${message.stickers.map(sticker => `**__Sticker:__** ${sticker.url}`).join('\n')}`;
+
+            if (toAdd.length > 0) {
+                embed.setDescription(toAdd);
             }
 
             const files = message.attachments.size > 0 ? Array.from(message.attachments.values()) : undefined;

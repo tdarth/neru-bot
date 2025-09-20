@@ -85,24 +85,16 @@ module.exports = {
         let toAdd = "";
 
         if (message.content) toAdd += message.content;
-
-        const files = message.attachments.size > 0 ? Array.from(message.attachments.values()) : undefined;
-        const stickers = message.stickers.size > 0 ? Array.from(message.stickers.values()) : undefined;
-
-        let availableStickers = [];
-
-        stickers.forEach(sticker => {
-            if (sticker.available) availableStickers.push(sticker.id);
-            else toAdd += `\n\n**__Sticker:__** ${sticker.url}`;
-        });
+        if (message.stickers.size > 0) toAdd += `\n\n${message.stickers.map(sticker => `**__Sticker:__** ${sticker.url}`).join('\n')}`;
 
         if (toAdd) embed.setDescription(toAdd);
+
+        const files = message.attachments.size > 0 ? Array.from(message.attachments.values()) : undefined;
 
         try {
             await modmailChannel.send({
                 embeds: [embed],
-                ...(files && { files }),
-                ...(availableStickers.length > 0 && { stickers: availableStickers })
+                ...(files && { files })
             });
             await message.react('✅');
         } catch (err) {
