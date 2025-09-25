@@ -13,7 +13,7 @@ module.exports = {
                 message.channel.members.remove(id);
             }
 
-            await message.channel.setName(`[LOCKED] ${interaction.channel.name}`);
+            await message.channel.setName(`[LOCKED] ${message.channel.name}`);
             await message.channel.setLocked(true);
         } else {
             replyWithText(message, ':x: **Only moderators can close private threads.**')
