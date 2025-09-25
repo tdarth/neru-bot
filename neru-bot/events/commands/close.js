@@ -5,7 +5,7 @@ module.exports = {
     name: 'close',
     trigger: (message) => message.content.startsWith(`${prefix}close`),
     async execute(message) {
-        if (!message.channel.name.includes("private-")) return replyWithText(":x: **This command can only be used in private threads.**");
+        if (!message.channel.name.includes("private-")) return replyWithText(message, ":x: **This command can only be used in private threads.**");
         if (message.member.roles.cache.some(role => staffRoles.includes(role.id))) {
             const members = await message.channel.members.fetch();
 
