@@ -230,3 +230,23 @@ process.on('uncaughtException', (error) => {
 client.on('error', (error) => {
     console.error('Discord.js client error:', error);
 });
+
+const { spawn } = require("child_process");
+
+process.stdin.on("data", (input) => {
+  const trimmed = input.toString().trim();
+
+  if (trimmed.startsWith("run ")) {
+    const commandString = trimmed.slice(4).trim();
+    
+    const [command, ...args] = commandString.split(" ");
+
+    console.log(`Running: ${command} ${args.join(" ")}`);
+
+    const child = spawn(command, args, { stdio: "inherit" });
+
+    child.on("close", (code) => {
+      console.log(`Command exited with code ${code}`);
+    });
+  }
+});
