@@ -48,7 +48,7 @@ module.exports = {
                 });
                 await message.react('✅');
             } catch (err) {
-                if (err.startsWith("DiscordAPIError[50007]")) await message.reply(messages.errors.USER_HAS_DMS_DISABLED);
+                if (String(err).startsWith("DiscordAPIError[50007]")) await message.reply(messages.errors.USER_HAS_DMS_DISABLED);
                 console.log(`[MODMAIL] Error in sending message to ${user.id}: ${err}`);
                 await message.react('❌');
             }

@@ -6,7 +6,7 @@
 
         "info": {
             "WELCOME_MESSAGE": "> `=` Sent anonymously to the user.\n> `-` Message ignored, not sent to user.\n> </modmail close:1416319768675356766> Close the ModMail optionally with a reason/silently.",
-            "OPENED_MODMAIL": "Thank you for the message! We'll get back to you shortly.\n\nIf you haven't already, please enable DMs from **all** users, as it's required for us to respond back.\nIn addition to this, please specify your inquiry. You **will not** hear back from us if you begin your ticket without a question or concern."
+            "OPENED_MODMAIL": "Thank you for the message! We'll get back to you shortly.\nIf you haven't already, please specify your inquiry. You **will not** hear back from us if you begin your ticket without a question or concern."
         },
 
         "errors": {
@@ -16,7 +16,7 @@
             "ALREADY_CLOSED": ":x: **Error:** This ModMail was already closed.",
             "NOT_IN_SERVER": ":x: **Error:** You cannot use this command here.",
             "NO_FORWARDED_MESSAGES": ":x: **Error:** Forwarded messages are not supported. Please provide a screenshot or message link.",
-            "USER_HAS_DMS_DISABLED": ":x: **Error:** User has DMs disabled. This user cannot be contacted."
+            "USER_HAS_DMS_DISABLED": ":x: **Error:** User has DMs disabled, or they left the server. This user cannot be contacted."
         }
     }
 }
