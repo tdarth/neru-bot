@@ -17,8 +17,6 @@ module.exports = {
             return await message.react('❌');
         }
 
-        console.log(message.content)
-
         const userId = message?.channel?.topic || await getUserByChannel(message.guild.id, message.channel.id) || null;
         const author = message.author;
 
@@ -50,6 +48,7 @@ module.exports = {
                 });
                 await message.react('✅');
             } catch (err) {
+                if (err.startsWith("DiscordAPIError[50007]")) await message.reply(messages.errors.USER_HAS_DMS_DISABLED);
                 console.log(`[MODMAIL] Error in sending message to ${user.id}: ${err}`);
                 await message.react('❌');
             }
