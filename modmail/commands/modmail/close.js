@@ -42,7 +42,7 @@ module.exports = {
 
         if (modmailLogChannelId) {
             const logChannel = await getChannelFromId(interaction.client, modmailLogChannelId);
-            await logChannel.send({ files: [transcript], content: `:outbox_tray: <t:${Math.floor(Date.now() / 1000)}:f> <#${interaction.channel.id}> (**#${interaction.channel.name}**, \`${interaction.channel.id}\`) opened by <@!${user.id}> (**${user.username || 'unknown'}**, \`${user.id}\`), was closed by <@!${interaction.user.id}> (**${interaction.user.username || 'unknown'}**, \`${interaction.user.id}\`) with reason: \`${reason ? reason : 'null'}\`. Closed silently? : ${silentClose ? '`true`' : '`false`'}.`, allowedMentions: { parse: [] } });
+            await logChannel.send({ files: [transcript], content: `:outbox_tray: <t:${Math.floor(Date.now() / 1000)}:f> <#${interaction.channel.id}> (**#${interaction.channel.name}**, \`${interaction.channel.id}\`) opened by <@!${user.id}> (**${user.username || 'unknown'}**, \`${user.id}\`), was closed by <@!${interaction.user.id}> (**${interaction.user.username || 'unknown'}**, \`${interaction.user.id}\`) with reason: \`${reason ? reason : 'null'}\` Closed silently? : ${silentClose ? '`true`' : '`false`'}.`, allowedMentions: { parse: [] } });
         }
 
         const deleteButton = new ButtonBuilder()
