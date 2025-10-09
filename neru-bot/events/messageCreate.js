@@ -5,7 +5,7 @@ const splitIntoChunks = require('../utils/splitIntoChunks');
 
 const codeRegex = /^[a-z0-9]{8}$/i;
 const ACCESS_TOKEN = process.env.APPLICATIONS_ACCESS_TOKEN;
-const FETCH_URL = "https://bakabakabakaapplication.tdarthh.workers.dev/fetchapplication";
+const FETCH_URL = "https://bakabakabakaapplication.tdarth.workers.dev/fetchapplication";
 
 module.exports = {
   name: Events.MessageCreate,
