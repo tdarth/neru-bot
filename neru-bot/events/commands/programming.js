@@ -7,7 +7,7 @@ module.exports = {
     trigger: (message) => message.content.startsWith(`${prefix}programming`),
     async execute(message) {
         await message.channel.sendTyping();
-        const response = await fetch(`https://cat-api-wrapper.tdarthh.workers.dev/anime?x=${Math.random()}`);
+        const response = await fetch(`https://cat-api-wrapper.tdarth.workers.dev/anime?x=${Math.random()}`);
         const buffer = await response.arrayBuffer();
         const file = new AttachmentBuilder(Buffer.from(buffer), { name: 'programming.png' });
 
