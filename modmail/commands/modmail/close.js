@@ -52,7 +52,7 @@ module.exports = {
                     new ContainerBuilder()
                         .addTextDisplayComponents(
                             new TextDisplayBuilder()
-                                .setContent(`:outbox_tray: **Closed** by <@!${interaction.user.id}> (**${interaction.user.username || 'unknown'}**, \`${interaction.user.id}\`)\n> <t:${Math.floor(Date.now() / 1000)}:f>\n> Opened by: <@!${user.id}> (**${user.username || 'unknown'}**, \`${user.id}\`)\n> Reason: \`${reason}\`\n> Closed Silently: \`${silentClose}\``)
+                                .setContent(`:outbox_tray: **Closed** by <@!${interaction.user.id}> (**${interaction.user.username || 'unknown'}**, \`${interaction.user.id}\`)\n> <t:${Math.floor(Date.now() / 1000)}:f>\n> Opened by: <@!${user.id}> (**${user.username || 'unknown'}**, \`${user.id}\`)\n> Reason: \`${reason}\`\n> Closed Silently: \`${silentClose ? 'true' : 'false'}\``)
                         )
                 ],
                 allowedMentions: {
