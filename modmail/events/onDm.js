@@ -1,4 +1,4 @@
-const { Events, ChannelType, EmbedBuilder, ThreadAutoArchiveDuration } = require('discord.js');
+const { Events, ChannelType, EmbedBuilder, ThreadAutoArchiveDuration, MessageFlags, ContainerBuilder, TextDisplayBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } = require('discord.js');
 const { getChannelByUser, addUserToChannel, clearChannel } = require('../db/utils/helper');
 const { getChannelFromId } = require('../utils/getChannelFromId');
 const { messages } = require('../messages.json');
@@ -72,7 +72,28 @@ module.exports = {
 
             if (modmailLogChannelId) {
                 const logChannel = await getChannelFromId(message.client, modmailLogChannelId);
-                await logChannel.send({ content: `:inbox_tray: <t:${Math.floor(Date.now() / 1000)}:f> <#${modmailChannel.id}> (**#${modmailChannel.name}**, \`${modmailChannel.id}\`) opened by <@!${author.id}> (**${author.username || 'unknown'}**, \`${author.id}\`).`, allowedMentions: { parse: [] } });
+                // await logChannel.send({ content: `:inbox_tray: <t:${Math.floor(Date.now() / 1000)}:f> <#${modmailChannel.id}> (**#${modmailChannel.name}**, \`${modmailChannel.id}\`) opened by <@!${author.id}> (**${author.username || 'unknown'}**, \`${author.id}\`).`, allowedMentions: { parse: [] } });
+
+                await logChannel.send({
+                    flags: MessageFlags.IsComponentsV2,
+                    components: [
+                        new ContainerBuilder()
+                            .addTextDisplayComponents(
+                                new TextDisplayBuilder()
+                                    .setContent(`:inbox_tray: **Opened** by <@!${author.id}> (**${author.username || 'unknown'}**, \`${author.id}\`)\n> <t:${Math.floor(Date.now() / 1000)}:f>`)
+                            ),
+                        new ActionRowBuilder()
+                            .addComponents(
+                                new ButtonBuilder()
+                                    .setLabel("Jump")
+                                    .setStyle(ButtonStyle.Link)
+                                    .setURL(`https://discord.com/channels/${process.env.GUILD_ID}/${modmailChannel.id}`)
+                            )
+                    ],
+                    allowedMentions: {
+                        parse: []
+                    }
+                })
             }
         }
 
@@ -89,11 +110,34 @@ module.exports = {
         let toAdd = "";
 
         if (message.content) toAdd += message.content;
-        if (message.stickers.size > 0) toAdd += `\n\n${message.stickers.map(sticker => `**__Sticker:__** ${sticker.url}`).join('\n')}`;
 
         if (toAdd) embed.setDescription(toAdd);
 
-        const files = message.attachments.size > 0 ? Array.from(message.attachments.values()) : undefined;
+        const attachments = Array.from(message.attachments.values());
+        const files = attachments.length > 0 ? attachments : [];
+
+        let attachmentLinks = '';
+
+        if (attachments.length > 0) {
+            attachmentLinks += attachments
+                .map((a, i) => `**Attachment ${i + 1}:** [${a.name}](${a.url})`)
+                .join('\n');
+        }
+
+        if (message.stickers.size > 0) {
+            message.stickers.forEach(sticker => {
+                files.push(new AttachmentBuilder(sticker.url).setName(`sticker_${sticker.id}.png`));
+            });
+
+            const stickerLinks = Array.from(message.stickers.values())
+                .map((s, i) => `**Sticker ${i + 1}:** [${s.name || 'sticker'}](${s.url})`)
+                .join('\n');
+            attachmentLinks += attachmentLinks ? `\n${stickerLinks}` : stickerLinks;
+        }
+
+        if (attachmentLinks) {
+            embed.setDescription((embed.data.description || '') + `\n\n__The following links are used for transcripts, as Discord deletes all images on thread deletion.__\n\n${attachmentLinks}`);
+        }
 
         try {
             await modmailChannel.send({

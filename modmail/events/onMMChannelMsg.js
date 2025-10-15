@@ -1,4 +1,4 @@
-const { Events, ChannelType, EmbedBuilder } = require('discord.js');
+const { Events, ChannelType, EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const { getDiscUserById } = require('../utils/getDiscUserById');
 const { messages } = require('../messages.json');
 const { prefixes, modmailChannelType } = require('../config.json');
@@ -33,13 +33,17 @@ module.exports = {
 
             let toAdd = cleanedMessage;
 
-            if (message.stickers.size > 0) toAdd += `\n\n${message.stickers.map(sticker => `**__Sticker:__** ${sticker.url}`).join('\n')}`;
-
             if (toAdd.length > 0) {
                 embed.setDescription(toAdd);
             }
 
-            const files = message.attachments.size > 0 ? Array.from(message.attachments.values()) : undefined;
+            const files = message.attachments.size > 0 ? Array.from(message.attachments.values()) : [];
+
+            if (message.stickers.size > 0) {
+                message.stickers.forEach(sticker => {
+                    files.push(new AttachmentBuilder(sticker.url).setName(`sticker_${sticker.id}.png`));
+                });
+            }
 
             try {
                 await user.send({
