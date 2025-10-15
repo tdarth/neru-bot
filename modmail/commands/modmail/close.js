@@ -37,8 +37,8 @@ module.exports = {
         if (!silentClose) await user.send({ embeds: [embed] }).catch(err => console.log(`[MODMAIL] Error on close DM: ${err}`));
         await interaction.reply(`${messages.success.MODMAIL_CLOSED}${silentClose ? ' silently' : ''}${reason ? ` (\`${reason}\`)` : ''}.\n${emojis.spinner} Transcribing...`);
 
-        const buffer = Buffer.from(await makeTranscriptFile(interaction.client, interaction.channel.id, 1000));
-        const transcriptFileName = `${interaction.channel.name}-${Date.now()}.txt`;
+        // const buffer = Buffer.from(await makeTranscriptFile(interaction.client, interaction.channel.id, 1000));
+        // const transcriptFileName = `${interaction.channel.name}-${Date.now()}.txt`;
         // const transcript = new AttachmentBuilder(buffer, { name: transcriptFileName });
 
         if (modmailLogChannelId) {

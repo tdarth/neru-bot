@@ -136,7 +136,7 @@ module.exports = {
         }
 
         if (attachmentLinks) {
-            embed.setDescription((embed.data.description || '') + `\n\n__The following links are used for transcripts, as Discord deletes all images on thread deletion.__\n\n${attachmentLinks}`);
+            embed.setDescription((embed.data.description || '') + `\n\n__The following links are used for transcripts, as Discord deletes all attachments on thread deletion.__\n\n${attachmentLinks}`);
         }
 
         try {
