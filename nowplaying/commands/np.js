@@ -67,9 +67,13 @@ module.exports = {
                 )
         }
 
-        await interaction.reply({
-            flags: MessageFlags.IsComponentsV2,
-            components: [container]
-        })
+        try {
+            await interaction.reply({
+                flags: MessageFlags.IsComponentsV2,
+                components: [container]
+            })
+        } catch (e) {
+            return console.log(`[NOWPLAYING] Error on np command: ${String(e)}`)
+        }
     }
 };
