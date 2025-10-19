@@ -14,7 +14,7 @@ module.exports = {
 
         if (session) {
             const userData = await getUserData(session);
-            if (userData) return await interaction.reply(new ContainerMessage(`**Account Linked!**\n${userData.user.url}`).isEphemeral().build())
+            if (userData) return await interaction.reply(new ContainerMessage(`**Account Linked!**\n${userData.user.url}`).addSecondaryComponents([new ActionRowBuilder().addComponents(new ButtonBuilder().setLabel('Log out').setURL(`https://www.last.fm/settings/applications`).setStyle(ButtonStyle.Link))]).isEphemeral().build());
         }
 
         const state = crypto.randomBytes(16).toString('hex');
