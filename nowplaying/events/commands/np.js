@@ -5,13 +5,15 @@ const { getSessionToken } = require('../../utils/lastfm/getSessionToken');
 const { getUserData } = require('../../utils/lastfm/getUserData');
 const { getRecentTracks } = require('../../utils/lastfm/getRecentTracks');
 
+const aliases = ['.now', '.playing', '.song']
+
 module.exports = {
     name: Events.MessageCreate,
     async execute(message) {
         if (message.author.bot) return;
 
         if (message.guild) {
-            if (message == '.np') {
+            if (aliases.includes(message.content.toLowerCase())) {
                 await message.channel.sendTyping();
 
                 const session = await getSessionToken(message.author.id) || null;
