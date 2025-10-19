@@ -30,7 +30,7 @@ module.exports = {
                 new SectionBuilder()
                     .addTextDisplayComponents(
                         new TextDisplayBuilder()
-                            .setContent(`# [${track.name}](${track.url})\n-# by **${track.artist['#text']}** on *${track.album['#text']}*.`)
+                            .setContent(`# [${track.name}](${track.url})\n-# by **${track.artist['#text']}** • *${track.album['#text']}*.`)
                     )
                     .setThumbnailAccessory(
                         new ThumbnailBuilder()
