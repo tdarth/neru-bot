@@ -7,8 +7,8 @@ const { getTop } = require('../utils/lastfm/getTop');
 const { getAdditionalSongInfo } = require('../utils/getAdditionalSongInfo');
 
 module.exports = {
-    id: 'TOP',
-    async execute(interaction, type, page, action, userid) {
+    id: 'TOP_TRACKS',
+    async execute(interaction, page, action, userid) {
         await interaction.deferUpdate();
 
         if (interaction.user.id != userid) return await interaction.followUp(new ContainerMessage(`${emojis.ERROR} **Only** <@${userid}> **can use this button.**`).isEphemeral().build());
@@ -19,7 +19,7 @@ module.exports = {
         const userData = await getUserData(session);
         if (!userData) return await interaction.followUp(new ContainerMessage(`${emojis.ERROR} **An error occurred while fetching this data.**`).isEphemeral().build());
 
-        const top = await getTop(userData?.user?.name, type.charAt(0).toUpperCase() + type.slice(1).toLowerCase(), 100);
+        const top = await getTop(userData?.user?.name, "Tracks", 100);
         if (!top) return await interaction.followUp(new ContainerMessage(`${emojis.ERROR} **An error occurred while fetching this data.**`).isEphemeral().build());
 
         const numTracks = top?.toptracks?.track?.length;
@@ -65,19 +65,19 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setLabel('1')
-                    .setCustomId(`TOP,TRACKS,${page},FIRST,${interaction.user.id}`)
+                    .setCustomId(`TOP_TRACKS,${page},FIRST,${interaction.user.id}`)
                     .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
                     .setLabel('◀')
-                    .setCustomId(`TOP,TRACKS,${page},BACK,${interaction.user.id}`)
+                    .setCustomId(`TOP_TRACKS,${page},BACK,${interaction.user.id}`)
                     .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
                     .setLabel('▶')
-                    .setCustomId(`TOP,TRACKS,${page},FORWARD,${interaction.user.id}`)
+                    .setCustomId(`TOP_TRACKS,${page},FORWARD,${interaction.user.id}`)
                     .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
                     .setLabel(`${numTracks}`)
-                    .setCustomId(`TOP,TRACKS,${page},LAST,${interaction.user.id}`)
+                    .setCustomId(`TOP_TRACKS,${page},LAST,${interaction.user.id}`)
                     .setStyle(ButtonStyle.Secondary)
             )
 
@@ -87,7 +87,7 @@ module.exports = {
                 components: [container, row]
             })
         } catch (e) {
-            return console.log(`[NOWPLAYING] Error on top button: ${String(e)}`)
+            return console.log(`[NOWPLAYING] Error on top tracks button: ${String(e)}`)
         }
     }
 }

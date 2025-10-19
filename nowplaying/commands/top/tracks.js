@@ -55,19 +55,19 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setLabel('1')
-                    .setCustomId(`TOP,TRACKS,1,FIRST,${interaction.user.id}`)
+                    .setCustomId(`TOP_TRACKS,1,FIRST,${interaction.user.id}`)
                     .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
                     .setLabel('◀')
-                    .setCustomId(`TOP,TRACKS,1,BACK,${interaction.user.id}`)
+                    .setCustomId(`TOP_TRACKS,1,BACK,${interaction.user.id}`)
                     .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
                     .setLabel('▶')
-                    .setCustomId(`TOP,TRACKS,1,FORWARD,${interaction.user.id}`)
+                    .setCustomId(`TOP_TRACKS,1,FORWARD,${interaction.user.id}`)
                     .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
                     .setLabel(`${numTracks}`)
-                    .setCustomId(`TOP,TRACKS,1,LAST,${interaction.user.id}`)
+                    .setCustomId(`TOP_TRACKS,1,LAST,${interaction.user.id}`)
                     .setStyle(ButtonStyle.Secondary)
             )
 
@@ -77,7 +77,7 @@ module.exports = {
                 components: [container, row]
             })
         } catch (e) {
-            return console.log(`[NOWPLAYING] Error on top command: ${String(e)}`)
+            return console.log(`[NOWPLAYING] Error on top track command: ${String(e)}`)
         }
     }
 };
