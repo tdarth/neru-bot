@@ -34,7 +34,7 @@ module.exports = {
                     )
                     .setThumbnailAccessory(
                         new ThumbnailBuilder()
-                            .setURL(`${track.image[track.image.length - 1]['#text']}`)
+                            .setURL(`${track.image[track.image.length - 1]['#text'].replace('/300x300', '')}`)
                     )
             )
             .addSeparatorComponents(
