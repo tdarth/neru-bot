@@ -36,11 +36,11 @@ module.exports = {
                         new SectionBuilder()
                             .addTextDisplayComponents(
                                 new TextDisplayBuilder()
-                                    .setContent(`# [${track.name}](${track.url})\n-# by **${track.artist['#text']}** • *${track.album['#text']}*`)
+                                    .setContent(`# ${track?.url ? `[${track?.name}]` : track?.name}${track?.url ? `(${track?.url})` : ``}\n-# by **${track?.artist['#text'] || 'Unknown'}**${track?.album['#text'] ? ` • *${track.album['#text']}*` : ''}`)
                             )
                             .setThumbnailAccessory(
                                 new ThumbnailBuilder()
-                                    .setURL(`${track.image[track.image.length - 1]['#text'].replace('/300x300', '')}`)
+                                    .setURL(`${track?.image[track?.image?.length - 1]['#text'].replace('/300x300', '') || 'https://lastfm.freetls.fastly.net/i/u/2a96cbd8b46e442fc41c2b86b821562f.png'}`)
                             )
                     )
                     .addSeparatorComponents(
@@ -48,7 +48,7 @@ module.exports = {
                     )
                     .addTextDisplayComponents(
                         new TextDisplayBuilder()
-                            .setContent(`\`${Number(stats.total).toLocaleString()}\` total scrobbles.${isCurrentlyPlaying ? '' : `\n-# Last scrobble: <t:${track.date.uts}:f>.`}`)
+                            .setContent(`\`${Number(stats?.total).toLocaleString()}\` total scrobbles.${isCurrentlyPlaying ? '' : `\n-# Last scrobble: <t:${track.date.uts}:f>.`}`)
                     );
 
                 if (isCurrentlyPlaying) {
