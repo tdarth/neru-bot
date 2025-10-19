@@ -1,9 +1,9 @@
 const { Events, MessageFlags, ContainerBuilder, TextDisplayBuilder, SectionBuilder, ThumbnailBuilder, SeparatorBuilder, MediaGalleryBuilder } = require('discord.js');
-const ContainerMessage = require('../utils/classes/ContainerMessage');
-const { emojis } = require('../config.json')
-const { getSessionToken } = require('../utils/lastfm/getSessionToken');
-const { getUserData } = require('../utils/lastfm/getUserData');
-const { getRecentTracks } = require('../utils/lastfm/getRecentTracks');
+const ContainerMessage = require('../../utils/classes/ContainerMessage');
+const { emojis } = require('../../config.json')
+const { getSessionToken } = require('../../utils/lastfm/getSessionToken');
+const { getUserData } = require('../../utils/lastfm/getUserData');
+const { getRecentTracks } = require('../../utils/lastfm/getRecentTracks');
 
 module.exports = {
     name: Events.MessageCreate,
