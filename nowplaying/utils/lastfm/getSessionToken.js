@@ -30,6 +30,7 @@ async function getSessionToken(id) {
 
     if (await getUserData(session)) {
         cache[id] = session;
+        console.log(session)
         return session;
     }
     else return false;
