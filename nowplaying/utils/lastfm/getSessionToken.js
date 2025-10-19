@@ -7,6 +7,8 @@ async function getSessionToken(id) {
         console.log(cache[id])
         if (await getUserData(cache[id])) {
             return cache[id];
+        } else {
+            delete cache[id];
         }
     }
 

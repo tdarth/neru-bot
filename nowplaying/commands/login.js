@@ -33,7 +33,7 @@ module.exports = {
         if (!response.ok) return await interaction.reply(`${emojis.ERROR} **Please try again later.**`);
 
         await interaction.reply(
-            new ContainerMessage("# Login\nWelcome to **nowplaying**!\n\nLinking your **Last.fm** account is required.\n> The following button will expire in **5 minutes**.")
+            new ContainerMessage("# Login\nWelcome to **nowplaying**!\n\nLinking your **Last.fm** account is required.\n> The following button will expire in **5 minutes**.\n> -# :star: After logging in, it may take up to **5 minutes** until changes are reflected within Discord.")
                 .addSecondaryComponents([
                     new ActionRowBuilder()
                         .addComponents(
