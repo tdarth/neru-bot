@@ -42,7 +42,7 @@ module.exports = {
                                 .setURL(`https://www.last.fm/api/auth/?api_key=${process.env.LAST_FM_API_KEY}&cb=${process.env.NP_API_URL}callback?state=${state}`)
                                 .setStyle(ButtonStyle.Link),
                             new ButtonBuilder()
-                                .setCustomId(`FINISHED_${interaction.user.id}`)
+                                .setCustomId(`FINISHED,${interaction.user.id}`)
                                 .setLabel('Finished?')
                                 .setStyle(ButtonStyle.Danger)
                         )

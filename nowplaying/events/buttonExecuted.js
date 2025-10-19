@@ -17,19 +17,20 @@ module.exports = {
     async execute(interaction) {
         if (!interaction.isButton()) return;
 
-        const [prefix, handler] = [...buttons.entries()].find(([id]) => 
+        const [prefix, handler] = [...buttons.entries()].find(([id]) =>
             interaction.customId.startsWith(id)
         ) || [];
 
         if (!handler) return;
 
-        const id = interaction.customId.slice(prefix.length);
+        const argsString = interaction.customId.slice(prefix.length);
+        const args = argsString ? argsString.split(',').slice(1) : [];
 
         try {
-            await handler(interaction, id);
+            await handler(interaction, ...args);
         } catch (error) {
             console.error(error);
-            await interaction.reply({ content: 'There was an error executing this button!', ephemeral: true });
+            await interaction.followUp({ content: 'There was an error executing this button!', ephemeral: true });
         }
     },
 };

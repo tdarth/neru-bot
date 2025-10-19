@@ -40,7 +40,7 @@ module.exports = {
                             )
                             .setThumbnailAccessory(
                                 new ThumbnailBuilder()
-                                    .setURL(`${track?.image[track?.image?.length - 1]['#text'].replace('/300x300', '') || 'https://lastfm.freetls.fastly.net/i/u/2a96cbd8b46e442fc41c2b86b821562f.png'}`)
+                                    .setURL(`${track?.image?.at(-1)?.['#text']?.replace('/300x300', '') || 'https://lastfm.freetls.fastly.net/i/u/2a96cbd8b46e442fc41c2b86b821562f.png'}`)
                             )
                     )
                     .addSeparatorComponents(

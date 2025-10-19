@@ -5,7 +5,7 @@ const { getUserData } = require('../utils/lastfm/getUserData');
 const { getSessionToken } = require('../utils/lastfm/getSessionToken');
 
 module.exports = {
-    id: 'FINISHED_',
+    id: 'FINISHED',
     async execute(interaction, id) {
         await interaction.deferReply();
         const session = await getSessionToken(id);
