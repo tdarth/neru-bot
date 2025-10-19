@@ -4,7 +4,6 @@ const cache = {};
 
 async function getSessionToken(id) {
     if (cache[id]) {
-        console.log(cache[id])
         if (await getUserData(cache[id])) {
             return cache[id];
         } else {
@@ -33,7 +32,6 @@ async function getSessionToken(id) {
 
     if (await getUserData(session)) {
         cache[id] = session;
-        console.log(session)
         return session;
     }
     else return false;
