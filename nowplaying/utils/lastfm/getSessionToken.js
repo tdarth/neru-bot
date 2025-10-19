@@ -5,6 +5,7 @@ const cache = {};
 async function getSessionToken(id) {
     if (cache[id]) {
         if (await getUserData(cache[id])) {
+            console.log(cache[id])
             return cache[id];
         }
     }
