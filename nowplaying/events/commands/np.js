@@ -65,7 +65,7 @@ module.exports = {
                                 items: [
                                     {
                                         media: {
-                                            url: 'https://s4.ezgif.com/tmp/ezgif-454abb3a94056d.gif'
+                                            url: 'https://i.imgur.com/lRYQYEi.gif'
                                         }
                                     }
                                 ]
