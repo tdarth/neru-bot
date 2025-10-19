@@ -15,7 +15,7 @@ module.exports = {
         if (!session) return await interaction.followUp(new ContainerMessage(`${emojis.ERROR} **Your account is not linked.**`).isEphemeral().build());
         else {
             const userData = await getUserData(session);
-            if (userData) return await interaction.reply(new ContainerMessage(`**Account Linked!**\n${userData.user.url}`).addSecondaryComponents([new ActionRowBuilder().addComponents(new ButtonBuilder().setLabel('Log out').setURL(`https://www.last.fm/settings/applications`).setStyle(ButtonStyle.Link))]).isEphemeral().build());
+            if (userData) return await interaction.followUp(new ContainerMessage(`**Account Linked!**\n${userData.user.url}`).addSecondaryComponents([new ActionRowBuilder().addComponents(new ButtonBuilder().setLabel('Log out').setURL(`https://www.last.fm/settings/applications`).setStyle(ButtonStyle.Link))]).isEphemeral().build());
         }
     }
 }
