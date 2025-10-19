@@ -3,11 +3,11 @@ const { getUserData } = require('./getUserData');
 const cache = {};
 
 async function getSessionToken(id) {
-    if (cache[id]) {
-        if (await getUserData(cache[id])) {
-            return cache[id];
-        }
-    }
+    // if (cache[id]) {
+    //     if (await getUserData(cache[id])) {
+    //         return cache[id];
+    //     }
+    // }
 
     const response = await fetch(`${process.env.NP_API_URL}session`, {
         method: "POST",
