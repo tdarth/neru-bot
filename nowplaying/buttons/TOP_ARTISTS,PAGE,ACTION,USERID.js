@@ -13,7 +13,7 @@ module.exports = {
         if (interaction.user.id != userid) return await interaction.followUp(new ContainerMessage(`${emojis.ERROR} **Only** <@${userid}> **can use this button.**`).isEphemeral().build());
 
         const session = await getSessionToken(interaction.user.id) || null;
-        if (!session) return await interaction.followUp(new ContainerMessage(`${emojis.ERROR} **This command requires a Last.fm account.**\n-# For more information, type </login:1429230213920985259>.`).isEphemeral().build());
+        if (!session) return await interaction.followUp(new ContainerMessage(`${emojis.ERROR} **This command requires a Last.fm account.**\n-# Type </login:1429230213920985259> to connect.`).isEphemeral().build());
 
         const userData = await getUserData(session);
         if (!userData) return await interaction.followUp(new ContainerMessage(`${emojis.ERROR} **An error occurred while fetching this data.**`).isEphemeral().build());

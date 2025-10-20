@@ -11,7 +11,7 @@ module.exports = {
         .setDescription('Shows your last or currently playing song'),
     async execute(interaction) {
         const session = await getSessionToken(interaction.user.id) || null;
-        if (!session) return await interaction.reply(new ContainerMessage(`${emojis.ERROR} **This command requires a Last.fm account.**\n-# For more information, type </login:1429230213920985259>.`).isEphemeral().build());
+        if (!session) return await interaction.reply(new ContainerMessage(`${emojis.ERROR} **This command requires a Last.fm account.**\n-# Type </login:1429230213920985259> to connect.`).isEphemeral().build());
 
         const userData = await getUserData(session);
         if (!userData) return await interaction.reply(new ContainerMessage(`${emojis.ERROR} **An error occurred while fetching this data.**`).isEphemeral().build());
