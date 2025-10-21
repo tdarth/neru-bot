@@ -49,7 +49,7 @@ module.exports = {
             )
             .addTextDisplayComponents(
                 new TextDisplayBuilder()
-                    .setContent(`\`${Number(stats?.total).toLocaleString()}\` total scrobbles.${isCurrentlyPlaying ? '' : `\n-# Last scrobble: <t:${track?.date?.uts}:f>.`}`)
+                    .setContent(`\`${Number(stats?.total).toLocaleString()}\` total scrobbles.${isCurrentlyPlaying ? '' : `\n-# Last scrobble: <t:${track?.date?.uts}:f>.${isOtherUser ? ` (for <@${target?.id}>)` : ''}`}`)
             );
 
         if (isCurrentlyPlaying) {
