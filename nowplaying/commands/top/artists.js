@@ -16,7 +16,7 @@ module.exports = {
         const userData = await getUserData(session);
         if (!userData) return await interaction.reply(new ContainerMessage(`${emojis.ERROR} **An error occurred while fetching this data.**`).isEphemeral().build());
 
-        const top = await getTop(userData?.user?.name, "Artists", 100);
+        const top = await getTop(userData?.user?.name, "Artists", 250);
         if (!top) return await interaction.reply(new ContainerMessage(`${emojis.ERROR} **An error occurred while fetching this data.**`).isEphemeral().build());
 
         const artist = top?.topartists?.artist?.[0] || null;
