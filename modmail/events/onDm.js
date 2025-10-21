@@ -116,27 +116,10 @@ module.exports = {
         const attachments = Array.from(message.attachments.values());
         const files = attachments.length > 0 ? attachments : [];
 
-        let attachmentLinks = '';
-
-        if (attachments.length > 0) {
-            attachmentLinks += attachments
-                .map((a, i) => `**Attachment ${i + 1}:** [${a.name}](${a.url})`)
-                .join('\n');
-        }
-
         if (message.stickers.size > 0) {
             message.stickers.forEach(sticker => {
                 files.push(new AttachmentBuilder(sticker.url).setName(`sticker_${sticker.id}.png`));
             });
-
-            const stickerLinks = Array.from(message.stickers.values())
-                .map((s, i) => `**Sticker ${i + 1}:** [${s.name || 'sticker'}](${s.url})`)
-                .join('\n');
-            attachmentLinks += attachmentLinks ? `\n${stickerLinks}` : stickerLinks;
-        }
-
-        if (attachmentLinks) {
-            embed.setDescription((embed.data.description || '') + `\n\n__The following links are used for transcripts, as Discord deletes all attachments on thread deletion.__\n\n${attachmentLinks}`);
         }
 
         try {

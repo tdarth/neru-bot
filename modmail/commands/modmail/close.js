@@ -100,11 +100,18 @@ module.exports = {
 
         const deleteButton = new ButtonBuilder()
             .setCustomId(`deleteChannel_${interaction.channel.id}`)
-            .setLabel('🗑️ Delete')
-            .setStyle(ButtonStyle.Danger);
+            .setLabel('🗑️')
+            .setStyle(ButtonStyle.Secondary);
+        
+        const infoButton = new ButtonBuilder()
+            .setCustomId(`info`)
+            .setLabel("Avoid deleting important ModMails, as attachments are not stored.")
+            .setStyle(ButtonStyle.Danger)
+            .setDisabled(true)
+
 
         const row = new ActionRowBuilder()
-            .addComponents(deleteButton);
+            .addComponents(deleteButton, infoButton);
 
         const closed = await interaction.fetchReply();
         await closed.edit({ content: closed.content.replace(`${emojis.spinner} Transcribing...`, `Transcript generated in <#${modmailLogChannelId}>.`), components: [row] });
