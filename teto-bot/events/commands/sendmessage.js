@@ -55,17 +55,17 @@ module.exports = {
                         new ContainerBuilder()
                             .addTextDisplayComponents(
                                 new TextDisplayBuilder()
-                                    .setContent('` 7.` **English must be spoken in all Channels**\n-# > We don\'t have the ability to effectively moderate non-english messages, and we don\'t intend to in the future. You will be punished if you cannot use English.\n*(Google Translate exists if needed.)*')
+                                    .setContent('` 7.` **English must be spoken in all Channels**\n-# > We don\'t have the ability to effectively moderate non-english messages, and we don\'t intend to in the future. You will be punished if you repeatedly use languages other than English, as plenty of translators exist if necessary.')
                             ),
                         new ContainerBuilder()
                             .addTextDisplayComponents(
                                 new TextDisplayBuilder()
-                                    .setContent('` 8.` **Use Common Sense / No Loopholes**\n-# > If you believe an action may break the rules, avoid doing it. Bending the rules in your favor will not be tolerated.\n*(Unfairly punished? Message an Admin.)*')
+                                    .setContent('` 8.` **Use Common Sense / No Loopholes**\n-# > If you believe an action may break the rules, avoid doing it. Bending the rules in your favor will not be tolerated.\nUnfairly punished? Please message <@1416282565001744518> `ModMail#3331`.)')
                             ),
                         new ContainerBuilder()
                             .addTextDisplayComponents(
                                 new TextDisplayBuilder()
-                                    .setContent('` 9.` **No Mini-modding or Impersonation**\n-# > Enforcing server rules is to be done by Moderators. Respectfully referring a user to our rule list is allowed, however.\n:warning: Do not: **Threaten to punish users**, **Deliberately seek punishment against a user**, or **Argue against moderator judgment**.')
+                                    .setContent('` 9.` **No Mini-modding or Impersonation**\n-# > Enforcing server rules is to be done by Moderators. Respectfully referring a user to our rule list is allowed, however.\n:warning: Do not: **Threaten to punish users**, or **Deliberately seek punishment against a user**.')
                             ),
                         new ContainerBuilder()
                             .addTextDisplayComponents(
@@ -78,6 +78,7 @@ module.exports = {
                                     .setContent('` 11.` **Follow Discord Guidelines**\n-# > https://discord.com/terms, https://discord.com/guidelines.')
                             ),
                         new TextDisplayBuilder()
+                            .addSeparatorComponents(new SeparatorBuilder)
                             .setContent('Find a Rulebreaker? Reply to their message with `?report <reason>`.'),
                     ]
                 })
