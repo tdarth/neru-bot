@@ -77,8 +77,8 @@ module.exports = {
                                 new TextDisplayBuilder()
                                     .setContent('` 11.` **Follow Discord Guidelines**\n-# > https://discord.com/terms, https://discord.com/guidelines.')
                             ),
+                        new SeparatorBuilder(),
                         new TextDisplayBuilder()
-                            .addSeparatorComponents(new SeparatorBuilder)
                             .setContent('Find a Rulebreaker? Reply to their message with `?report <reason>`.'),
                     ]
                 })
