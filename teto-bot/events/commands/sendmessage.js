@@ -60,7 +60,7 @@ module.exports = {
                         new ContainerBuilder()
                             .addTextDisplayComponents(
                                 new TextDisplayBuilder()
-                                    .setContent('` 8.` **Use Common Sense / No Loopholes**\n-# > If you believe an action may break the rules, avoid doing it. Bending the rules in your favor will not be tolerated.\nUnfairly punished? Please message <@1416282565001744518> `ModMail#3331`.)')
+                                    .setContent('` 8.` **Use Common Sense / No Loopholes**\n-# > If you believe an action may break the rules, avoid doing it. Bending the rules in your favor will not be tolerated.\nUnfairly punished? Please message <@1416282565001744518>. (`ModMail#3331`)')
                             ),
                         new ContainerBuilder()
                             .addTextDisplayComponents(
