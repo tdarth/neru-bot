@@ -75,7 +75,15 @@ module.exports = {
             await author.send(messages.info.OPENED_MODMAIL);
 
             if (modmailPingStaffOnCreation) await modmailChannel.send(staffRoles.map(role => `<@&${role}>`).join(', '));
-            if (modmailWelcomeMessage) await modmailChannel.send(messages.info.WELCOME_MESSAGE);
+            if (modmailWelcomeMessage) await modmailChannel.send({
+                content: messages.info.WELCOME_MESSAGE
+                    .replaceAll("{user}", `<@${author?.id}>`)
+                    .replaceAll("{username}", author?.username || 'Error')
+                    .replaceAll("{userid}", author?.id),
+                allowedMentions: {
+                    parse: []
+                }
+            });
 
             if (modmailLogChannelId) {
                 const logChannel = await getChannelFromId(message.client, modmailLogChannelId);
