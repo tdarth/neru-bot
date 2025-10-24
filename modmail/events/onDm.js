@@ -45,7 +45,6 @@ module.exports = {
         const author = message.author;
 
         let modmailChannelId = await getChannelByUser(process.env.GUILD_ID, author.id);
-        console.log(`[MODMAIL] Fetched channel ID from DB for user ${author.id}: ${modmailChannelId}`);
         let modmailChannel;
 
         if (modmailChannelId) {
@@ -56,7 +55,15 @@ module.exports = {
                 await author.send(messages.info.OPENED_MODMAIL);
 
                 if (modmailPingStaffOnCreation) await modmailChannel.send(staffRoles.map(role => `<@&${role}>`).join(', '));
-                if (modmailWelcomeMessage) await modmailChannel.send(messages.info.WELCOME_MESSAGE);
+                if (modmailWelcomeMessage) await modmailChannel.send({
+                    content: messages.info.WELCOME_MESSAGE
+                        .replaceAll("{user}", `<@${author?.id}>`)
+                        .replaceAll("{username}", author?.username || 'Error')
+                        .replaceAll("{userid}", author?.id),
+                    allowedMentions: {
+                        parse: []
+                    }
+                });
 
                 if (modmailLogChannelId) {
                     const logChannel = await getChannelFromId(message.client, modmailLogChannelId);
