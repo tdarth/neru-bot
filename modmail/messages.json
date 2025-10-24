@@ -5,7 +5,7 @@
         },
 
         "info": {
-            "WELCOME_MESSAGE": "Ticket opened by {user}. (**{username}**, `{userid}`) > `=` Sent anonymously to the user.\n> `-` Message ignored, not sent to user.\n> </modmail close:1416319768675356766> Close the ModMail optionally with a reason/silently.",
+            "WELCOME_MESSAGE": "Ticket opened by {user}. (**{username}**, `{userid}`)\n> `=` Sent anonymously to the user.\n> `-` Message ignored, not sent to user.\n> </modmail close:1416319768675356766> Close the ModMail optionally with a reason/silently.",
             "OPENED_MODMAIL": "```Thank you for the message! We'll get back to you shortly.```\n\nIf you haven't already, please specify your inquiry. You __**will not**__ hear back from us if you begin your ticket without a question or concern.\n-# Additionally, you must __allow__ Direct Messages from our server in Discord's Content & Social settings."
         },
 
