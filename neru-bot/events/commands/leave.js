@@ -3,8 +3,8 @@ const { prefix } = require('../../config.json');
 const replyWithText = require('../../utils/replyWithText');
 
 module.exports = {
-    name: 'join',
-    trigger: (message) => message.content.startsWith(`${prefix}join`),
+    name: 'leave',
+    trigger: (message) => message.content.startsWith(`${prefix}leave`),
     async execute(message) {
         if (message.author.id !== "990500436047982602") return await replyWithText(message, `:x: **No permission.**`);
 
