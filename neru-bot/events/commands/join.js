@@ -12,6 +12,8 @@ module.exports = {
             channelId: '1370793991108427807',
             guildId: message.guild.id,
             adapterCreator: message.guild.voiceAdapterCreator,
+            selfDeaf: true,
+            selfMute: false
         });
 
         if (connection) {
