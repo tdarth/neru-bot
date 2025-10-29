@@ -10,7 +10,8 @@ module.exports = {
         .setName('login')
         .setDescription('Connect your Last.fm account'),
     async execute(interaction) {
-        const session = await getSessionToken(interaction.user.id) || null;
+        try {
+            const session = await getSessionToken(interaction.user.id) || null;
 
         if (session) {
             const userData = await getUserData(session);
@@ -50,5 +51,8 @@ module.exports = {
                 .isEphemeral()
                 .build()
         );
+        } catch (e) {
+            console.log(`Login command error: ${e.toString()}`)
+        }
     }
 };
