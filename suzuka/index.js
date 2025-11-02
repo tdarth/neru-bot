@@ -1,7 +1,7 @@
 const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 require('dotenv').config();
 
-const TOKEN = process.env.BOT_TOKEN;
+const TOKEN = process.env.TOKEN;
 
 if (!TOKEN) {
     console.error('No token');
