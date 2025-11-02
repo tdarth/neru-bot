@@ -1,4 +1,4 @@
-import { ActivityType, Client, GatewayIntentBits } from 'discord.js';
+const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 require('dotenv').config();
 
 const TOKEN = process.env.BOT_TOKEN;
