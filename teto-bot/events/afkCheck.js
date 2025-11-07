@@ -6,6 +6,7 @@ const { afkUsers, deleteAfkUser } = require('../utils/afkHelper');
 module.exports = {
     name: Events.MessageCreate,
     async execute(message) {
+        if (message.guild.id == "1369181065385869352") return;
         if (message.author.bot || message.content.startsWith(`${prefix}afk`)) return;
 
         const id = message.author.id;
