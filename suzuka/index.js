@@ -41,7 +41,7 @@ client.on('messageCreate', async (message) => {
             });
 
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-            const attachment = new AttachmentBuilder(Buffer.from(toAttach), { name: `suzuka_server_data-${timestamp}` })
+            const attachment = new AttachmentBuilder(Buffer.from(toAttach), { name: `suzuka_server_data-${timestamp}.txt` })
 
             return await message.reply({
                 files: [attachment]
