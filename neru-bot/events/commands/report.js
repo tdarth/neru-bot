@@ -42,7 +42,7 @@ module.exports = {
             ).addSeparatorComponents(new SeparatorBuilder());
         }
 
-        container.addSectionComponents(new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent("Finished with the report?")).setButtonAccessory(new ButtonBuilder().setLabel("Mark as Resolved").setStyle(ButtonStyle.Success).setCustomId(`markAsResolved_button`)));
+        container.addSectionComponents(new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent("Handling the report?")).setButtonAccessory(new ButtonBuilder().setLabel("Claim").setStyle(ButtonStyle.Success).setCustomId(`markAsResolved_button`)));
 
         await message.client.channels.cache.get(reportsChannelId)?.send({
             flags: MessageFlags.IsComponentsV2, components: [container], allowedMentions: {

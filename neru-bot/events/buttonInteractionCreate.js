@@ -15,11 +15,11 @@ module.exports = {
                     components: [
                         new ContainerBuilder()
                             .addTextDisplayComponents(
-                                new TextDisplayBuilder().setContent("## :white_check_mark: Report Resolved")
+                                new TextDisplayBuilder().setContent("## :white_check_mark: Report Handled")
                             )
                             .addSeparatorComponents(new SeparatorBuilder())
                             .addTextDisplayComponents(
-                                new TextDisplayBuilder().setContent(`-# Marked resolved by <@${interaction.user.id}> on <t:${Math.floor(Date.now() / 1000)}:f>.`)
+                                new TextDisplayBuilder().setContent(`-# Claimed by <@${interaction.user.id}> on <t:${Math.floor(Date.now() / 1000)}:f>.`)
                             )
                     ]
                 });
