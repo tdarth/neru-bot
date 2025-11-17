@@ -6,7 +6,7 @@ module.exports = {
     name: 'pet',
     trigger: (message) => message.content.startsWith(`${prefix}pet`),
     async execute(message) {
-        const user = message.content.replace(`${prefix}pet`, '').trim() || message.author;
+        const user = message.mentions.users.first() || message.author;
         if (!user) return await replyWithText(message, ':x: **An error occurred. Yikes!**');
 
         const res = await fetch(`https://api.some-random-api.com/premium/petpet?avatar=${user.displayAvatarURL({extension: 'png'})}`);
