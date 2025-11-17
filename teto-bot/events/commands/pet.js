@@ -9,7 +9,7 @@ module.exports = {
         const user = message.content.replace(`${prefix}pet`, '').trim() || message.author;
         if (!user) return await replyWithText(message, ':x: **An error occurred. Yikes!**');
 
-        const res = await fetch(`https://api.some-random-api.com/premium/petpet?avatar=${user.avatarURL({extension: 'png'})}`);
+        const res = await fetch(`https://api.some-random-api.com/premium/petpet?avatar=${user.displayAvatarURL({extension: 'png'})}`);
         if (!res.ok) return await replyWithText(message, ':x: **An error occurred. Yikes!**');
         
         await message.reply({
