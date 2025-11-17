@@ -6,6 +6,8 @@ module.exports = {
     name: 'pet',
     trigger: (message) => message.content.startsWith(`${prefix}pet`),
     async execute(message) {
+        await message.channel.sendTyping();
+
         const user = message.mentions.users.first() || message.author;
         if (!user) return await replyWithText(message, ':x: **An error occurred. Yikes!**');
 
