@@ -47,6 +47,19 @@ client.on('messageCreate', async (message) => {
                 files: [attachment]
             })
         }
+
+        if (command == 'stats') {
+            const response = await fetch(`https://discord.com/api/v9/applications/1434408272018014288`, {
+                headers: {
+                    Authorization: `Bot ${TOKEN}` 
+                }
+            });
+
+            if (!response.ok) return message.reply(':x: **An error occurred.**');
+
+            const data = await response.json();
+            await message.reply(`**Guild Count:** \`${data?.approximate_guild_count}\`\n**User Install Count:** \`${data?.approximate_user_install_count}\`\n**User Authorization Count:** \`${data?.approximate_user_install_count}\``);
+        }
     } catch (e) {
         console.log(`Suzuka Error on servers: ${e}`);
     }
