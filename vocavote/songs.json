@@ -560,12 +560,6 @@
         },
         {
             "song": {
-                "name": "Mimukauwa Nice Try",
-                "url": "https://www.youtube.com/watch?v=Ljr2wMSBHqU"
-            }
-        },
-        {
-            "song": {
                 "name": "Mind Brand",
                 "url": "https://www.youtube.com/watch?v=YAgdOXlWw4A"
             }
@@ -898,6 +892,12 @@
             "song": {
                 "name": "Yowamushi Mont Blanc",
                 "url": "https://www.youtube.com/watch?v=B-A2eYlbrwQ"
+            }
+        },
+        {
+            "song": {
+                "name": "Zako",
+                "url": "https://www.youtube.com/watch?v=kqj7b59D85Y"
             }
         }
     ]
