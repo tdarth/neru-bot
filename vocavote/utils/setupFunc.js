@@ -83,7 +83,7 @@ async function setup(interaction) {
     await interaction.editReply(new ContainerMessage(
         `:white_check_mark: **Cache guild members.**\n` +
         `${categoryCount == totalCategories ? ':white_check_mark:' : '<a:spinner:1445581140688637992>'} \`(${categoryCount}/${totalCategories})\` **Create channel categories.**\n` +
-        `<a:spinner:1445581140688637992> \`(${songIndex}/${songs.length})\` **Create song channels.**`
+        `:white_check_mark: \`(${songIndex}/${songs.length})\` **Create song channels.**`
     ).isEphemeral().build());
 }
 
