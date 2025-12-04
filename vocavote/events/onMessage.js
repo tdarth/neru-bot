@@ -50,7 +50,7 @@ module.exports = {
                 await message.delete();
                 await message.channel.permissionOverwrites.edit(
                     message.author.id,
-                    { deny: [PermissionFlagsBits.ViewChannel] }
+                    { ViewChannel: false }
                 );
             } catch (err) {
                 console.error(`Error: ${err}`);
