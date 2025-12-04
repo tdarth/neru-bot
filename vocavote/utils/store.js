@@ -66,6 +66,13 @@ function store(filepath, id, username, song, vote) {
 async function retrieve(filepath, id = null) {
   try {
     const content = await fs.readFile(filepath, "utf-8");
+
+    if (content.trim() === "") {
+      const emptyData = { users: [] };
+      if (!id) return emptyData;
+      return null;
+    }
+
     const data = JSON.parse(content);
 
     if (!id) return data;

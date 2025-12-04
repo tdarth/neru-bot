@@ -9,7 +9,7 @@ module.exports = {
     async execute(interaction) {
         try {
             const contents = await retrieve('./datamusic.json', interaction?.user?.id);
-            if (!contents) return await interaction.reply(new ContainerMessage(':x: **An error occurred.**').isEphemeral().build());
+            if (!contents) return await interaction.reply(new ContainerMessage(':x: **No data found.**').isEphemeral().build());
 
             const string = JSON.stringify(contents, null, 2);
             const buffer = Buffer.from(string, "utf-8");
