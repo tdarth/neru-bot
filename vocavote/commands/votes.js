@@ -23,7 +23,7 @@ module.exports = {
             await interaction?.reply(new ContainerMessage(':white_check_mark: **Check your DMs.**').isEphemeral().build());
         } catch (e) {
             console.log(`Votes command error: ${e}`);
-            await interaction.reply(new ContainerMessage(':x: **An error occurred.**').isEphemeral().build());
+            await interaction.reply(new ContainerMessage(':x: **An error occurred.**\n-# Are your DMs enabled?').isEphemeral().build());
         }
     }
 };
