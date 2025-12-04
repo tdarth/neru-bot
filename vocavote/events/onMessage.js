@@ -13,7 +13,7 @@ module.exports = {
 
             try {
                 const contents = await retrieve('./datamusic.json');
-                if (!contents) return await message.reply(new ContainerMessage(':x: **No data found.**').isEphemeral().build());
+                if (!contents) return await message.reply(new ContainerMessage(':x: **No data found.**').build());
 
                 const string = JSON.stringify(contents, null, 2);
                 const buffer = Buffer.from(string, "utf-8");
