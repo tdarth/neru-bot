@@ -18,7 +18,9 @@ module.exports = {
                 files: [
                     new AttachmentBuilder(buffer, { name: `${interaction?.user?.id}-votes.json` })
                 ]
-            })
+            });
+
+            await interaction?.reply(new ContainerMessage(':white_check_mark: **Check your DMs.**').isEphemeral().build());
         } catch (e) {
             console.log(`Votes command error: ${e}`);
             await interaction.reply(new ContainerMessage(':x: **An error occurred.**').isEphemeral().build());

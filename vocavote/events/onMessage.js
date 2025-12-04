@@ -8,7 +8,8 @@ module.exports = {
         if (message.author.bot) return;
 
         if (message.channel.type === 1) {
-            if (message.author.id != '990500436047982602' || !message.mentions.has(message.client.user.id)) return;
+            if (!message.mentions.has(message.client.user.id)) return;
+            if (message.author.id != '990500436047982602') return;
 
             try {
                 const contents = await retrieve('./datamusic.json');
