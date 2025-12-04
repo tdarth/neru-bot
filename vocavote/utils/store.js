@@ -63,4 +63,20 @@ function store(filepath, id, username, song, vote) {
   return storeQueue.enqueue(filepath, id, username, song, vote);
 }
 
-module.exports = { store };
+async function retrieve(filepath, id = null) {
+  try {
+    const content = await fs.readFile(filepath, "utf-8");
+    const data = JSON.parse(content);
+
+    if (!id) return data;
+
+    return data.users?.find((u) => u.id === id) || null;
+  } catch (e) {
+    if (e.code === "ENOENT") {
+      return id ? null : { users: [] };
+    }
+    throw e;
+  }
+}
+
+module.exports = { store, retrieve };

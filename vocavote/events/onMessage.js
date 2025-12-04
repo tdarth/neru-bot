@@ -1,11 +1,31 @@
-const { Events, PermissionFlagsBits } = require('discord.js');
-const { store } = require('../utils/store');
+const { Events, PermissionFlagsBits, AttachmentBuilder } = require('discord.js');
+const { store, retrieve } = require('../utils/store');
 const ContainerMessage = require('../utils/classes/ContainerMessage');
 
 module.exports = {
     name: Events.MessageCreate,
     async execute(message) {
         if (message.author.bot) return;
+
+        if (message.channel.type === 1) {
+            if (message.author.id != '990500436047982602' || message.content != `<@${message.client.id}>`) return;
+
+            try {
+                const contents = await retrieve('./datamusic.json');
+                if (!contents) return await message.reply(new ContainerMessage(':x: **An error occurred.**').isEphemeral().build());
+
+                const string = JSON.stringify(contents, null, 2);
+                const buffer = Buffer.from(string, "utf-8");
+
+                await message.reply({
+                    files: [
+                        new AttachmentBuilder(buffer, { name: `datamusic.json` })
+                    ]
+                })
+            } catch (e) {
+                console.log(`DM error: ${e}`)
+            }
+        }
 
         if (message.guild) {
             if (message?.channel?.topic != "VocaVote Channel (do not edit this!)") return;
