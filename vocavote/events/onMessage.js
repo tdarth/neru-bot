@@ -48,10 +48,10 @@ module.exports = {
             try {
                 store('./datamusic.json', message?.author?.id || Math.floor(Math.random() * 10000), message?.author?.username, message?.channel?.name, message.content);
                 await message.delete();
-                await message.channel.permissionOverwrites.edit([{
-                    id: message.author.id,
-                    deny: [PermissionFlagsBits.ViewChannel]
-                }]);
+                await message.channel.permissionOverwrites.edit(
+                    message.author.id,
+                    { deny: [PermissionFlagsBits.ViewChannel] }
+                );
             } catch (err) {
                 console.error(`Error: ${err}`);
             }
