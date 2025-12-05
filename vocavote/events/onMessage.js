@@ -1,5 +1,5 @@
-const { Events, PermissionFlagsBits, AttachmentBuilder } = require('discord.js');
-const { store, retrieve } = require('../utils/store');
+const { Events } = require('discord.js');
+const { store } = require('../utils/store');
 const ContainerMessage = require('../utils/classes/ContainerMessage');
 
 module.exports = {
@@ -7,34 +7,13 @@ module.exports = {
     async execute(message) {
         if (message.author.bot) return;
 
-        if (message.channel.type === 1) {
-            if (!message.mentions.has(message.client.user.id)) return;
-            if (message.author.id != '990500436047982602') return;
-
-            try {
-                const contents = await retrieve('./datamusic.json');
-                if (!contents) return await message.reply(new ContainerMessage(':x: **No data found.**').build());
-
-                const string = JSON.stringify(contents, null, 2);
-                const buffer = Buffer.from(string, "utf-8");
-
-                await message.reply({
-                    files: [
-                        new AttachmentBuilder(buffer, { name: `datamusic.json` })
-                    ]
-                })
-            } catch (e) {
-                console.log(`DM error: ${e}`)
-            }
-        }
-
         if (message.guild) {
             if (message?.channel?.topic != "VocaVote Channel (do not edit this!)") return;
 
             const num = Number(message?.content);
 
-            if (isNaN(num) || num < 1 || num > 10) {
-                const msg = await message.reply(new ContainerMessage(':x: **Please only type a number 1-10.**').build());
+            if (isNaN(num) || num < 0 || num > 10) {
+                const msg = await message.reply(new ContainerMessage(':x: **Please only type a number 0-10.**').build());
                 setTimeout(async () => {
                     try {
                         await message.delete();

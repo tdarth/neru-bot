@@ -1,14 +1,17 @@
 const { SlashCommandSubcommandBuilder, AttachmentBuilder } = require('discord.js');
 const { retrieve } = require('../utils/store');
+const { messages } = require('../messages.json');
 const ContainerMessage = require('../utils/classes/ContainerMessage');
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
-        .setName('votes')
-        .setDescription('View your current votes'),
+        .setName('allvotes')
+        .setDescription('View all current votes (admin only)'),
     async execute(interaction) {
+        if (interaction?.user?.id != interaction?.guild?.ownerId) return await interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSIONS.replace('{0}', 'SERVER_OWNER')).isEphemeral().build());
+
         try {
-            const contents = await retrieve('./datamusic.json', interaction?.user?.id);
+            const contents = await retrieve('./datamusic.json');
             if (!contents) return await interaction.reply(new ContainerMessage(':x: **No data found.**').isEphemeral().build());
 
             const string = JSON.stringify(contents, null, 2);
@@ -16,7 +19,7 @@ module.exports = {
 
             await interaction?.user?.send({
                 files: [
-                    new AttachmentBuilder(buffer, { name: `${interaction?.user?.id}-votes.json` })
+                    new AttachmentBuilder(buffer, { name: `${Date().now}-all-votes.json` })
                 ]
             });
 
