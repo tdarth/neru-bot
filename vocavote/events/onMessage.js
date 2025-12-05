@@ -9,14 +9,22 @@ module.exports = {
 
         if (message.guild) {
             if (message?.channel?.topic != "VocaVote Channel (do not edit this!)") return;
+            if (message?.content?.startsWith('send ') && message.author.id == message.guild.ownerId) {
+                try {
+                    await message.delete()
+                    return await message.channel.send(message?.content?.replace('send ', ''))
+                } catch (err) {
+                    console.error(`Error: ${err}`);
+                }
+            }
 
             const num = Number(message?.content);
 
             if (isNaN(num) || num < 0 || num > 10) {
                 const msg = await message.reply(new ContainerMessage(':x: **Please only type a number 0-10.**').build());
+                await message.delete();
                 setTimeout(async () => {
                     try {
-                        await message.delete();
                         await msg.delete();
                     } catch (e) {
                         return

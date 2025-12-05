@@ -19,7 +19,7 @@ module.exports = {
 
             await interaction?.user?.send({
                 files: [
-                    new AttachmentBuilder(buffer, { name: `${Date().now}-all-votes.json` })
+                    new AttachmentBuilder(buffer, { name: `${Date.now()}-all-votes.json` })
                 ]
             });
 
