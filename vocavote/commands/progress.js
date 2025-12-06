@@ -21,9 +21,9 @@ module.exports = {
                 ids.push(user.id);
             });
 
-            users.voters.forEach(user => {
+            users.voters.forEach(async user => {
                 if (!ids.includes(user)) {
-                    const fetchedUser = interaction.client.users.fetch(user);
+                    const fetchedUser = await interaction.client.users.fetch(user);
                     progress.set(`${fetchedUser.username || 'unknown'} (${user})`, 0)
                 }
             });
