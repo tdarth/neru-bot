@@ -14,7 +14,13 @@ module.exports = {
 
         const user = interaction.options.getUser('user');
         const channels = await interaction.guild.channels.fetch();
-        const voteChannels = Array.from(channels.filter(channel => channel.topic && channel.topic == 'VocaVote Channel (do not edit this!)'));
+        const voteChannels = Array.from(
+            channels.filter(channel =>
+                channel.topic === 'VocaVote Channel (do not edit this!)' &&
+                channel.permissionOverwrites !== undefined
+            )
+        );
+
 
         let index = 0;
 
@@ -29,7 +35,7 @@ module.exports = {
 
                 index++;
 
-                await interaction.ediReply(new ContainerMessage(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` Adding <@${user.id}>...`).isEphemeral().build());
+                await interaction.editReply(new ContainerMessage(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` Adding <@${user.id}>...`).isEphemeral().build());
 
 
             } catch (e) {
