@@ -23,10 +23,10 @@ module.exports = {
                 ids.push(user.id);
             });
 
-            for (const user of user.voters) {
-                if (!ids.includes(user)) {
-                    const fetchedUser = await interaction.client.users.fetch(user);
-                    progress.set(`${fetchedUser.username || 'unknown'} (${user})`, 0)
+            for (const userid of users.voters) {
+                if (!ids.includes(userid)) {
+                    const fetchedUser = await interaction.client.users.fetch(userid);
+                    progress.set(`${fetchedUser.username || 'unknown'} (${userid})`, 0)
                 }
             }
 
