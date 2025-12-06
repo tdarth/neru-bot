@@ -11,11 +11,11 @@ module.exports = {
         if (interaction?.user?.id != interaction?.guild?.ownerId) return await interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSIONS.replace('{0}', 'SERVER_OWNER')).isEphemeral().build());
 
         const user = interaction.options.getUser('user');
-        await interaction.guild.channels.fetch();
-        
+        const channels = await interaction.guild.channels.fetch();
+
         const voteChannels = [];
 
-        voteChannels.forEach(channel => {
+        channels.forEach(channel => {
             if (channel?.topic != 'VocaVote Channel (do not edit this!)') return;
             voteChannels.push(channel);
         });
