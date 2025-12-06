@@ -13,36 +13,26 @@ module.exports = {
             const { data } = await retrieve('./datamusic.json');
             if (!data) return await interaction.reply(new ContainerMessage(':x: **No data found.**').isEphemeral().build());
 
-            const votesByUserId = new Map();
+            let progress = new Map();
+            let ids = [];
+
             data.users.forEach(user => {
-                votesByUserId.set(user.id, user.votes.length);
+                progress.set(`${user.username} (${user.id})`, user.votes.length);
+                ids.push(user.id);
             });
 
-            const progressEntries = [];
-
-            for (const userId of users.voters) {
-                const voteCount = votesByUserId.get(userId) || 0;
-
-                let username;
-
-                const userData = data.users.find(u => u.id === userId);
-                if (userData) {
-                    username = userData.username;
-                } else {
-                    try {
-                        const member = await interaction.guild.members.fetch(userId);
-                        username = member.user.username;
-                    } catch {
-                        username = userId;
-                    }
+            users.voters.forEach(user => {
+                if (!ids.includes(user)) {
+                    const fetchedUser = interaction.client.users.fetch(user);
+                    progress.set(`${fetchedUser.username || 'unknown'} (${user})`, 0)
                 }
+            });
 
-                progressEntries.push([`${username} (${userId})`, voteCount]);
-            }
-
-            const progress = [
+            progress = [
                 `${songs.length} total songs, ${users.voters.length} users.\n`,
-                ...progressEntries.map(([username, count]) => `${username}: ${count}`)
+                ...[...progress.entries()]
+                    .sort((a, b) => b[1] - a[1])
+                    .map(([username, count]) => `${username}: ${count}`)
             ].join("\n");
 
             const buffer = Buffer.from(progress, "utf-8");
