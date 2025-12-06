@@ -1,4 +1,4 @@
-const { SlashCommandSubcommandBuilder, MessageFlags, ContainerBuilder, TextDisplayBuilder, SeparatorBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { SlashCommandSubcommandBuilder } = require('discord.js');
 const { messages } = require('../messages.json');
 const { songs } = require('../songs.json')
 const { users } = require('../users.json')
@@ -8,7 +8,7 @@ module.exports = {
     data: new SlashCommandSubcommandBuilder()
         .setName('addvoter')
         .setDescription('Adds a voter')
-        .addUserOption((option) => option.setName('user').setDescription('The user to add')),
+        .addUserOption((option) => option.setName('user').setDescription('The user to add')).setRequired(true),
     async execute(interaction) {
         if (interaction?.user?.id != interaction?.guild?.ownerId) return await interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSIONS.replace('{0}', 'SERVER_OWNER')).isEphemeral().build());
 
@@ -29,16 +29,16 @@ module.exports = {
 
                 index++;
 
-                await msg.edit(new ContainerMessage(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` Adding <@${user.id}>...`).isEphemeral().build());
+                await msg.editReply(new ContainerMessage(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` Adding <@${user.id}>...`).isEphemeral().build());
 
 
             } catch (e) {
-                await msg.edit(new ContainerMessage(`:x: **An error occurred.**`).isEphemeral().build());
+                await msg.editReply(new ContainerMessage(`:x: **An error occurred.**`).isEphemeral().build());
                 console.log(`Addvoter command error: ${e}`);
-                break;
+                return;
             };
         }
 
-        await msg.edit(new ContainerMessage(`:white_check_mark: **Added <@${user.id}>.**`).isEphemeral().build());
+        await msg.editReply(new ContainerMessage(`:white_check_mark: **Added <@${user.id}>.**`).isEphemeral().build());
     }
 };
