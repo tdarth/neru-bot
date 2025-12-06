@@ -10,7 +10,7 @@ module.exports = {
         .setDescription('View the current voting progress'),
     async execute(interaction) {
         const msg = await interaction.reply(new ContainerMessage('<a:spinner:1445581140688637992> **Loading..**').build());
-        
+
         try {
             const { data } = await retrieve('./datamusic.json');
             if (!data) return await msg.edit(new ContainerMessage(':x: **No data found.**').isEphemeral().build());
@@ -39,14 +39,14 @@ module.exports = {
 
             const buffer = Buffer.from(progress, "utf-8");
 
-            await msg.edit({
-                flags: MessageFlags.IsComponentsV2,
+            await interaction.channel.send({
+                content: `:white_check_mark: <@${interaction.user.id}>`,
                 files: [
                     new AttachmentBuilder(buffer, { name: `${Date.now()}-progress.txt` })
                 ]
             });
 
-            console.log(progress)
+            await msg.delete();
         } catch (e) {
             console.log(`Progress command error: ${e}`);
             await msg.edit(new ContainerMessage(':x: **An error occurred.**').isEphemeral().build());
