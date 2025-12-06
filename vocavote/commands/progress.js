@@ -1,6 +1,7 @@
 const { SlashCommandSubcommandBuilder, AttachmentBuilder } = require('discord.js');
 const { retrieve } = require('../utils/store');
 const { songs } = require('../songs.json')
+const { users } = require('../users.json')
 const ContainerMessage = require('../utils/classes/ContainerMessage');
 
 module.exports = {
@@ -12,14 +13,35 @@ module.exports = {
             const { data } = await retrieve('./datamusic.json');
             if (!data) return await interaction.reply(new ContainerMessage(':x: **No data found.**').isEphemeral().build());
 
-            let progress = new Map();
-
+            const votesByUserId = new Map();
             data.users.forEach(user => {
-                progress.set(`${user.username} (${user.id})`, user.votes.length);
+                votesByUserId.set(user.id, user.votes.length);
             });
 
+            const progressEntries = [];
+
+            for (const userId of users.users.voters) {
+                const voteCount = votesByUserId.get(userId) || 0;
+
+                let username;
+
+                const userData = data.users.find(u => u.id === userId);
+                if (userData) {
+                    username = userData.username;
+                } else {
+                    try {
+                        const member = await interaction.guild.members.fetch(userId);
+                        username = member.user.username;
+                    } catch {
+                        username = userId;
+                    }
+                }
+
+                progressEntries.push([`${username} (${userId})`, voteCount]);
+            }
+
             progress = [
-                `${songs.length} total songs\n`,
+                `${songs.length} total songs, ${users.voters.length} users.\n`,
                 ...[...progress.entries()]
                     .sort((a, b) => b[1] - a[1])
                     .map(([username, count]) => `${username}: ${count}`)
