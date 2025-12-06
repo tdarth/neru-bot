@@ -18,19 +18,7 @@ module.exports = {
 
         let index = 0;
 
-        const msg = await interaction.reply({
-            flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
-            components: [
-                new ContainerBuilder()
-                    .addTextDisplayComponents(
-                        new TextDisplayBuilder()
-                            .setContent(`<a:spinner:1445581140688637992> \`(0/${voteChannels.length})\` Adding <@${user.id}>...`)
-                    )
-            ],
-            allowedMentions: {
-                parse: []
-            }
-        });
+        const msg = await msg.reply(new ContainerMessage(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` Adding <@${user.id}>...`).isEphemeral().build());
 
         for (const voteChannel of voteChannels) {
             try {
@@ -41,50 +29,16 @@ module.exports = {
 
                 index++;
 
-                await msg.edit({
-                    flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
-                    components: [
-                        new ContainerBuilder()
-                            .addTextDisplayComponents(
-                                new TextDisplayBuilder()
-                                    .setContent(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` Adding <@${user.id}>...`)
-                            )
-                    ],
-                    allowedMentions: {
-                        parse: []
-                    }
-                });
+                await msg.edit(new ContainerMessage(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` Adding <@${user.id}>...`).isEphemeral().build());
+
+
             } catch (e) {
-                await msg.edit({
-                    flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
-                    components: [
-                        new ContainerBuilder()
-                            .addTextDisplayComponents(
-                                new TextDisplayBuilder()
-                                    .setContent(`:x: **An error occurred.**`)
-                            )
-                    ],
-                    allowedMentions: {
-                        parse: []
-                    }
-                });
+                await msg.edit(new ContainerMessage(`:x: **An error occurred.**`).isEphemeral().build());
                 console.log(`Addvoter command error: ${e}`);
                 break;
             };
         }
 
-        await msg.edit({
-            flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
-            components: [
-                new ContainerBuilder()
-                    .addTextDisplayComponents(
-                        new TextDisplayBuilder()
-                            .setContent(`:white_check_mark: **Added <@${user.id}>.**`)
-                    )
-            ],
-            allowedMentions: {
-                parse: []
-            }
-        });
+        await msg.edit(new ContainerMessage(`:white_check_mark: **Added <@${user.id}>.**`).isEphemeral().build());
     }
 };
