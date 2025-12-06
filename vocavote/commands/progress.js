@@ -10,8 +10,10 @@ module.exports = {
         .setDescription('View the current voting progress'),
     async execute(interaction) {
         try {
+            await interaction.reply(new ContainerMessage('<a:spinner:1445581140688637992> **Loading..**').build());
+
             const { data } = await retrieve('./datamusic.json');
-            if (!data) return await interaction.reply(new ContainerMessage(':x: **No data found.**').isEphemeral().build());
+            if (!data) return await interaction.editReply(new ContainerMessage(':x: **No data found.**').isEphemeral().build());
 
             let progress = new Map();
             let ids = [];
@@ -21,12 +23,12 @@ module.exports = {
                 ids.push(user.id);
             });
 
-            users.voters.forEach(async user => {
+            for (const user of user.voters) {
                 if (!ids.includes(user)) {
                     const fetchedUser = await interaction.client.users.fetch(user);
                     progress.set(`${fetchedUser.username || 'unknown'} (${user})`, 0)
                 }
-            });
+            }
 
             progress = [
                 `${songs.length} total songs, ${users.voters.length} users.\n`,
@@ -37,14 +39,14 @@ module.exports = {
 
             const buffer = Buffer.from(progress, "utf-8");
 
-            await interaction.reply({
+            await interaction.editReply({
                 files: [
                     new AttachmentBuilder(buffer, { name: `${Date.now()}-progress.txt` })
                 ]
             });
         } catch (e) {
             console.log(`Progress command error: ${e}`);
-            await interaction.reply(new ContainerMessage(':x: **An error occurred.**').isEphemeral().build());
+            await interaction.editReply(new ContainerMessage(':x: **An error occurred.**').isEphemeral().build());
         }
     }
 };
