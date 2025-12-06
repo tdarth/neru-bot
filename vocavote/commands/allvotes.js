@@ -6,12 +6,13 @@ const ContainerMessage = require('../utils/classes/ContainerMessage');
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
         .setName('allvotes')
-        .setDescription('View all current votes (admin only)'),
+        .setDescription('View all current votes (admin only)')
+        .addUserOption((option) => option.setName('from-user').setDescription('The user to view').setRequired(false)),
     async execute(interaction) {
         if (interaction?.user?.id != interaction?.guild?.ownerId) return await interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSIONS.replace('{0}', 'SERVER_OWNER')).isEphemeral().build());
 
         try {
-            const { data, warnings } = await retrieve('./datamusic.json');
+            const { data, warnings } = await retrieve('./datamusic.json', interaction?.options?.getUser('user')?.id || null);
             if (!data) return await interaction.reply(new ContainerMessage(':x: **No data found.**').isEphemeral().build());
 
             const string = JSON.stringify(data, null, 2);
