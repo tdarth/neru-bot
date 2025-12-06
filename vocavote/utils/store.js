@@ -1,4 +1,5 @@
 const fs = require("fs").promises;
+const { cleanVoteData } = require('./cleanVoteData');
 
 class StoreQueue {
   constructor() {
@@ -75,7 +76,7 @@ async function retrieve(filepath, id = null) {
 
     const data = JSON.parse(content);
 
-    if (!id) return data;
+    if (!id) return { data, warnings } = cleanVoteData(data);
 
     return data.users?.find((u) => u.id === id) || null;
   } catch (e) {

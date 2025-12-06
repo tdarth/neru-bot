@@ -6,7 +6,7 @@ module.exports = {
     data: new SlashCommandSubcommandBuilder()
         .setName('addvoter')
         .setDescription('Adds a voter')
-        .addUserOption((option) => option.setName('user').setDescription('The user to add').setRequired(true)),
+        .addUserOption((option) => option.setName('user').setDescription('The user to add (admin only)').setRequired(true)),
     async execute(interaction) {
         if (interaction?.user?.id != interaction?.guild?.ownerId) return await interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSIONS.replace('{0}', 'SERVER_OWNER')).isEphemeral().build());
 

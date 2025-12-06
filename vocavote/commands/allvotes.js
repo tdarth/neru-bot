@@ -11,16 +11,23 @@ module.exports = {
         if (interaction?.user?.id != interaction?.guild?.ownerId) return await interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSIONS.replace('{0}', 'SERVER_OWNER')).isEphemeral().build());
 
         try {
-            const contents = await retrieve('./datamusic.json');
-            if (!contents) return await interaction.reply(new ContainerMessage(':x: **No data found.**').isEphemeral().build());
+            const { data, warnings } = await retrieve('./datamusic.json');
+            if (!data) return await interaction.reply(new ContainerMessage(':x: **No data found.**').isEphemeral().build());
 
-            const string = JSON.stringify(contents, null, 2);
+            const string = JSON.stringify(data, null, 2);
             const buffer = Buffer.from(string, "utf-8");
 
+            const files = [];
+
+            files.push(new AttachmentBuilder(buffer, { name: `${Date.now()}-all-votes.json` }));
+
+            if (warnings) {
+                const buffer2 = Buffer.from(warnings, "utf-8");
+                files.push(new AttachmentBuilder(buffer2, { name: `${Date.now()}-warnings.json` }));
+            }
+
             await interaction?.user?.send({
-                files: [
-                    new AttachmentBuilder(buffer, { name: `${Date.now()}-all-votes.json` })
-                ]
+                files: files
             });
 
             await interaction?.reply(new ContainerMessage(':white_check_mark: **Check your DMs.**').isEphemeral().build());

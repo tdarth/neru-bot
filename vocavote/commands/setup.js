@@ -7,7 +7,7 @@ const ContainerMessage = require('../utils/classes/ContainerMessage');
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
         .setName('setup')
-        .setDescription('Creates channels'),
+        .setDescription('Creates channels (admin only)'),
     async execute(interaction) {
         if (interaction?.user?.id != interaction?.guild?.ownerId) return await interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSIONS.replace('{0}', 'SERVER_OWNER')).isEphemeral().build());
 
