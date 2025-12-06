@@ -18,7 +18,7 @@ module.exports = {
 
         let index = 0;
 
-        const msg = await interaction.reply(new ContainerMessage(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` Adding <@${user.id}>...`).isEphemeral().build());
+        const msg = await interaction.reply(new ContainerMessage(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` Adding <@${user.id}>...`).build());
 
         for (const voteChannel of voteChannels) {
             try {
@@ -29,16 +29,16 @@ module.exports = {
 
                 index++;
 
-                await msg.edit(new ContainerMessage(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` Adding <@${user.id}>...`).isEphemeral().build());
+                await msg.edit(new ContainerMessage(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` Adding <@${user.id}>...`).build());
 
 
             } catch (e) {
-                await msg.edit(new ContainerMessage(`:x: **An error occurred.**`).isEphemeral().build());
+                await msg.edit(new ContainerMessage(`:x: **An error occurred.**`).build());
                 console.error(`Addvoter command error: ${e}`);
                 return;
             };
         }
 
-        await msg.edit(new ContainerMessage(`:white_check_mark: **Added <@${user.id}>.**`).isEphemeral().build());
+        await msg.edit(new ContainerMessage(`:white_check_mark: **Added <@${user.id}>.**`).build());
     }
 };
