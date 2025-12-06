@@ -1,7 +1,5 @@
-const { SlashCommandSubcommandBuilder } = require('discord.js');
+const { SlashCommandSubcommandBuilder, ChannelType } = require('discord.js');
 const { messages } = require('../messages.json');
-const { songs } = require('../songs.json')
-const { users } = require('../users.json')
 const ContainerMessage = require('../utils/classes/ContainerMessage');
 
 module.exports = {
@@ -17,10 +15,12 @@ module.exports = {
         const voteChannels = Array.from(
             channels.filter(channel =>
                 channel.topic === 'VocaVote Channel (do not edit this!)' &&
-                channel.permissionOverwrites !== undefined
+                (channel.type === ChannelType.GuildText) &&
+                channel.permissionOverwrites && typeof channel.permissionOverwrites.edit === 'function'
             )
         );
 
+        console.log(voteChannels.join(", "))
 
         let index = 0;
 
