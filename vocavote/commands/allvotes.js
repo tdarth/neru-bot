@@ -21,9 +21,13 @@ module.exports = {
 
             files.push(new AttachmentBuilder(buffer, { name: `${Date.now()}-all-votes.json` }));
 
-            if (warnings) {
-                const buffer2 = Buffer.from(warnings, "utf-8");
-                files.push(new AttachmentBuilder(buffer2, { name: `${Date.now()}-warnings.json` }));
+            if (warnings && warnings.length > 0) {
+                const warningText = warnings.join("\n");
+                const buffer2 = Buffer.from(warningText, "utf-8");
+
+                files.push(
+                    new AttachmentBuilder(buffer2, { name: `${Date.now()}-warnings.txt` })
+                );
             }
 
             await interaction?.user?.send({
