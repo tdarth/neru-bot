@@ -40,7 +40,7 @@ module.exports = {
             const buffer = Buffer.from(progress, "utf-8");
 
             await interaction.channel.send({
-                content: `:white_check_mark: <@${interaction.user.id}>`,
+                content: `</progress:1446963430467833989> **requested by** <@${interaction.user.id}>`,
                 files: [
                     new AttachmentBuilder(buffer, { name: `${Date.now()}-progress.txt` })
                 ]
