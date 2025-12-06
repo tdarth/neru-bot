@@ -40,13 +40,10 @@ module.exports = {
                 progressEntries.push([`${username} (${userId})`, voteCount]);
             }
 
-            progress = [
-                `${songs.length} total songs, ${users.voters.length} users.\n`,
-                ...[...progress.entries()]
-                    .sort((a, b) => b[1] - a[1])
-                    .map(([username, count]) => `${username}: ${count}`)
+            const progress = [
+                `${songs.length} total songs, ${voters.length} users.\n`,
+                ...progressEntries.map(([username, count]) => `${username}: ${count}`)
             ].join("\n");
-
 
             const buffer = Buffer.from(progress, "utf-8");
 
