@@ -41,7 +41,7 @@ module.exports = {
             }
 
             const progress = [
-                `${songs.length} total songs, ${voters.length} users.\n`,
+                `${songs.length} total songs, ${users.voters.length} users.\n`,
                 ...progressEntries.map(([username, count]) => `${username}: ${count}`)
             ].join("\n");
 
