@@ -14,30 +14,38 @@ module.exports = {
         try {
             const fromUser = interaction?.options?.getUser('from-user')?.id || null;
 
-            const { data, warnings } = await retrieve('./datamusic.json', fromUser);
-            if (!data) return await interaction.reply(new ContainerMessage(':x: **No data found.**').isEphemeral().build());
+            const result = await retrieve('./datamusic.json', fromUser);
 
-            const string = JSON.stringify(data, null, 2);
-            const buffer = Buffer.from(string, "utf-8");
+            if (fromUser) {
+                if (!result) return interaction.reply(new ContainerMessage(':x: **No data found for that user.**').isEphemeral().build());
 
-            const files = [];
+                const string = JSON.stringify(result, null, 2);
+                const buffer = Buffer.from(string, "utf-8");
 
-            files.push(new AttachmentBuilder(buffer, { name: `${Date.now()}-${fromUser ? '' : 'all-'}votes.json` }));
+                const files = [new AttachmentBuilder(buffer, { name: `${Date.now()}-${fromUser}-votes.json` })];
 
-            if (warnings && warnings.length > 0) {
-                const warningText = warnings.join("\n");
-                const buffer2 = Buffer.from(warningText, "utf-8");
+                await interaction.user.send({ files });
+            } else {
+                const { data, warnings } = result;
 
-                files.push(
-                    new AttachmentBuilder(buffer2, { name: `${Date.now()}-warnings.txt` })
-                );
+                if (!data) return await interaction.reply(new ContainerMessage(':x: **No data found.**').isEphemeral().build());
+
+                const string = JSON.stringify(data, null, 2);
+                const buffer = Buffer.from(string, "utf-8");
+
+                const files = [new AttachmentBuilder(buffer, { name: `${Date.now()}-all-votes.json` })];
+
+                if (warnings && warnings.length > 0) {
+                    const warningText = warnings.join("\n");
+                    const buffer2 = Buffer.from(warningText, "utf-8");
+
+                    files.push(new AttachmentBuilder(buffer2, { name: `${Date.now()}-warnings.txt` }));
+                }
+
+                await interaction.user.send({ files });
             }
 
-            await interaction?.user?.send({
-                files: files
-            });
-
-            await interaction?.reply(new ContainerMessage(':white_check_mark: **Check your DMs.**').isEphemeral().build());
+            interaction.reply(new ContainerMessage(':white_check_mark: **Check your DMs.**').isEphemeral().build());
         } catch (e) {
             console.log(`Votes command error: ${e}`);
             await interaction.reply(new ContainerMessage(':x: **An error occurred.**\n-# Are your DMs enabled?').isEphemeral().build());
