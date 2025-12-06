@@ -1,12 +1,24 @@
-function cleanVoteData(json) {
+async function cleanVoteData(json, songFile) {
     const warnings = [];
     const data = json;
+
+    const content = await fs.readFile(songFile, "utf-8");
+    const songJson = JSON.parse(content);
+
+    const validSongNames = new Set(
+        songJson.songs.map(entry => entry.song.name)
+    );
 
     data.users.forEach(user => {
         const seen = new Map();
         const uniqueVotes = [];
 
         for (const vote of user.votes) {
+            if (!validSongNames.has(vote.song)) {
+                warnings.push(`${user.username} (${user.id}) had a vote for unknown song: ${vote.song}`);
+                continue;
+            }
+
             if (!seen.has(vote.song)) {
                 seen.set(vote.song, vote.vote);
                 uniqueVotes.push(vote);
@@ -20,6 +32,8 @@ function cleanVoteData(json) {
                 }
             }
         }
+
+        user.votes = uniqueVotes;
     });
 
     return { data, warnings };

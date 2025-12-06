@@ -76,7 +76,7 @@ async function retrieve(filepath, id = null) {
 
     const data = JSON.parse(content);
 
-    if (!id) return cleanVoteData(data);
+    if (!id) return cleanVoteData(data, './songs.json');
 
     return data.users?.find((u) => u.id === id) || null;
   } catch (e) {
