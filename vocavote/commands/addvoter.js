@@ -22,7 +22,7 @@ module.exports = {
 
         let index = 0;
 
-        await interaction.reply(new ContainerMessage(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` Adding <@${user.id}>...`).isEphemeral().build());
+        await interaction.reply(new ContainerMessage(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` **Adding <@${user.id}>...**`).isEphemeral().build());
 
         for (const voteChannel of voteChannels) {
             try {
@@ -33,7 +33,7 @@ module.exports = {
 
                 index++;
 
-                await interaction.editReply(new ContainerMessage(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` Adding <@${user.id}>...`).isEphemeral().build());
+                await interaction.editReply(new ContainerMessage(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` **Adding <@${user.id}>...**`).isEphemeral().build());
 
 
             } catch (e) {
