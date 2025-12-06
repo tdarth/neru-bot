@@ -1,5 +1,5 @@
 const { MessageFlags, ContainerBuilder, TextDisplayBuilder, SeparatorBuilder } = require('discord.js');
-const { prefix } = require('../../config.json');
+const { prefix, staffRoles } = require('../../config.json');
 const { afkUsers, deleteAfkUser } = require('../../utils/afkHelper');
 
 module.exports = {

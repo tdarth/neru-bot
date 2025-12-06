@@ -68,23 +68,23 @@ module.exports = {
                         parse: []
                     }
                 });
+                console.log(`Addvoter command error: ${e}`);
                 break;
             };
-
-            await msg.edit({
-                flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
-                components: [
-                    new ContainerBuilder()
-                        .addTextDisplayComponents(
-                            new TextDisplayBuilder()
-                                .setContent(`:white_check_mark: **Added <@${user.id}>.**`)
-                        )
-                ],
-                allowedMentions: {
-                    parse: []
-                }
-            });
-
         }
+
+        await msg.edit({
+            flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
+            components: [
+                new ContainerBuilder()
+                    .addTextDisplayComponents(
+                        new TextDisplayBuilder()
+                            .setContent(`:white_check_mark: **Added <@${user.id}>.**`)
+                    )
+            ],
+            allowedMentions: {
+                parse: []
+            }
+        });
     }
 };
