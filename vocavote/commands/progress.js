@@ -20,7 +20,7 @@ module.exports = {
 
             const progressEntries = [];
 
-            for (const userId of users.users.voters) {
+            for (const userId of users.voters) {
                 const voteCount = votesByUserId.get(userId) || 0;
 
                 let username;
