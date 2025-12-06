@@ -6,7 +6,7 @@ const geminiApiKey = process.env.GEMINI_API_KEY;
 
 const logging_channel = '1394518674710466571';
 
-const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`;
+const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`;
 
 const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
 
