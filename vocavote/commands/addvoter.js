@@ -11,16 +11,14 @@ module.exports = {
         if (interaction?.user?.id != interaction?.guild?.ownerId) return await interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSIONS.replace('{0}', 'SERVER_OWNER')).isEphemeral().build());
 
         const user = interaction.options.getUser('user');
-        const channels = await interaction.guild.channels.fetch();
-        const voteChannels = Array.from(
-            channels.filter(channel =>
-                channel.topic === 'VocaVote Channel (do not edit this!)' &&
-                (channel.type === ChannelType.GuildText) &&
-                channel.permissionOverwrites && typeof channel.permissionOverwrites.edit === 'function'
-            )
-        );
+        await interaction.guild.channels.fetch();
+        
+        const voteChannels = [];
 
-        console.log(voteChannels.join(", "))
+        voteChannels.forEach(channel => {
+            if (channel?.topic != 'VocaVote Channel (do not edit this!)') return;
+            voteChannels.push(channel);
+        });
 
         let index = 0;
 
