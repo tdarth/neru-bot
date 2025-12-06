@@ -12,7 +12,9 @@ module.exports = {
         if (interaction?.user?.id != interaction?.guild?.ownerId) return await interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSIONS.replace('{0}', 'SERVER_OWNER')).isEphemeral().build());
 
         try {
-            const { data, warnings } = await retrieve('./datamusic.json', interaction?.options?.getUser('user')?.id || null);
+            const fromUser = interaction?.options?.getUser('from-user')?.id || null;
+
+            const { data, warnings } = await retrieve('./datamusic.json', fromUser);
             if (!data) return await interaction.reply(new ContainerMessage(':x: **No data found.**').isEphemeral().build());
 
             const string = JSON.stringify(data, null, 2);
@@ -20,7 +22,7 @@ module.exports = {
 
             const files = [];
 
-            files.push(new AttachmentBuilder(buffer, { name: `${Date.now()}-all-votes.json` }));
+            files.push(new AttachmentBuilder(buffer, { name: `${Date.now()}-${fromUser ? '' : 'all-'}votes.json` }));
 
             if (warnings && warnings.length > 0) {
                 const warningText = warnings.join("\n");
