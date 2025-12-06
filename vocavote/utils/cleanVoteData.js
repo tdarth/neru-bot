@@ -1,3 +1,5 @@
+const fs = require("fs").promises;
+
 async function cleanVoteData(json, songFile) {
     const warnings = [];
     const data = json;
