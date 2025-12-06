@@ -1,4 +1,4 @@
-const { SlashCommandSubcommandBuilder, AttachmentBuilder } = require('discord.js');
+const { SlashCommandSubcommandBuilder, AttachmentBuilder, MessageFlags } = require('discord.js');
 const { retrieve } = require('../utils/store');
 const { songs } = require('../songs.json')
 const { users } = require('../users.json')
@@ -40,10 +40,13 @@ module.exports = {
             const buffer = Buffer.from(progress, "utf-8");
 
             await interaction.editReply({
+                flags: MessageFlags.IsComponentsV2,
                 files: [
                     new AttachmentBuilder(buffer, { name: `${Date.now()}-progress.txt` })
                 ]
             });
+
+            console.log(progress)
         } catch (e) {
             console.log(`Progress command error: ${e}`);
             await interaction.editReply(new ContainerMessage(':x: **An error occurred.**').isEphemeral().build());
