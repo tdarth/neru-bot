@@ -1,12 +1,13 @@
 const { Events, MessageFlags, ContainerBuilder, TextDisplayBuilder } = require('discord.js');
 const replyWithText = require('../utils/replyWithText');
-const { prefix } = require('../config.json');
+const { prefix, staffRoles } = require('../config.json');
 const { afkUsers, deleteAfkUser } = require('../utils/afkHelper');
 
 module.exports = {
     name: Events.MessageCreate,
     async execute(message) {
         if (message.author.bot || message.content.startsWith(`${prefix}afk`)) return;
+        if (message.member.roles.cache.some(role => staffRoles.includes(role.id)) && message.content.startsWith(`${prefix}unafk`)) return;
 
         const id = message.author.id;
 

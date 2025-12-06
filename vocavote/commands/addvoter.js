@@ -18,7 +18,7 @@ module.exports = {
 
         let index = 0;
 
-        const msg = await msg.reply(new ContainerMessage(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` Adding <@${user.id}>...`).isEphemeral().build());
+        const msg = await interaction.reply(new ContainerMessage(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` Adding <@${user.id}>...`).isEphemeral().build());
 
         for (const voteChannel of voteChannels) {
             try {

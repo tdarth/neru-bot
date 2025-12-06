@@ -7,7 +7,7 @@ module.exports = {
     name: 'unafk',
     trigger: (message) => message.content.startsWith(`${prefix}unafk`),
     async execute(message) {
-        if (!message.member.roles.cache.some(role => staffRoles.includes(role.id))) return;
+        if (!message.member.roles.cache.some(role => staffRoles.includes(role.id))) return await message.reply('<:neru_hmm:1440604542638096384>');
         const id = message.content.replace(`${prefix}unafk`, '').replace('<', '').replace('>', '').replace('@', '').trim();
         if (!id) return replyWithText(message, ':x: **Usage: ?unafk <user/userid>**');
         const member = await message.guild.members.fetch(id);
