@@ -29,16 +29,16 @@ module.exports = {
 
                 index++;
 
-                await msg.editReply(new ContainerMessage(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` Adding <@${user.id}>...`).isEphemeral().build());
+                await msg.edit(new ContainerMessage(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` Adding <@${user.id}>...`).isEphemeral().build());
 
 
             } catch (e) {
-                await msg.editReply(new ContainerMessage(`:x: **An error occurred.**`).isEphemeral().build());
-                console.log(`Addvoter command error: ${e}`);
+                await msg.edit(new ContainerMessage(`:x: **An error occurred.**`).isEphemeral().build());
+                console.error(`Addvoter command error: ${e}`);
                 return;
             };
         }
 
-        await msg.editReply(new ContainerMessage(`:white_check_mark: **Added <@${user.id}>.**`).isEphemeral().build());
+        await msg.edit(new ContainerMessage(`:white_check_mark: **Added <@${user.id}>.**`).isEphemeral().build());
     }
 };
