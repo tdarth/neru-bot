@@ -31,7 +31,7 @@ module.exports = {
             }
 
             progress = [
-                `${songs.length} total songs, ${users.voters.length} users.\n`,
+                `${songs.length} total songs, ${users.voters.length} voters.\n`,
                 ...[...progress.entries()]
                     .sort((a, b) => b[1] - a[1])
                     .map(([username, count]) => `${count >= songs.length ? '✅ ' : ''}${username}: ${count}`)
@@ -40,7 +40,7 @@ module.exports = {
             const buffer = Buffer.from(progress, "utf-8");
 
             await interaction.channel.send({
-                content: `</progress:1446963430467833989> **requested by** <@${interaction.user.id}>`,
+                content: `</progress:1446963430467833989> **requested by <@${interaction.user.id}>.**`,
                 files: [
                     new AttachmentBuilder(buffer, { name: `${Date.now()}-progress.txt` })
                 ]
