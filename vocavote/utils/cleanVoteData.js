@@ -1,5 +1,5 @@
 const fs = require("fs").promises;
-const { slugify } = require('./slugify');
+const { cleanForMatch } = require('./cleanForMatch');
 
 async function cleanVoteData(json, songFile) {
     const warnings = [];
@@ -9,7 +9,7 @@ async function cleanVoteData(json, songFile) {
     const songJson = JSON.parse(content);
 
     const validSongNames = new Set(
-        songJson.songs.map(entry => slugify(entry.song.name))
+        songJson.songs.map(entry => cleanForMatch(entry.song.name))
     );
 
     data.users.forEach(user => {
