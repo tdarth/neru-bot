@@ -8,8 +8,8 @@ module.exports = {
     if (message.guild) {
       for (const trigger of message.client.triggers) {
         try {
-          if (trigger.trigger(message)) {
-            await trigger.execute(message);
+          if (trigger.trigger(message.toLowerCase())) {
+            await trigger.execute(message.toLowerCase());
             break;
           }
         } catch (err) {

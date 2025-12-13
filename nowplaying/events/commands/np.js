@@ -13,7 +13,7 @@ module.exports = {
         if (message.author.bot) return;
 
         if (message.guild) {
-            if (aliases.some(x => message.content.startsWith(x))) {
+            if (aliases.some(x => message.content.toLowerCase().startsWith(x))) {
                 await message.channel.sendTyping();
 
                 const session = await getSessionToken(message.author.id) || null;
