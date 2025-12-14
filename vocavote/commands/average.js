@@ -6,12 +6,12 @@ module.exports = {
         .setName('average')
         .setDescription('Returns averaged song data from a datamusic file')
         .addAttachmentOption((option) => option.setName('datamusic-file').setDescription('The data file').setRequired(true))
-        .addStringOption((option) => option.setName('song-count').setDescription('Each user must have at least this many votes to be counted').setRequired(true))
+        .addStringOption((option) => option.setName('song-count').setDescription('Each user must have at least this many votes to be counted'))
         .addStringOption((option) => option.setName('ignore-users').setDescription('Usernames/UserIDs seperated with a comma'))
         .addStringOption((option) => option.setName('ignore-songs').setDescription('Songs in slug format seperated with a comma')),
     async execute(interaction) {
         const dataMusic = interaction?.options?.getAttachment('datamusic-file') || null;
-        const songCount = interaction?.options?.getString('song-count') || null;
+        const songCount = interaction?.options?.getString('song-count') || 0;
         const ignoreUsers = interaction?.options?.getString('ignore-users') || null;
         const ignoreSongs = interaction?.options?.getString('ignore-songs') || null;
 
