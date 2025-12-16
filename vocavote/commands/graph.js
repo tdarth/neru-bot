@@ -31,7 +31,7 @@ module.exports = {
             const ctx = canvas.getContext('2d');
 
             if (voteFile) {
-                const res = await fetch(dataMusic.url);
+                const res = await fetch(voteFile.url);
                 if (!res.ok) return interaction.reply(new ContainerMessage(':x: **An error occurred.**'));
                 const contents = await res.text();
                 data = JSON.parse(contents);
