@@ -14,6 +14,7 @@ const query = `query {
         progress
         repeat
         updatedAt
+        notes
         startedAt { year month day }
         completedAt { year month day }
         media {
@@ -48,7 +49,6 @@ const query = `query {
           },
           bannerImage
         }
-        notes
       }
     }
   }
@@ -278,7 +278,6 @@ async function getWrapped(token, userId, wrappedYear) {
     });
 
     if (!storeRes.ok) return 'save_error';
-    console.log(JSON.stringify(wrapped))
     return `${process.env.WRAPPED_FRONTEND_URL}view?id=${userId}`;
   } catch (e) {
     console.log(e);
