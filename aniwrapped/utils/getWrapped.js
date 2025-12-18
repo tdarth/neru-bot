@@ -48,6 +48,7 @@ const query = `query {
           },
           bannerImage
         }
+        notes
       }
     }
   }
