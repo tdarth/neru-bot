@@ -13,3 +13,6 @@ suzuka/node_modules
 vocavote/node_modules
 vocavote/datamusic.json
 aniwrapped/node_modules
+aniwrapped/dataCache.json
+aniwrapped/idCache.json
+aniwrapped/tokenCache.json

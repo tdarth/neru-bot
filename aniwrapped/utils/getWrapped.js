@@ -278,6 +278,7 @@ async function getWrapped(token, userId, wrappedYear) {
     });
 
     if (!storeRes.ok) return 'save_error';
+    console.log(JSON.stringify(wrapped))
     return `${process.env.WRAPPED_FRONTEND_URL}view?id=${userId}`;
   } catch (e) {
     console.log(e);
