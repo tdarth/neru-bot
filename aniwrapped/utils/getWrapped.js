@@ -1,9 +1,22 @@
 const { getDataCache, setDataCache } = require('../utils/dataCache');
 const { getId, cacheId } = require('../utils/getAnilistToken');
 
-const query = `query {
+const query = `query ($userId: Int!) {
+  User(id: $userId) {
+    favourites {
+      anime {
+        edges {
+          favouriteOrder
+          node {
+            id
+          }
+        }
+      }
+    }
+  }
+
   MediaListCollection(
-    userId: 0
+    userId: $userId
     type: ANIME
   ) {
     lists {
@@ -14,12 +27,11 @@ const query = `query {
         progress
         repeat
         updatedAt
-        notes
         startedAt { year month day }
         completedAt { year month day }
+        notes
         media {
           id
-          idMal
           title {
             userPreferred
             romaji
@@ -33,21 +45,21 @@ const query = `query {
           averageScore
           genres
           isAdult
+          isFavourite
           coverImage {
             medium
             large
             extraLarge
           }
+          bannerImage
           siteUrl
           duration
-          isFavourite
           studios {
             nodes {
               name
               isAnimationStudio
             }
-          },
-          bannerImage
+          }
         }
       }
     }
@@ -133,7 +145,12 @@ async function getWrapped(token, userId, wrappedYear) {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ query }).replace('userId: 0', `userId: ${aniUserId}`)
+        body: JSON.stringify({
+          query,
+          variables: {
+            userId: aniUserId
+          }
+        })
       });
 
       if (!response.ok) return 'unknown_error';
@@ -145,6 +162,13 @@ async function getWrapped(token, userId, wrappedYear) {
       data = await response.json();
       setDataCache(token, data);
     }
+
+    const favOrderMap = new Map(
+      data?.data?.User?.favourites?.anime?.edges?.map(edge => [
+        edge.node.id,
+        edge.favouriteOrder
+      ]) || []
+    );
 
     const completedAnime = data?.data?.MediaListCollection?.lists?.[0]?.entries || null;
     if (!completedAnime) return 'noanimefound_error';
@@ -230,13 +254,18 @@ async function getWrapped(token, userId, wrappedYear) {
     // favorites
     for (const anime of completedAnime) {
       if (!inYear(anime, wrappedYear)) continue;
-      const isFavorite = anime?.media?.isFavourite;
 
-      if (!isFavorite) continue;
+      const mediaId = anime?.media?.id;
+      if (!favOrderMap.has(mediaId)) continue;
+
       totalFavorites++;
-      favoriteData.push(anime);
+      favoriteData.push({
+        ...anime,
+        favouriteOrder: favOrderMap.get(mediaId)
+      });
     }
-    favoriteData.sort((a, b) => b.score - a.score);
+
+    favoriteData.sort((a, b) => a.favouriteOrder - b.favouriteOrder);
     wrapped['favorites']['total'] = totalFavorites;
     wrapped['favorites']['breakdown'] = favoriteData;
     // favorites
