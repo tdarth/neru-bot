@@ -3,10 +3,12 @@ const replyWithText = require('../utils/replyWithText');
 const { prefix, staffRoles } = require('../config.json');
 const { afkUsers, deleteAfkUser } = require('../utils/afkHelper');
 
+const aliases = ["afk", "awayfromkeyboard"];
+
 module.exports = {
     name: Events.MessageCreate,
     async execute(message) {
-        if (message.author.bot || message.content.startsWith(`${prefix}afk`)) return;
+        if (message.author.bot || aliases.some(alias => message.content.toLowerCase().startsWith(`${prefix}${alias}`))) return;
         if (message.member.roles.cache.some(role => staffRoles.includes(role.id)) && message.content.startsWith(`${prefix}unafk`)) return;
 
         const id = message.author.id;
