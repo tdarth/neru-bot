@@ -3,6 +3,8 @@ const replyWithText = require('../utils/replyWithText');
 const { prefix } = require('../config.json');
 const { afkUsers, deleteAfkUser } = require('../utils/afkHelper');
 
+const aliases = ["afk", "awayfromkeyboard"];
+
 module.exports = {
     name: Events.MessageCreate,
     async execute(message) {
