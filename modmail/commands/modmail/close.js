@@ -12,7 +12,8 @@ module.exports = {
         .setName('close')
         .setDescription("Closes the current ModMail channel")
         .addStringOption(option => option.setName('reason').setDescription('The reason to close the ModMail'))
-        .addStringOption(option => option.setName('silent-close').setDescription('Prevent the user from being notified').addChoices({ name: 'Enable', value: 'enable' })),
+        .addStringOption(option => option.setName('silent-close').setDescription('Prevent the user from being notified').addChoices({ name: 'Enable', value: 'enable' }))
+        .addStringOption(option => option.setName('notes').setDescription('Shown in transcripts for staff to see')),
     async execute(interaction) {
         if (!interaction.guild) return await interaction.reply({ flags: MessageFlags.Ephemeral, content: messages.errors.NOT_IN_SERVER });
         if (!interaction.member.roles.cache.some(role => staffRoles.includes(role.id))) return await interaction.reply({ flags: MessageFlags.Ephemeral, content: messages.errors.MISSING_PERMISSION });
@@ -24,6 +25,7 @@ module.exports = {
 
         const reason = interaction?.options?.getString('reason') || null;
         const silentClose = interaction?.options?.getString('silent-close') || null;
+        const notes = interaction?.options?.getString('notes') || null;
 
         await clearChannel(process.env.GUILD_ID, interaction.channel.id);
         if (modmailChannelType == 0) await interaction.channel.edit({ topic: `CLOSED - ${interaction.channel.topic}` });
@@ -52,7 +54,7 @@ module.exports = {
                     new ContainerBuilder()
                         .addTextDisplayComponents(
                             new TextDisplayBuilder()
-                                .setContent(`:outbox_tray: **Closed** by <@!${interaction.user.id}> (**${interaction.user.username || 'unknown'}**, \`${interaction.user.id}\`)\n> <t:${Math.floor(Date.now() / 1000)}:f>\n> Opened by: <@!${user.id}> (**${user.username || 'unknown'}**, \`${user.id}\`)\n> Reason: \`${reason}\`\n> Closed Silently: \`${silentClose ? 'true' : 'false'}\``)
+                                .setContent(`:outbox_tray: **Closed** by <@!${interaction.user.id}> (**${interaction.user.username || 'unknown'}**, \`${interaction.user.id}\`)\n> <t:${Math.floor(Date.now() / 1000)}:f>\n> Opened by: <@!${user.id}> (**${user.username || 'unknown'}**, \`${user.id}\`)\n> Reason: \`${reason || 'N/A'}\`\n> Closed Silently: \`${silentClose ? 'true' : 'false'}\`${notes ? `\n> Notes: \`${notes}\`` : ''}`)
                         )
                 ],
                 allowedMentions: {
