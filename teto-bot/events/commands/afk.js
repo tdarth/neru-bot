@@ -7,10 +7,14 @@ const aliases = ["afk", "awayfromkeyboard"];
 
 module.exports = {
     name: 'afk',
-    trigger: (message) => aliases.some(alias => message.content.toLowerCase() == `${prefix}${alias}`),
+    trigger: (message) => aliases.some(alias => message.content.toLowerCase().startsWith(`${prefix}${alias}`)),
     async execute(message) {
         if (message.guild.id == "1369181065385869352") return await replyWithText(message, ":x: **This command has been disabled.**");
-        let afkReason = message.content.replace(`${prefix}afk`, '').trim() || "No reason specified.";
+        const usedAlias = aliases.find(a => message.content.startsWith(`${prefix}${a}`));
+
+        let afkReason = message.content
+            .slice((`${prefix}${usedAlias}`).length)
+            .trim() || 'No reason specified.';
 
         setAfkUser(message.author.id, { username: message.member?.nickname || message.author.username, reason: afkReason, setAt: Date.now() })
 
