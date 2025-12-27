@@ -3,9 +3,11 @@ const { prefix } = require('../../config.json');
 const { setAfkUser } = require('../../utils/afkHelper');
 const replyWithText = require('../../utils/replyWithText')
 
+const aliases = ["afk", "awayfromkeyboard"];
+
 module.exports = {
     name: 'afk',
-    trigger: (message) => message.content.startsWith(`${prefix}afk`),
+    trigger: (message) => aliases.some(alias => message.content.toLowerCase() == `${prefix}${alias}`),
     async execute(message) {
         if (message.guild.id == "1369181065385869352") return await replyWithText(message, ":x: **This command has been disabled.**");
         let afkReason = message.content.replace(`${prefix}afk`, '').trim() || "No reason specified.";

@@ -2,9 +2,11 @@ const { MessageFlags, ContainerBuilder, TextDisplayBuilder, SeparatorBuilder } =
 const { prefix } = require('../../config.json');
 const { setAfkUser } = require('../../utils/afkHelper');
 
+const aliases = ["afk", "awayfromkeyboard"];
+
 module.exports = {
     name: 'afk',
-    trigger: (message) => message.content.startsWith(`${prefix}afk`),
+    trigger: (message) => aliases.some(alias => message.content.toLowerCase() == `${prefix}${alias}`),
     async execute(message) {
         let afkReason = message.content.replace(`${prefix}afk`, '').trim() || "No reason specified.";
 
