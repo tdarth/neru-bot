@@ -25,7 +25,6 @@ run("npm", ["install"], "./neru-bot")
                             run("node", ["index.js"], "./teto-bot");
                             run("node", ["index.js"], "./nowplaying");
                             run("node", ["index.js"], "./miku-bot");
-                            run("node", ["index.js"], "./tagroles");
                             run("node", ["index.js"], "./modmail");
                             run("node", ["index.js"], "./suzuka");
                             run("node", ["index.js"], "./vocavote");
