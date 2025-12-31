@@ -1,4 +1,4 @@
-const { TextDisplayBuilder, ContainerBuilder, SeparatorBuilder, MessageFlags } = require('discord.js');
+require('discord.js');
 const { prefix } = require('../../config.json');
 const replyWithText = require("../../utils/replyWithText");
 
@@ -16,10 +16,11 @@ module.exports = {
             if (!channelIdToSend || isNaN(channelIdToSend)) return replyWithText(message, `:x: **Invalid channel.**`);
 
             const channelToSend = await message.client.channels.fetch(channelIdToSend);
-            await channelToSend.send(args.slice(1).join(' '));
+            const sentMessage = await channelToSend.send(args.slice(1).join(' '));
+            await replyWithText(message, `:white_check_mark:, [**Message sent!**](https://discord.com/channels/${message.guild.id}/${channelIdToSend.id}/${sentMessage.id})`);
         } catch (e) {
             console.log(`Send to channel command error: ${e}`);
-            return replyWithText(message, `:x: An error occurred.`);
+            return replyWithText(message, `:x: **An error occurred.**\n-# \`${e}\``);
         }
     },
 };
