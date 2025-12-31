@@ -17,7 +17,8 @@ module.exports = {
 
             const channelToSend = await message.client.channels.fetch(channelIdToSend);
             const sentMessage = await channelToSend.send(args.slice(1).join(' '));
-            await replyWithText(message, `:white_check_mark: [**Message sent!**](https://discord.com/channels/${message.guild.id}/${channelToSend.id}/${sentMessage.id})`);
+            if (message.channel.id != channelIdToSend) await replyWithText(message, `:white_check_mark: [**Message sent!**](https://discord.com/channels/${message.guild.id}/${channelToSend.id}/${sentMessage.id})`);
+            else await message.delete();
         } catch (e) {
             console.log(`Send to channel command error: ${e}`);
             return replyWithText(message, `:x: **An error occurred.**\n-# \`${e}\``);
