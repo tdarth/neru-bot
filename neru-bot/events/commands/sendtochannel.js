@@ -12,12 +12,12 @@ module.exports = {
 
             if (args.length <= 1) return replyWithText(message, `:x: **Usage: ${prefix}sendtochannel channel message**`);
 
-            const channelIdToSend = args[0].replace(/[<>#]/g, '') || null;
+            const channelIdToSend = args[0].replace(/[<>#]/g, '') || message.channel.id || null;
             if (!channelIdToSend || isNaN(channelIdToSend)) return replyWithText(message, `:x: **Invalid channel.**`);
 
             const channelToSend = await message.client.channels.fetch(channelIdToSend);
             const sentMessage = await channelToSend.send(args.slice(1).join(' '));
-            await replyWithText(message, `:white_check_mark:, [**Message sent!**](https://discord.com/channels/${message.guild.id}/${channelIdToSend.id}/${sentMessage.id})`);
+            await replyWithText(message, `:white_check_mark: [**Message sent!**](https://discord.com/channels/${message.guild.id}/${channelToSend.id}/${sentMessage.id})`);
         } catch (e) {
             console.log(`Send to channel command error: ${e}`);
             return replyWithText(message, `:x: **An error occurred.**\n-# \`${e}\``);
