@@ -15,5 +15,8 @@
     "modmailChannelForThreadId": "1416613217077297152",
     "modmailChannelType": 1,
     "modmailPingStaffOnCreation": false,
-    "modmailWelcomeMessage": true
+    "modmailWelcomeMessage": true,
+    "modmailShowUserTypingIndicators": true,
+    "modmailUserTypingIndicatorsFetchCount": 10,
+    "modmailUseBuiltInTypingIndicators": false
 }

@@ -107,7 +107,7 @@ module.exports = {
         
         const infoButton = new ButtonBuilder()
             .setCustomId(`info`)
-            .setLabel("Avoid deleting important ModMails, as attachments are not stored.")
+            .setLabel(messages.info.DELETE_BUTTON_INFO)
             .setStyle(ButtonStyle.Danger)
             .setDisabled(true)
 

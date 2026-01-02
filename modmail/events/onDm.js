@@ -2,7 +2,7 @@ const { Events, ChannelType, EmbedBuilder, ThreadAutoArchiveDuration, MessageFla
 const { getChannelByUser, addUserToChannel, clearChannel } = require('../db/utils/helper');
 const { getChannelFromId } = require('../utils/getChannelFromId');
 const { messages } = require('../messages.json');
-const { modmailCategoryId, modmailLogChannelId, modmailChannelForThreadId, modmailChannelType, modmailPingStaffOnCreation, staffRoles, modmailWelcomeMessage } = require('../config.json');
+const { modmailCategoryId, modmailLogChannelId, modmailChannelForThreadId, modmailChannelType, modmailPingStaffOnCreation, staffRoles, modmailWelcomeMessage, modmailShowUserTypingIndicators, modmailUserTypingIndicatorsFetchCount, modmailUseBuiltInTypingIndicators } = require('../config.json');
 
 async function createChannel(guild, channelName, authorId, type = 0, channelId = null, client = null) {
     let channel = null;
@@ -138,13 +138,38 @@ module.exports = {
         }
 
         try {
-            await modmailChannel.send({
-                embeds: [embed],
-                ...(files && { files })
-            });
+            let didEdit = false;
+
+            if (modmailShowUserTypingIndicators && !modmailUseBuiltInTypingIndicators) {
+                const topModmailMessages = await modmailChannel.messages.fetch({ limit: modmailUserTypingIndicatorsFetchCount || 10 });
+
+                for (const message of topModmailMessages.values()) {
+                    if (message.embeds) {
+                        for (const mmEmbed of message.embeds) {
+                            if (mmEmbed.description == (messages?.info?.USER_START_TYPING || '**Started typing...**')) {
+                                await message.edit({
+                                    embeds: [embed],
+                                    ...(files && { files })
+                                });
+                                didEdit = true
+                                break;
+                            }
+                        }
+                    }
+                    if (didEdit) break;
+                }
+            }
+
+            if (!didEdit) {
+                await modmailChannel.send({
+                    embeds: [embed],
+                    ...(files && { files })
+                });
+            }
+
             await message.react('✅');
         } catch (err) {
-            console.log(`[MODMAIL] Error in sending message to ${modmailChannel.id}: ${err}`);
+            console.log(`[MODMAIL] Error in sending message to ${modmailChannel.id} (typingIndicators: ${modmailShowUserTypingIndicators.toString()}): ${err}`);
             await message.react('❌');
         }
     },
