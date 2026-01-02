@@ -1,6 +1,6 @@
 const { Events, EmbedBuilder } = require('discord.js');
 const { messages } = require('../messages.json');
-const { modmailShowUserTypingIndicators, modmailUseBuiltInTypingIndicators, modmailUserTypingIndicatorsFetchCount } = require('../config.json');
+const { modmailShowUserTypingIndicators, modmailUseBuiltInTypingIndicators, modmailUserTypingIndicatorsFetchCount, modmailUserTypingIndicatorsDeleteTime } = require('../config.json');
 const { getChannelByUser } = require('../db/utils/helper');
 const { getChannelFromId } = require('../utils/getChannelFromId');
 
@@ -42,9 +42,24 @@ module.exports = {
             }
 
             if (found) return;
-            await modmailChannel.send({
+
+            const typingMessage = await modmailChannel.send({
                 embeds: [embed]
             });
+
+            setTimeout(async () => {
+                const latestTypingMessage = await modmailChannel.messages.fetch(typingMessage.id);
+                const latestTypingEmbeds = latestTypingMessage?.embeds || null;
+
+                if (!latestTypingEmbeds) return;
+
+                for (const embed of latestTypingEmbeds) {
+                    if (embed.description == (messages?.info?.USER_START_TYPING || '**Started typing...**')) {
+                        await latestTypingMessage.delete();
+                        break;
+                    }
+                }
+            }, modmailUserTypingIndicatorsDeleteTime * 1000 || 10000);
         } catch (e) {
             console.log(`[MODMAIL] User typing indicator error: ${e}`)
         }

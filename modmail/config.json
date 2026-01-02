@@ -18,5 +18,6 @@
     "modmailWelcomeMessage": true,
     "modmailShowUserTypingIndicators": true,
     "modmailUserTypingIndicatorsFetchCount": 10,
+    "modmailUserTypingIndicatorsDeleteTime": 10,
     "modmailUseBuiltInTypingIndicators": false
 }
