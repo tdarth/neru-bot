@@ -49,6 +49,7 @@ module.exports = {
 
         for (const userId of allUserIds) {
             if (userId in afkUsers) {
+                if (Math.round((Date.now() - Number(afkUsers[userId].setAt)) / 1000) <= 300) continue; // 5 mins
                 afkUserIds.push(userId);
                 afkUserReasons.push(afkUsers[userId].reason);
             }
