@@ -1,5 +1,4 @@
 const { SlashCommandSubcommandBuilder, ChannelType } = require('discord.js');
-const { messages } = require('../messages.json');
 const ContainerMessage = require('../utils/classes/ContainerMessage');
 
 module.exports = {
@@ -8,7 +7,7 @@ module.exports = {
         .setDescription('Adds a voter')
         .addUserOption((option) => option.setName('user').setDescription('The user to add (admin only)').setRequired(true)),
     async execute(interaction) {
-        if (interaction?.user?.id != interaction?.guild?.ownerId) return await interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSIONS.replace('{0}', 'SERVER_OWNER')).isEphemeral().build());
+        if (interaction?.user?.id != interaction?.guild?.ownerId) return await interaction.reply(new ContainerMessage(':x: **Missing permissions:** `SERVER_OWNER`.').isEphemeral().build());
 
         const user = interaction.options.getUser('user');
         const channels = await interaction.guild.channels.fetch();
@@ -22,7 +21,7 @@ module.exports = {
 
         let index = 0;
 
-        await interaction.reply(new ContainerMessage(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` **Adding <@${user.id}>...**`).isEphemeral().build());
+        await interaction.reply(new ContainerMessage(`:hourglass: \`(${index}/${voteChannels.length})\` **Adding <@${user.id}>...**`).isEphemeral().build());
 
         for (const voteChannel of voteChannels) {
             try {
@@ -33,7 +32,7 @@ module.exports = {
 
                 index++;
 
-                await interaction.editReply(new ContainerMessage(`<a:spinner:1445581140688637992> \`(${index}/${voteChannels.length})\` **Adding <@${user.id}>...**`).isEphemeral().build());
+                await interaction.editReply(new ContainerMessage(`:hourglass: \`(${index}/${voteChannels.length})\` **Adding <@${user.id}>...**`).isEphemeral().build());
 
 
             } catch (e) {

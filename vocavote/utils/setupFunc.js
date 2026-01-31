@@ -27,8 +27,8 @@ async function setup(interaction) {
     async function updateProgress() {
         await interaction.editReply(new ContainerMessage(
             `:white_check_mark: **Cache guild members.**\n` +
-            `${categoryCount == totalCategories ? ':white_check_mark:' : '<a:spinner:1445581140688637992>'} \`(${categoryCount}/${totalCategories})\` **Create channel categories.**\n` +
-            `<a:spinner:1445581140688637992> \`(${songIndex}/${songs.length})\` **Create song channels.**`
+            `${categoryCount == totalCategories ? ':white_check_mark:' : ':hourglass:'} \`(${categoryCount}/${totalCategories})\` **Create channel categories.**\n` +
+            `:hourglass: \`(${songIndex}/${songs.length})\` **Create song channels.**`
         ).isEphemeral().build());
     }
 
@@ -82,7 +82,7 @@ async function setup(interaction) {
 
     await interaction.editReply(new ContainerMessage(
         `:white_check_mark: **Cache guild members.**\n` +
-        `${categoryCount == totalCategories ? ':white_check_mark:' : '<a:spinner:1445581140688637992>'} \`(${categoryCount}/${totalCategories})\` **Create channel categories.**\n` +
+        `${categoryCount == totalCategories ? ':white_check_mark:' : ':hourglass:'} \`(${categoryCount}/${totalCategories})\` **Create channel categories.**\n` +
         `:white_check_mark: \`(${songIndex}/${songs.length})\` **Create song channels.**`
     ).isEphemeral().build());
 }

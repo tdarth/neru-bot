@@ -1,7 +1,0 @@
-{
-    "messages": {
-        "errors": {
-            "MISSING_PERMISSIONS": ":x: **Missing permissions:** `{0}`"
-        }
-    }
-}

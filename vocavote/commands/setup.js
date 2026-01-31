@@ -1,5 +1,4 @@
 const { SlashCommandSubcommandBuilder, MessageFlags, ContainerBuilder, TextDisplayBuilder, SeparatorBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { messages } = require('../messages.json');
 const { songs } = require('../songs.json')
 const { users } = require('../users.json')
 const ContainerMessage = require('../utils/classes/ContainerMessage');
@@ -9,7 +8,7 @@ module.exports = {
         .setName('setup')
         .setDescription('Creates channels (admin only)'),
     async execute(interaction) {
-        if (interaction?.user?.id != interaction?.guild?.ownerId) return await interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSIONS.replace('{0}', 'SERVER_OWNER')).isEphemeral().build());
+        if (interaction?.user?.id != interaction?.guild?.ownerId) return await interaction.reply(new ContainerMessage(':x: **Missing permissions:** `SERVER_OWNER`.').isEphemeral().build());
 
         await interaction.reply({
             flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,

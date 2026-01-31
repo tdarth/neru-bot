@@ -9,7 +9,7 @@ module.exports = {
         .setName('progress')
         .setDescription('View the current voting progress'),
     async execute(interaction) {
-        const msg = await interaction.reply(new ContainerMessage('<a:spinner:1445581140688637992> **Loading..**').build());
+        const msg = await interaction.reply(new ContainerMessage(':hourglass: **Loading..**').build());
 
         try {
             const { data } = await retrieve('./datamusic.json');
@@ -40,7 +40,7 @@ module.exports = {
             const buffer = Buffer.from(progress, "utf-8");
 
             await interaction.channel.send({
-                content: `</progress:1446963430467833989> **requested by <@${interaction.user.id}>.**`,
+                content: `/progress **requested by <@${interaction.user.id}>.**`,
                 files: [
                     new AttachmentBuilder(buffer, { name: `${Date.now()}-progress.txt` })
                 ]

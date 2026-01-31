@@ -1,6 +1,5 @@
 const { SlashCommandSubcommandBuilder, AttachmentBuilder } = require('discord.js');
 const { retrieve } = require('../utils/store');
-const { messages } = require('../messages.json');
 const ContainerMessage = require('../utils/classes/ContainerMessage');
 
 module.exports = {
@@ -9,7 +8,7 @@ module.exports = {
         .setDescription('View all current votes (admin only)')
         .addUserOption((option) => option.setName('from-user').setDescription('The user to view').setRequired(false)),
     async execute(interaction) {
-        if (interaction?.user?.id != interaction?.guild?.ownerId) return await interaction.reply(new ContainerMessage(messages.errors.MISSING_PERMISSIONS.replace('{0}', 'SERVER_OWNER')).isEphemeral().build());
+        if (interaction?.user?.id != interaction?.guild?.ownerId) return await interaction.reply(new ContainerMessage(':x: **Missing permissions:** `SERVER_OWNER`.').isEphemeral().build());
 
         try {
             const fromUser = interaction?.options?.getUser('from-user')?.id || null;

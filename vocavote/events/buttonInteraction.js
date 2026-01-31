@@ -11,7 +11,7 @@ module.exports = {
         try {
             if (interaction.customId === "setup_confirm") {
                 await interaction.deferUpdate();
-                await interaction.editReply(new ContainerMessage(`<a:spinner:1445581140688637992> **Cache guild members.**\n<a:spinner:1445581140688637992> \`(0/${Math.ceil(songs.length / 50)})\` **Create channel categories.**\n<a:spinner:1445581140688637992> \`(0/${songs.length})\` **Create song channels.**`).isEphemeral().build());
+                await interaction.editReply(new ContainerMessage(`:hourglass: **Cache guild members.**\n:hourglass: \`(0/${Math.ceil(songs.length / 50)})\` **Create channel categories.**\n:hourglass: \`(0/${songs.length})\` **Create song channels.**`).isEphemeral().build());
 
                 await setup(interaction);
             }

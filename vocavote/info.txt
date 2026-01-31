@@ -1,0 +1,19 @@
+1. Fill out .env.
+2. Add voter User IDs into users.json.
+3. Add additional songs in songs.json.
+4. Run deploy-commands.js.
+5. Run index.js.
+6. /setup in your Discord Server.
+
+A channel will be created for each song specified, posting the link for listening.
+Upon sending a message in a VocaVote channel, the voter's score will be deleted, logged to datamusic.json, and they will lose viewing access to the channel.
+
+Users can view their votes at any time with /votes, or visualize their data with /graph.
+/progress displays the number of songs each voter has currently voted on.
+
+Server owner commands include
+- /addvoter: Adds a voter after setup has already ran.
+- /allvotes: Displays every vote for each voter, or can scope to specific person.
+- /average: Automatically averages, finds SD, and IQR of the current voting data. Allows you to exclude songs, require a certain amount of votes, etc.
+
+Add a new song at any time by changing a channel's topic to "VocaVote Channel (do not edit this!)". The server owner can type in VocaVote channels by starting their message with "send ", e.x. "send Test".
