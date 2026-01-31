@@ -5,7 +5,6 @@ const ContainerMessage = require('../utils/classes/ContainerMessage');
 module.exports = {
     name: Events.MessageCreate,
     async execute(message) {
-        return;
         if (message.author.bot) return;
 
         if (message.guild) {
