@@ -19,16 +19,12 @@ run("npm", ["install"], "./neru-bot")
                   .on("close", () => {
                     run("npm", ["install"], "./suzuka")
                       .on("close", () => {
-                        run("npm", ["install"], "./vocavote")
-                          .on("close", () => {
-                            run("node", ["index.js"], "./neru-bot");
-                            run("node", ["index.js"], "./teto-bot");
-                            run("node", ["index.js"], "./nowplaying");
-                            run("node", ["index.js"], "./miku-bot");
-                            run("node", ["index.js"], "./modmail");
-                            run("node", ["index.js"], "./suzuka");
-                            run("node", ["index.js"], "./vocavote");
-                          });
+                        run("node", ["index.js"], "./neru-bot");
+                        run("node", ["index.js"], "./teto-bot");
+                        run("node", ["index.js"], "./nowplaying");
+                        run("node", ["index.js"], "./miku-bot");
+                        run("node", ["index.js"], "./modmail");
+                        run("node", ["index.js"], "./suzuka");
                       });
                   });
               });
