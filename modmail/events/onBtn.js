@@ -1,5 +1,6 @@
-const { Events, MessageFlags, ContainerBuilder, TextDisplayBuilder } = require('discord.js');
+const { Events, MessageFlags, ContainerBuilder, TextDisplayBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { staffRoles } = require('../config.json');
+const { messages } = require('../messages.json');
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -12,23 +13,49 @@ module.exports = {
             try {
                 await interaction.deferUpdate();
                 await interaction.channel.delete();
-            } catch (err) {
-                console.error(`[MODMAIL] Error in button interaction: ${err.message}`);
+            } catch (e) {
+                console.error(`[MODMAIL] Error in button interaction: ${e.message}`);
+            }
+        }
+
+        if (customId == "deleteMe") {
+            try {
+                await interaction.message.delete();
+            } catch (e) {
+                console.error(`[MODMAIL] Error in deleteMe button interaction: ${e.message}`);
             }
         }
 
         if (customId.startsWith('PW_')) {
             await interaction.deferUpdate();
+
+            try {
+                await interaction.user.send({
+                    content: `${messages.success.PASSWORD_RECEIVED.replaceAll("{password}", customId.replace('PW_', ''))}`,
+                    components: [
+                        new ActionRowBuilder()
+                            .addComponents(
+                                new ButtonBuilder()
+                                    .setCustomId(`deleteMe`)
+                                    .setStyle(ButtonStyle.Secondary)
+                                    .setLabel('🗑️')
+                            )
+                    ]
+                });
+            } catch {
+                await interaction.followUp({
+                    flags: MessageFlags.Ephemeral,
+                    content: `${messages.errors.PASSWORD_DM_ERROR}`
+                });
+
+                return;
+            }
+
+
             await interaction.followUp({
-                flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
-                components: [
-                    new ContainerBuilder()
-                        .addTextDisplayComponents(
-                            new TextDisplayBuilder()
-                                .setContent(`\`\`\`${customId.replace('PW_', '')}\`\`\``)
-                        )
-                ]
-            })
+                flags: MessageFlags.Ephemeral,
+                content: `${messages.success.PASSWORD_DM_SUCCESS}`
+            });
         }
     },
 };
