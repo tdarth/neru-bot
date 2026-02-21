@@ -24,6 +24,6 @@ module.exports = {
         if (userStatus?.banned) return await interaction.reply(messages.errors.USER_ALREADY_BANNED.replaceAll('{user}', `${formatUser(user)}`).replaceAll('{reason}', userStatus.reason ? `(\`${userStatus.reason}\`)` : ''));
 
         await addBannedUser(interaction.guild.id, user.id, reason || 'No reason specified.');
-        await interaction.reply(messages.success.USER_BANNED.replaceAll('{user}', formatUser(user)).replaceAll('{reason}', reason ? `(\`${reason}\`)` : ''));
+        await interaction.reply({content: messages.success.USER_BANNED.replaceAll('{user}', formatUser(user)).replaceAll('{reason}', reason ? `(\`${reason}\`)` : ''), allowedMentions: { repliedUser: true, parse: [] }});
     }
 };

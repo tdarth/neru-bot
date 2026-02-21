@@ -22,6 +22,6 @@ module.exports = {
         if (!userStatus?.banned) return await interaction.reply(messages.errors.USER_ALREADY_UNBANNED.replaceAll('{user}', `${formatUser(user)}`));
 
         await removeBannedUser(interaction.guild.id, user.id);
-        await interaction.reply(messages.success.USER_UNBANNED.replaceAll('{user}', formatUser(user)));
+        await interaction.reply({content: messages.success.USER_UNBANNED.replaceAll('{user}', formatUser(user)), allowedMentions: { repliedUser: true, parse: [] }});
     }
 };
