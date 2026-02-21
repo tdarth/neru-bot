@@ -7,9 +7,9 @@ const { formatUser } = require('../../utils/formatUser');
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
         .setName('ban')
-        .setDescription("Ban a user from creating ModMail tickets")
-        .addUserOption(option => option.setName('user').setDescription('The user to ban').setRequired(true))
-        .addStringOption(option => option.setName('reason').setDescription('The reason to ban this user. This will be shown to the member, leave blank otherwise')),
+        .setDescription("Ban a user from ModMail")
+        .addUserOption(option => option.setName('user').setDescription('The user to ban from ModMail').setRequired(true))
+        .addStringOption(option => option.setName('reason').setDescription('The reason to ban this user from ModMail. This will be shown to the member, leave blank otherwise')),
     async execute(interaction) {
         if (!interaction.guild) return await interaction.reply({ flags: MessageFlags.Ephemeral, content: messages.errors.NOT_IN_SERVER });
         if (!interaction.member.roles.cache.some(role => staffRoles.includes(role.id))) return await interaction.reply({ flags: MessageFlags.Ephemeral, content: messages.errors.MISSING_PERMISSION });
