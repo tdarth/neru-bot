@@ -24,6 +24,18 @@ async function init() {
 
     const conn = await pool.getConnection();
     await conn.query(createTableSQL);
+    const createBannedSQL = `
+    CREATE TABLE IF NOT EXISTS banned (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      guild_id VARCHAR(255) NOT NULL,
+      user_id VARCHAR(255) NOT NULL,
+      reason TEXT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE KEY unique_banned (guild_id, user_id)
+    )
+  `;
+
+    await conn.query(createBannedSQL);
     conn.release();
 }
 

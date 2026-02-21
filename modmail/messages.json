@@ -3,7 +3,9 @@
         "success": {
             "MODMAIL_CLOSED": ":white_check_mark: **ModMail** closed",
             "PASSWORD_DM_SUCCESS": ":white_check_mark: **The transcript password was directly messaged to you.**",
-            "PASSWORD_RECEIVED": "**Transcript Password:**\n```{password}```"
+            "PASSWORD_RECEIVED": "**Transcript Password:**\n```{password}```",
+            "USER_BANNED": ":white_check_mark: {user} was banned. {reason}",
+            "USER_UNBANNED": ":white_check_mark: {user} was unbanned."
         },
 
         "info": {
@@ -21,7 +23,11 @@
             "NOT_IN_SERVER": ":x: **Error:** You cannot use this command here.",
             "NO_FORWARDED_MESSAGES": ":x: **Error:** Forwarded messages are not supported. Please provide a screenshot or message link.",
             "USER_HAS_DMS_DISABLED": ":x: **Error:** User has DMs disabled, or they left the server. This user cannot be contacted.",
-            "PASSWORD_DM_ERROR": ":x: **Error:** An error occurred while attempting to directly message you. Please check your Discord settings and try again."
+            "PASSWORD_DM_ERROR": ":x: **Error:** An error occurred while attempting to directly message you. Please check your Discord settings and try again.",
+            "USER_ALREADY_BANNED": ":x: **Error:** {user} is already banned. {reason}",
+            "USER_ALREADY_UNBANNED": ":x: **Error:** {user} is not banned.",
+            "BANNED_USER_OPEN": ":x: **Error:** You are banned from ModMail. {reason}",
+            "NO_BOTS_ALLOWED": ":x: **Error:** You cannot use this command on bots."
         }
     }
 }

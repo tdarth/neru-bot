@@ -1,8 +1,9 @@
 const { Events, ChannelType, EmbedBuilder, ThreadAutoArchiveDuration, MessageFlags, ContainerBuilder, TextDisplayBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } = require('discord.js');
-const { getChannelByUser, addUserToChannel, clearChannel } = require('../db/utils/helper');
+const { getChannelByUser, addUserToChannel, clearChannel, isUserBanned } = require('../db/utils/helper');
 const { getChannelFromId } = require('../utils/getChannelFromId');
 const { messages } = require('../messages.json');
 const { modmailCategoryId, modmailLogChannelId, modmailChannelForThreadId, modmailChannelType, modmailPingStaffOnCreation, staffRoles, modmailWelcomeMessage, modmailShowUserTypingIndicators, modmailUserTypingIndicatorsFetchCount, modmailUseBuiltInTypingIndicators } = require('../config.json');
+const { formatUser } = require('../utils/formatUser');
 
 async function createChannel(guild, channelName, authorId, type = 0, channelId = null, client = null) {
     let channel = null;
@@ -34,6 +35,10 @@ module.exports = {
     async execute(message) {
         if (message.channel.type !== ChannelType.DM) return;
         if (message.author.bot) return;
+        
+        const bannedStatus = await isUserBanned(process.env.GUILD_ID, message.author.id);
+        if (bannedStatus.banned) return message.reply(messages.errors.BANNED_USER_OPEN.replaceAll('{reason}', bannedStatus.reason == 'No reason specified.' ? '' : `(\`${bannedStatus.reason}\`)`));
+
         if (message.messageSnapshots.first()) {
             await message.reply(messages.errors.NO_FORWARDED_MESSAGES);
             return await message.react('❌');
@@ -75,7 +80,7 @@ module.exports = {
                             new ContainerBuilder()
                                 .addTextDisplayComponents(
                                     new TextDisplayBuilder()
-                                        .setContent(`:inbox_tray: **Opened** by <@!${author.id}> (**${author.username || 'unknown'}**, \`${author.id}\`)\n> <t:${Math.floor(Date.now() / 1000)}:f>`)
+                                        .setContent(`:inbox_tray: **Opened** by ${formatUser(author)}\n> <t:${Math.floor(Date.now() / 1000)}:f>`)
                                 ),
                             new ActionRowBuilder()
                                 .addComponents(

@@ -1,11 +1,12 @@
 const { SlashCommandSubcommandBuilder, MessageFlags, EmbedBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ContainerBuilder, TextDisplayBuilder } = require('discord.js');
+const { createTranscript } = require('discord-html-transcripts');
 const { staffRoles, modmailLogChannelId, emojis, modmailChannelType, modmailChannelForThreadId } = require('../../config.json');
 const { messages } = require('../../messages.json');
 const { clearChannel, getUserByChannel } = require('../../db/utils/helper');
 const { getDiscUserById } = require('../../utils/getDiscUserById');
 const { getChannelFromId } = require('../../utils/getChannelFromId');
 const { makeTranscriptFile } = require('../../utils/makeTranscriptFile');
-const { createTranscript } = require("discord-html-transcripts");
+const { formatUser } = require('../../utils/formatUser');
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
@@ -54,7 +55,7 @@ module.exports = {
                     new ContainerBuilder()
                         .addTextDisplayComponents(
                             new TextDisplayBuilder()
-                                .setContent(`:outbox_tray: **Closed** by <@!${interaction.user.id}> (**${interaction.user.username || 'unknown'}**, \`${interaction.user.id}\`)\n> <t:${Math.floor(Date.now() / 1000)}:f>\n> Opened by: <@!${user.id}> (**${user.username || 'unknown'}**, \`${user.id}\`)\n> Reason: \`${reason || 'N/A'}\`\n> Closed Silently: \`${silentClose ? 'true' : 'false'}\`${notes ? `\n> Notes: \`${notes}\`` : ''}`)
+                                .setContent(`:outbox_tray: **Closed** by ${formatUser(interaction.user)}\n> <t:${Math.floor(Date.now() / 1000)}:f>\n> Opened by: ${formatUser(user)}\n> Reason: \`${reason || 'N/A'}\`\n> Closed Silently: \`${silentClose ? 'true' : 'false'}\`${notes ? `\n> Notes: \`${notes}\`` : ''}`)
                         )
                 ],
                 allowedMentions: {

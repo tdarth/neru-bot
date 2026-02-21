@@ -52,11 +52,44 @@ async function updateUserChannel(guildId, channelId, userId) {
   await pool.query(sql, [channelId, guildId, userId]);
 }
 
+async function addBannedUser(guildId, userId, reason = null) {
+  const sql = `
+    INSERT INTO banned (guild_id, user_id, reason)
+    VALUES (?, ?, ?)
+    ON DUPLICATE KEY UPDATE reason = VALUES(reason)
+  `;
+  await pool.query(sql, [guildId, userId, reason]);
+}
+
+async function removeBannedUser(guildId, userId) {
+  const sql = `
+    DELETE FROM banned
+    WHERE guild_id = ? AND user_id = ?
+  `;
+  await pool.query(sql, [guildId, userId]);
+}
+
+async function isUserBanned(guildId, userId) {
+  const sql = `
+    SELECT reason FROM banned
+    WHERE guild_id = ? AND user_id = ?
+    LIMIT 1
+  `;
+  const [rows] = await pool.query(sql, [guildId, userId]);
+  if (rows.length > 0) {
+    return { banned: true, reason: rows[0].reason };
+  }
+  return { banned: false, reason: null };
+}
+
 module.exports = {
   addUserToChannel,
   getChannelByUser,
   removeUserFromChannel,
   clearChannel,
   updateUserChannel,
-  getUserByChannel
+  getUserByChannel,
+  addBannedUser,
+  removeBannedUser,
+  isUserBanned
 };
