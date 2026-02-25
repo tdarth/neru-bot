@@ -3,7 +3,7 @@ const replyWithText = require("../../utils/replyWithText");
 const sendToChannelWithText = require("../../utils/sendToChannelWithText");
 const { AttachmentBuilder } = require('discord.js');
 
-const allowedRoles = ["1369834948386623518", "1390101291589697727", "1369249484772610079"];
+const allowedRoles = ["1369834948386623518", "1390101291589697727", "1369249484772610079", "1459789850302742682"];
 const ARCHIVE_CHANNEL_ID = "1369842594003292211";
 
 module.exports = {
