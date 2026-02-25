@@ -4,6 +4,7 @@ const { emojis } = require('../config.json')
 const { getSessionToken } = require('../utils/lastfm/getSessionToken');
 const { getUserData } = require('../utils/lastfm/getUserData');
 const { getRecentTracks } = require('../utils/lastfm/getRecentTracks');
+const { getSongInfo } = require('../utils/lastfm/getSongInfo');
 
 module.exports = {
     data: new SlashCommandSubcommandBuilder()
@@ -32,6 +33,12 @@ module.exports = {
 
         if (!track || !stats) return await interaction.reply(new ContainerMessage(`${emojis.ERROR} **An error occurred while fetching this data.**`).isEphemeral().build());
 
+        let trackImage = track?.image?.at(-1)?.['#text']?.replace('/300x300', '') || null;
+        if (!trackImage) {
+            const fetchedTrackImage = await getSongInfo(track?.artist['#text'], track?.name);
+            trackImage = fetchedTrackImage || 'https://lastfm.freetls.fastly.net/i/u/2a96cbd8b46e442fc41c2b86b821562f.png';
+        }
+
         const container = new ContainerBuilder()
             .addSectionComponents(
                 new SectionBuilder()
@@ -41,7 +48,7 @@ module.exports = {
                     )
                     .setThumbnailAccessory(
                         new ThumbnailBuilder()
-                            .setURL(`${track?.image?.at(-1)?.['#text']?.replace('/300x300', '') || 'https://lastfm.freetls.fastly.net/i/u/2a96cbd8b46e442fc41c2b86b821562f.png'}`)
+                            .setURL(`${trackImage}`)
                     )
             )
             .addSeparatorComponents(
