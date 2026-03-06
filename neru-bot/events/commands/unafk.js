@@ -1,13 +1,13 @@
 const { MessageFlags, ContainerBuilder, TextDisplayBuilder } = require('discord.js');
 const replyWithText = require('../../utils/replyWithText');
-const { prefix, staffRoles } = require('../../config.json');
+const { prefix, staffRoles, emojis } = require('../../config.json');
 const { afkUsers, deleteAfkUser } = require('../../utils/afkHelper');
 
 module.exports = {
     name: 'unafk',
     trigger: (message) => message.content.startsWith(`${prefix}unafk`),
     async execute(message) {
-        if (!message.member.roles.cache.some(role => staffRoles.includes(role.id))) return await message.reply('<:teto_think:1393360916090982510>');
+        if (!message.member.roles.cache.some(role => staffRoles.includes(role.id))) return await message.reply(emojis.neru_hmm);
         const id = message.content.replace(`${prefix}unafk`, '').replace('<', '').replace('>', '').replace('@', '').trim();
         if (!id) return replyWithText(message, ':x: **Usage: ?unafk <user/userid>**');
         const member = await message.guild.members.fetch(id);
