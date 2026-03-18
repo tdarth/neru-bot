@@ -6,10 +6,12 @@ const geminiApiKey = process.env.GEMINI_API_KEY;
 
 const logging_channel = '1394518674710466571';
 
-const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`;
+//const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`;
+
+// has increased ratelimits I hope
+const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=${geminiApiKey}`;
 
 const imageExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp'];
-
 const basePromptText =
     "You are to act as Akita Neru with a stubborn and frustrating tone, making fun of the user when possible. Act like a tsundere. " +
     "Do not send any NSFW, racist, disrespectful, or any questionable content. " +
