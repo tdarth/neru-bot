@@ -94,7 +94,7 @@ module.exports = {
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
                 console.error('API error:', errorData);
-                return await replyWithText(message, ":x: **An error occurred.**");
+                return await replyWithText(message, ":x: Ratelimited. **Please try again later.** <:silli_rin:1451309032429326337>");
             }
 
             const data = await response.json();
