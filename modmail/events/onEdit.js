@@ -76,7 +76,7 @@ module.exports = {
             await newMessage.react('✏️');
         } catch (err) {
             console.log(`[MODMAIL] Error in sending edit message to ${modmailChannel.id}: ${err}`);
-            await newMessage.react('❌');
+            await newMessage.reply(messages.errors.MESSAGE_NOT_EDITED);
         }
     },
 };
