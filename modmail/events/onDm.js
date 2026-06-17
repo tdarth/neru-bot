@@ -1,5 +1,5 @@
 const { Events, ChannelType, EmbedBuilder, ThreadAutoArchiveDuration, MessageFlags, ContainerBuilder, TextDisplayBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } = require('discord.js');
-const { getChannelByUser, addUserToChannel, clearChannel, isUserBanned } = require('../db/utils/helper');
+const { getChannelByUser, addUserToChannel, clearChannel, isUserBanned, associateMessageToEmbed } = require('../db/utils/helper');
 const { getChannelFromId } = require('../utils/getChannelFromId');
 const { messages } = require('../messages.json');
 const { modmailCategoryId, modmailLogChannelId, modmailChannelForThreadId, modmailChannelType, modmailPingStaffOnCreation, staffRoles, modmailWelcomeMessage, modmailShowUserTypingIndicators, modmailUserTypingIndicatorsFetchCount, modmailUseBuiltInTypingIndicators } = require('../config.json');
@@ -187,10 +187,12 @@ module.exports = {
             }
 
             if (!didEdit) {
-                await modmailChannel.send({
+                const finalEmbed = await modmailChannel.send({
                     embeds: [embed],
                     ...(files && { files })
                 });
+
+                await associateMessageToEmbed(message.id, finalEmbed.id, modmailChannel.id);
             }
 
             await message.react('✅');

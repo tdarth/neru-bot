@@ -82,6 +82,43 @@ async function isUserBanned(guildId, userId) {
   return { banned: false, reason: null };
 }
 
+async function associateMessageToEmbed(userMessageId, embedMessageId, modmailChannelId) {
+  const sql = `
+    INSERT INTO message_associations (channel_id, user_message_id, embed_message_id)
+    VALUES (?, ?, ?)
+    ON DUPLICATE KEY UPDATE embed_message_id = VALUES(embed_message_id)
+  `;
+  await pool.query(sql, [modmailChannelId, userMessageId, embedMessageId]);
+}
+
+async function getEmbedMessageFromUser(userMessageId, modmailChannelId) {
+  const sql = `
+    SELECT embed_message_id FROM message_associations
+    WHERE channel_id = ? AND user_message_id = ?
+    LIMIT 1
+  `;
+  const [rows] = await pool.query(sql, [modmailChannelId, userMessageId]);
+  return rows.length > 0 ? rows[0].embed_message_id : null;
+}
+
+async function getUserMessageFromEmbed(embedMessageId, modmailChannelId) {
+  const sql = `
+    SELECT user_message_id FROM message_associations
+    WHERE channel_id = ? AND embed_message_id = ?
+    LIMIT 1
+  `;
+  const [rows] = await pool.query(sql, [modmailChannelId, embedMessageId]);
+  return rows.length > 0 ? rows[0].user_message_id : null;
+}
+
+async function clearMessageAssociations(modmailChannelId) {
+  const sql = `
+    DELETE FROM message_associations
+    WHERE channel_id = ?
+  `;
+  await pool.query(sql, [modmailChannelId]);
+}
+
 module.exports = {
   addUserToChannel,
   getChannelByUser,
@@ -93,3 +130,9 @@ module.exports = {
   removeBannedUser,
   isUserBanned
 };
+
+// export new functions
+module.exports.associateMessageToEmbed = associateMessageToEmbed;
+module.exports.getEmbedMessageFromUser = getEmbedMessageFromUser;
+module.exports.getUserMessageFromEmbed = getUserMessageFromEmbed;
+module.exports.clearMessageAssociations = clearMessageAssociations;

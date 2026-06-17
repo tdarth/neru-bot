@@ -10,7 +10,7 @@
 
         "info": {
             "WELCOME_MESSAGE": "Ticket opened by {user}. (**{username}**, `{userid}`)\n\n__Prefixes__ (start your message with the following symbol)\n> `=` Sent anonymously to the user.\n> `-` Message ignored, not sent to user.\n\n__Commands__\n> </modmail ban:1416319768675356766> Ban a user from using ModMail.\n> </modmail check:1416319768675356766> Shows information about the user who opened this ticket.\n> </modmail close:1416319768675356766> Close the ModMail optionally with a reason/silently.\n\n-# :pushpin: Only messages that receive a :white_check_mark: reaction are shown to the user.\n-# **__Please refrain from pinging non-staff members, as doing so grants them access to view this channel.__**",
-            "OPENED_MODMAIL": "```Thank you for the message! We'll get back to you shortly.```\nIf you haven't already, please specify your inquiry. You __**will not**__ hear back from us if you begin your ticket without a question or concern.\n-# Additionally, please keep Direct Messages from our server in Discord's Content & Social settings __enabled__ for the remainder of this ticket.",
+            "OPENED_MODMAIL": "```Thank you for the message!```\nIf you haven't already, please specify your inquiry. You __**will not**__ hear back from us if you begin your ticket without a question or concern.\n-# Additionally, please keep Direct Messages from our server in Discord's Content & Social settings __enabled__ for the remainder of this ticket.",
             "USER_START_TYPING": "<a:typing:1456444126437310599>‎ ‎ **Started typing**",
             "DELETE_BUTTON_INFO": "Attachments are not stored."
         },
@@ -27,7 +27,9 @@
             "USER_ALREADY_BANNED": ":x: **Error:** {user} is already banned from ModMail. {reason}",
             "USER_ALREADY_UNBANNED": ":x: **Error:** {user} is not banned from ModMail.",
             "BANNED_USER_OPEN": ":x: **Error:** You are banned from ModMail. {reason}",
-            "NO_BOTS_ALLOWED": ":x: **Error:** You cannot use this command on bots."
+            "NO_BOTS_ALLOWED": ":x: **Error:** You cannot use this command on bots.",
+            "EDITED_MSG_WITHOUT_OPEN_TICKET": ":x: **Error:** Your edited message was not sent to staff. Please open a ticket by sending a new message.",
+            "MM_MSG_NOT_DELETED_FOR_USER": ":x: **Error:** {user}, the message you deleted failed to delete on the user's end. They will still see the message."
         }
     }
 }

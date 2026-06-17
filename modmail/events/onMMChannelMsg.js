@@ -2,7 +2,7 @@ const { Events, ChannelType, EmbedBuilder, AttachmentBuilder } = require('discor
 const { getDiscUserById } = require('../utils/getDiscUserById');
 const { messages } = require('../messages.json');
 const { prefixes, modmailChannelType } = require('../config.json');
-const { getUserByChannel } = require('../db/utils/helper');
+const { getUserByChannel, associateMessageToEmbed } = require('../db/utils/helper');
 
 module.exports = {
     name: Events.MessageCreate,
@@ -46,10 +46,12 @@ module.exports = {
             }
 
             try {
-                await user.send({
+                const finalEmbed = await user.send({
                     embeds: [embed],
                     ...(files && { files })
                 });
+
+                await associateMessageToEmbed(message.id, finalEmbed.id, message.channel.id);
                 await message.react('✅');
             } catch (err) {
                 if (String(err).startsWith("DiscordAPIError[50007]")) await message.reply(messages.errors.USER_HAS_DMS_DISABLED);

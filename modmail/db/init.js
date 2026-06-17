@@ -36,6 +36,18 @@ async function init() {
   `;
 
     await conn.query(createBannedSQL);
+    const createMessageAssocSQL = `
+    CREATE TABLE IF NOT EXISTS message_associations (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      channel_id VARCHAR(255) NOT NULL,
+      user_message_id VARCHAR(255) NOT NULL,
+      embed_message_id VARCHAR(255) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE KEY unique_message_assoc (channel_id, user_message_id)
+    )
+  `;
+
+    await conn.query(createMessageAssocSQL);
     conn.release();
 }
 

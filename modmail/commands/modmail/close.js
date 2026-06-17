@@ -2,7 +2,7 @@ const { SlashCommandSubcommandBuilder, MessageFlags, EmbedBuilder, AttachmentBui
 const { createTranscript } = require('discord-html-transcripts');
 const { staffRoles, modmailLogChannelId, emojis, modmailChannelType, modmailChannelForThreadId } = require('../../config.json');
 const { messages } = require('../../messages.json');
-const { clearChannel, getUserByChannel } = require('../../db/utils/helper');
+const { clearChannel, getUserByChannel, clearMessageAssociations } = require('../../db/utils/helper');
 const { getDiscUserById } = require('../../utils/getDiscUserById');
 const { getChannelFromId } = require('../../utils/getChannelFromId');
 const { makeTranscriptFile } = require('../../utils/makeTranscriptFile');
@@ -100,6 +100,8 @@ module.exports = {
                 })
             }
         }
+
+        await clearMessageAssociations(interaction.channel.id);
 
         const deleteButton = new ButtonBuilder()
             .setCustomId(`deleteChannel_${interaction.channel.id}`)
