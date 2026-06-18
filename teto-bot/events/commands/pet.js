@@ -13,7 +13,7 @@ module.exports = {
 
         let member;
 
-        if (message.guild) member = await message.guild.members.fetch(userId);
+        if (message.guild) member = await message.guild.members.fetch(user.id);
 
         const res = await fetch(`https://api.some-random-api.com/premium/petpet?avatar=${member ? member.displayAvatarURL({extension: 'png'}) : user.displayAvatarURL({extension: 'png'})}`);
         if (!res.ok) return await replyWithText(message, ':x: **An error occurred. Yikes!**');
