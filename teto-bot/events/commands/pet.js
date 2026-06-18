@@ -11,7 +11,11 @@ module.exports = {
         const user = message.mentions.users.first() || message.author;
         if (!user) return await replyWithText(message, ':x: **An error occurred. Yikes!**');
 
-        const res = await fetch(`https://api.some-random-api.com/premium/petpet?avatar=${user.member ? user.member.displayAvatarURL({extension: 'png'}) : user.displayAvatarURL({extension: 'png'})}`);
+        let member;
+
+        if (message.guild) member = await message.guild.members.fetch(userId);
+
+        const res = await fetch(`https://api.some-random-api.com/premium/petpet?avatar=${member ? member.displayAvatarURL({extension: 'png'}) : user.displayAvatarURL({extension: 'png'})}`);
         if (!res.ok) return await replyWithText(message, ':x: **An error occurred. Yikes!**');
         
         await message.reply({
