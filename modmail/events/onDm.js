@@ -2,32 +2,37 @@ const { Events, ChannelType, EmbedBuilder, ThreadAutoArchiveDuration, MessageFla
 const { getChannelByUser, addUserToChannel, clearChannel, isUserBanned, associateMessageToEmbed } = require('../db/utils/helper');
 const { getChannelFromId } = require('../utils/getChannelFromId');
 const { messages } = require('../messages.json');
-const { modmailCategoryId, modmailLogChannelId, modmailChannelForThreadId, modmailChannelType, modmailPingStaffOnCreation, staffRoles, modmailWelcomeMessage, modmailShowUserTypingIndicators, modmailUserTypingIndicatorsFetchCount, modmailUseBuiltInTypingIndicators } = require('../config.json');
+const { modmailCategoryId, modmailLogChannelId, modmailChannelForThreadId, modmailChannelType, modmailPingStaffOnCreation, staffRoles, modmailWelcomeMessage, modmailShowUserTypingIndicators, modmailUserTypingIndicatorsFetchCount, modmailUseBuiltInTypingIndicators, modmailShouldAddChannelPrefix, modmailChannelPrefix } = require('../config.json');
 const { formatUser } = require('../utils/formatUser');
 
 async function createChannel(guild, channelName, authorId, type = 0, channelId = null, client = null) {
     let channel = null;
 
-    if (type == 0) {
-        channel = await guild.channels.create({
-            name: channelName,
-            type: ChannelType.GuildText,
-            topic: authorId,
-            parent: modmailCategoryId
-        });
+    try {
+        if (type == 0) {
+            channel = await guild.channels.create({
+                name: channelName,
+                type: ChannelType.GuildText,
+                topic: authorId,
+                parent: modmailCategoryId
+            });
 
-    } else if (type == 1) {
-        channelToCreateThread = await getChannelFromId(client, channelId);
-        channel = await channelToCreateThread.threads.create({
-            name: channelName,
-            autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
-            type: ChannelType.PrivateThread,
-            invitable: false
-        })
+        } else if (type == 1) {
+            channelToCreateThread = await getChannelFromId(client, channelId);
+            channel = await channelToCreateThread.threads.create({
+                name: channelName,
+                autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
+                type: ChannelType.PrivateThread,
+                invitable: false
+            })
+        }
+
+        await addUserToChannel(guild.id, channel.id, authorId);
+        return channel || null;
+    } catch (e) {
+        console.log(`[MODMAIL] Error creating channel: ${e}`);
+        return false;
     }
-
-    await addUserToChannel(guild.id, channel.id, authorId);
-    return channel || null;
 }
 
 module.exports = {
@@ -35,7 +40,7 @@ module.exports = {
     async execute(message) {
         if (message.channel.type !== ChannelType.DM) return;
         if (message.author.bot) return;
-        
+
         const bannedStatus = await isUserBanned(process.env.GUILD_ID, message.author.id);
         if (bannedStatus.banned) return message.reply(messages.errors.BANNED_USER_OPEN.replaceAll('{reason}', bannedStatus.reason == 'No reason specified.' ? '' : `(\`${bannedStatus.reason}\`)`));
 
@@ -56,7 +61,10 @@ module.exports = {
             modmailChannel = await getChannelFromId(client, modmailChannelId);
             if (!modmailChannel) {
                 await clearChannel(process.env.GUILD_ID, modmailChannelId);
-                modmailChannel = await createChannel(guild, `modmail-${author?.username || 'unknown'}`, author.id, modmailChannelType, modmailChannelForThreadId, client);
+                modmailChannel = await createChannel(guild, `${modmailShouldAddChannelPrefix ? `${modmailChannelPrefix}` : ''}modmail-${author?.username || 'unknown'}`, author.id, modmailChannelType, modmailChannelForThreadId, client);
+                
+                if (!modmailChannel) return author.send(messages.errors.MODMAIL_CHANNEL_CREATE_ERROR);
+                
                 await author.send(messages.info.OPENED_MODMAIL);
 
                 if (modmailPingStaffOnCreation) await modmailChannel.send(staffRoles.map(role => `<@&${role}>`).join(', '));
@@ -97,7 +105,10 @@ module.exports = {
                 }
             }
         } else {
-            modmailChannel = await createChannel(guild, `modmail-${author?.username || 'unknown'}`, author.id, modmailChannelType, modmailChannelForThreadId, client);
+            modmailChannel = await createChannel(guild, `${modmailShouldAddChannelPrefix ? `${modmailChannelPrefix}` : ''}modmail-${author?.username || 'unknown'}`, author.id, modmailChannelType, modmailChannelForThreadId, client);
+            
+            if (!modmailChannel) return author.send(messages.errors.MODMAIL_CHANNEL_CREATE_ERROR);
+            
             await author.send(messages.info.OPENED_MODMAIL);
 
             if (modmailPingStaffOnCreation) await modmailChannel.send(staffRoles.map(role => `<@&${role}>`).join(', '));

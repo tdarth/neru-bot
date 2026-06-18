@@ -30,7 +30,8 @@
             "NO_BOTS_ALLOWED": ":x: **Error:** You cannot use this command on bots.",
             "EDITED_MSG_WITHOUT_OPEN_TICKET": ":x: **Error:** Your edited message was not sent to staff. Please open a ticket by sending a new message.",
             "MM_MSG_NOT_DELETED_FOR_USER": ":x: **Error:** {user}, the message you deleted failed to delete on the user's end. They will still see the message.",
-            "MESSAGE_NOT_EDITED": ":x: **Error:** The bot failed to edit your message. Your updated message was not shared."
+            "MESSAGE_NOT_EDITED": ":x: **Error:** The bot failed to edit your message. Your updated message was not shared.",
+            "MODMAIL_CHANNEL_CREATE_ERROR": ":x: **Error:** An error occurred while creating your ModMail channel. If this persists, please directly message @tdarth_."
         }
     }
 }

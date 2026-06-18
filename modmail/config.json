@@ -19,5 +19,7 @@
     "modmailShowUserTypingIndicators": true,
     "modmailUserTypingIndicatorsFetchCount": 10,
     "modmailUserTypingIndicatorsDeleteTime": 10,
-    "modmailUseBuiltInTypingIndicators": true
+    "modmailUseBuiltInTypingIndicators": true,
+    "modmailShouldAddChannelPrefix": true,
+    "modmailChannelPrefix": "[OPEN] "
 }
