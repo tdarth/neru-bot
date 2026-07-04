@@ -11,7 +11,12 @@ module.exports = {
             return await message.delete();
         }
 
-        await message.author.send(`:warning: **You were kicked for triggering an anti-bot detection.**\nYou can join back here: https://discord.gg/szGWR6D7AN.`);
+        try {
+            await message.author.send(`:warning: **You were kicked for triggering an anti-bot detection.**\nYou can join back here: https://discord.gg/szGWR6D7AN.`);
+        } catch (e) {
+            console.log(`[NERU] Honeypot: failed to dm ${message.member.id} (${message.author.username})`);
+        }
+
         await message.member.ban({ deleteMessageSeconds: 60, reason: "Triggered honeypot" });
 
         const guild = message.guild;
