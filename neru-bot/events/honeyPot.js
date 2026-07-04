@@ -13,7 +13,7 @@ module.exports = {
         await message.user.send(`:warning: You were banned for **1 second** under a bot account suspicion.`)
         await message.member.ban( { deleteMessageSeconds: 60, reason: "Triggered honeypot" } )
 
-        setTimeout(() => {
+        setTimeout(async () => {
             try {
                 await message.interaction.guild.bans.remove(message.member.id);
             } catch (e) {
