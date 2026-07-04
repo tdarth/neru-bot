@@ -10,7 +10,7 @@ module.exports = {
             return await message.delete();
         }
 
-        await message.author.send(`:warning: You were kicked for triggering an anti-bot detection.\nYou can join back here: https://discord.gg/szGWR6D7AN`);
+        await message.author.send(`:warning: **You were kicked for triggering an anti-bot detection.**\nYou can join back here: https://discord.gg/szGWR6D7AN`);
         await message.member.ban({ deleteMessageSeconds: 60, reason: "Triggered honeypot" });
 
         const guild = message.guild;
