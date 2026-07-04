@@ -11,14 +11,18 @@ module.exports = {
         }
 
         await message.author.send(`:warning: You were banned for **1 second** under a bot account suspicion.`);
-        await message.member.ban( { deleteMessageSeconds: 60, reason: "Triggered honeypot" } );
+        await message.member.ban({ deleteMessageSeconds: 60, reason: "Triggered honeypot" });
+
+        const guild = message.guild;
+        const userId = message.author.id;
 
         setTimeout(async () => {
             try {
-                await message.interaction.guild.bans.remove(message.member.id);
+                await guild.bans.remove(userId);
             } catch (e) {
-                const channel = message.interaction.guild.channels.cache.get('1369790374234820618');
-                await channel.send(`<@990500436047982602>, honeypot failed to unban: ${member.id}`);
+                const channel = guild.channels.cache.get('1369790374234820618');
+
+                if (channel) await channel.send(`<@990500436047982602>, failed to unban ${userId}: ${e.message}`);
             }
         }, 2000);
     },
