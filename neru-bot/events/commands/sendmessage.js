@@ -1,4 +1,4 @@
-const { TextDisplayBuilder, ContainerBuilder, SeparatorBuilder, MessageFlags } = require('discord.js');
+const { TextDisplayBuilder, ContainerBuilder, SeparatorBuilder, MessageFlags, ActionRowBuilder, SectionBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { prefix, emojis } = require('../../config.json');
 const replyWithText = require("../../utils/replyWithText");
 
@@ -12,6 +12,32 @@ module.exports = {
 
         const arg = message.content.replace(`${prefix}sendmessage `, ``);
         switch (arg) {
+            case "honeypotbtn":
+                container.addSectionComponents(
+                    new SectionBuilder().addTextDisplayComponents(
+                        new TextDisplayBuilder().setContent(`## :wave: Hi scam bot\nIf you accidentally typed in the aforementioned channel, please press the button below.`)
+                    ).setButtonAccessory(
+                        new ButtonBuilder()
+                            .setCustomId('unhoneypot')
+                            .setStyle(ButtonStyle.Secondary)
+                            .setLabel("Return to Server")
+                    )
+                );
+
+                await message.client.channels.cache.get(message.channel.id)?.send({
+                    flags: MessageFlags.IsComponentsV2,
+                    components: [container]
+                })
+
+                break;
+            case "honeypotmsg":
+                container.addTextDisplayComponents(new TextDisplayBuilder().setContent(`## :warning: Don't send messages here.\nThis channel is to automatically mute scam bots.\n-# > Don't worry about accidentally sending a message here! You can unmute yourself at any time. *(try it out if you want)*`));
+
+                await message.client.channels.cache.get(message.channel.id)?.send({
+                    flags: MessageFlags.IsComponentsV2,
+                    components: [container]
+                })
+                break;
             case "rules":
                 container.addTextDisplayComponents(new TextDisplayBuilder().setContent(`### ${emojis.neru}${emojis.miku}${emojis.teto}\n# Server Rules\n:scroll: __Last updated:__ <t:${Math.floor(Date.now() / 1000)}:D>.`));
                 container.addSeparatorComponents(new SeparatorBuilder());

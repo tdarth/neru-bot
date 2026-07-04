@@ -1,10 +1,15 @@
 const { Events, MessageFlags, TextDisplayBuilder, ContainerBuilder, SeparatorBuilder } = require('discord.js');
-const { staffRoles } = require('../config.json');
+const { staffRoles, honeypotRoleId } = require('../config.json');
 
 module.exports = {
     name: Events.InteractionCreate,
     async execute(interaction) {
         if (!interaction.isButton()) return;
+
+        if (interaction.customId === "unhoneypot") {
+            await interaction.deferUpdate();
+            await interaction.member.roles.remove(honeypotRoleId);
+        }
 
         if (interaction.customId === "markAsResolved_button") {
             try {
