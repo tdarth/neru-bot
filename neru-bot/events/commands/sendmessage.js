@@ -15,7 +15,7 @@ module.exports = {
             case "unmutebtn":
                 container.addSectionComponents(
                     new SectionBuilder().addTextDisplayComponents(
-                        new TextDisplayBuilder().setContent(`## :wave: Hi!\nYou may return to the server at any time..`)
+                        new TextDisplayBuilder().setContent(`## :wave: Hi!\nYou may return to the server at any time.`)
                     ).setButtonAccessory(
                         new ButtonBuilder()
                             .setCustomId('unhoneypot')
