@@ -34,12 +34,12 @@ if (fs.existsSync(foldersPath)) {
       if ('data' in command && 'execute' in command) {
         client.commands.set(command.data.name, command);
       } else {
-        console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+        console.log(`[MIKU] WARNING: The command at ${filePath} is missing a required "data" or "execute" property.`);
       }
     }
   }
 } else {
-  console.log("No commands folder found. Skipping command loading.");
+  console.log("[MIKU] No commands folder found. Skipping command loading.");
 }
 
 const eventsPath = path.join(__dirname, 'events');
@@ -49,7 +49,7 @@ if (fs.existsSync(eventsPath)) {
   for (const file of eventFiles) {
     const filePath = path.join(eventsPath, file);
     const event = require(filePath);
-    console.log(`Loading event: ${filePath}`);
+    console.log(`[MIKU] Loading event: ${filePath}`);
 
     if (event.once) {
       client.once(event.name, (...args) => event.execute(...args));
@@ -58,7 +58,7 @@ if (fs.existsSync(eventsPath)) {
     }
   }
 } else {
-  console.log("No events folder found. Skipping event loading.");
+  console.log("[MIKU] No events folder found. Skipping event loading.");
 }
 
 loadTriggers(client);
@@ -69,13 +69,13 @@ client.login(token)
   .catch(err => console.error("[MIKU] Login error:", err));
 
 process.on('unhandledRejection', (reason, promise) => {
-    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    console.error('[MIKU] Unhandled Rejection at:', promise, 'reason:', reason);
 });
 
 process.on('uncaughtException', (error) => {
-    console.error('Uncaught Exception:', error);
+    console.error('[MIKU] Uncaught Exception:', error);
 });
 
 client.on('error', (error) => {
-    console.error('Discord.js client error:', error);
+    console.error('[MIKU] Discord.js client error:', error);
 });

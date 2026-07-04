@@ -5,55 +5,6 @@ const express = require('express');
 const { Client, GatewayIntentBits, Collection, MessageFlags, ContainerBuilder, TextDisplayBuilder, SeparatorBuilder } = require('discord.js');
 const { DefaultWebSocketManagerOptions: { identifyProperties } } = require("@discordjs/ws");
 
-
-// CADMIUM IMPORTS
-const crypto = require("crypto");
-const mysql = require('mysql2/promise');
-
-const AES_SECRET_KEY = process.env.AES_SECRET_KEY;
-
-function encryptJSON(json) {
-  const text = JSON.stringify(json);
-
-  const iv = crypto.randomBytes(12);
-
-  const cipher = crypto.createCipheriv("aes-256-gcm", Buffer.from(AES_SECRET_KEY, "hex"), iv);
-
-  let encrypted = cipher.update(text, "utf8", "base64");
-  encrypted += cipher.final("base64");
-
-  const authTag = cipher.getAuthTag();
-
-  return {
-    iv: iv.toString("base64"),
-    config: encrypted,
-    tag: authTag.toString("base64"),
-  };
-}
-
-const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    charset: 'utf8mb4',
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
-});
-
-async function getConfig(serverId) {
-      const [rows] = await pool.query(
-        `SELECT * FROM server_settings WHERE server_id = ?`,
-        [serverId]
-    );
-
-    if (rows.length === 0) return null;
-    return rows[0];
-}
-// ###############
-
 const loadTriggers = require('./utils/triggerCommandLoader');
 const splitIntoChunks = require('./utils/splitIntoChunks');
 const app = express();
