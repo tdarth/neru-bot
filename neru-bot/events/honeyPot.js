@@ -10,8 +10,8 @@ module.exports = {
             return await message.delete();
         }
 
-        await message.user.send(`:warning: You were banned for **1 second** under a bot account suspicion.`)
-        await message.member.ban( { deleteMessageSeconds: 60, reason: "Triggered honeypot" } )
+        await message.author.send(`:warning: You were banned for **1 second** under a bot account suspicion.`);
+        await message.member.ban( { deleteMessageSeconds: 60, reason: "Triggered honeypot" } );
 
         setTimeout(async () => {
             try {
