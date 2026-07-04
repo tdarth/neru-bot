@@ -31,7 +31,7 @@ module.exports = {
 
                 break;
             case "honeypotmsg":
-                container.addTextDisplayComponents(new TextDisplayBuilder().setContent(`## :warning: Don't send messages here.\nThis channel is to automatically mute scam bots.\n-# > Don't worry about accidentally sending a message here! You can unmute yourself at any time. *(try it out if you want)*`));
+                container.addTextDisplayComponents(new TextDisplayBuilder().setContent(`## :warning: Don't send messages here.\nThis channel is used for automatically muting scam bots.\n-# > Don't worry about accidentally sending a message here! You can unmute yourself at any time. *(try it out if you want)*`));
 
                 await message.client.channels.cache.get(message.channel.id)?.send({
                     flags: MessageFlags.IsComponentsV2,
