@@ -12,15 +12,15 @@ module.exports = {
 
         const arg = message.content.replace(`${prefix}sendmessage `, ``);
         switch (arg) {
-            case "honeypotbtn":
+            case "unmutebtn":
                 container.addSectionComponents(
                     new SectionBuilder().addTextDisplayComponents(
-                        new TextDisplayBuilder().setContent(`## :wave: Hi scam bot\nIf you accidentally typed in the aforementioned channel, please press the button below.`)
+                        new TextDisplayBuilder().setContent(`## :wave: Hi!\nYou may return to the server at any time..`)
                     ).setButtonAccessory(
                         new ButtonBuilder()
                             .setCustomId('unhoneypot')
                             .setStyle(ButtonStyle.Secondary)
-                            .setLabel("Return to Server")
+                            .setLabel("Return")
                     )
                 );
 
@@ -31,7 +31,7 @@ module.exports = {
 
                 break;
             case "honeypotmsg":
-                container.addTextDisplayComponents(new TextDisplayBuilder().setContent(`## :warning: Don't send messages here.\nThis channel is used for automatically muting scam bots.\n-# > Don't worry about accidentally sending a message here! You can unmute yourself at any time. *(try it out if you want)*`));
+                container.addTextDisplayComponents(new TextDisplayBuilder().setContent(`## :warning: Don't send messages here.\nThis channel is used for automatically banning scam bots.\n-# > You will receive a 1 second ban if you send a message here.`));
 
                 await message.client.channels.cache.get(message.channel.id)?.send({
                     flags: MessageFlags.IsComponentsV2,
