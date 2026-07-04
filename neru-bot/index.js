@@ -102,7 +102,7 @@ app.get('/config', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
+  console.log(`[NERU] Listening on port ${PORT}`);
 });
 
 identifyProperties.browser = "Discord iOS";
@@ -137,12 +137,12 @@ if (fs.existsSync(foldersPath)) {
       if ('data' in command && 'execute' in command) {
         client.commands.set(command.data.name, command);
       } else {
-        console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+        console.log(`[NERU] WARNING: The command at ${filePath} is missing a required "data" or "execute" property.`);
       }
     }
   }
 } else {
-  console.log("No commands folder found. Skipping command loading.");
+  console.log("[NERU] No commands folder found. Skipping command loading.");
 }
 
 const eventsPath = path.join(__dirname, 'events');
@@ -152,7 +152,7 @@ if (fs.existsSync(eventsPath)) {
   for (const file of eventFiles) {
     const filePath = path.join(eventsPath, file);
     const event = require(filePath);
-    console.log(`Loading event: ${filePath}`);
+    console.log(`[NERU] Loading event: ${filePath}`);
 
     if (event.once) {
       client.once(event.name, (...args) => event.execute(...args));
@@ -161,7 +161,7 @@ if (fs.existsSync(eventsPath)) {
     }
   }
 } else {
-  console.log("No events folder found. Skipping event loading.");
+  console.log("[NERU] No events folder found. Skipping event loading.");
 }
 
 loadTriggers(client);
@@ -172,13 +172,13 @@ client.login(token)
   .catch(err => console.error("[NERU] Login error:", err));
 
 process.on('unhandledRejection', (reason, promise) => {
-    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    console.error('[NERU] Unhandled Rejection at:', promise, 'reason:', reason);
 });
 
 process.on('uncaughtException', (error) => {
-    console.error('Uncaught Exception:', error);
+    console.error('[NERU] Uncaught Exception:', error);
 });
 
 client.on('error', (error) => {
-    console.error('Discord.js client error:', error);
+    console.error('[NERU] Discord.js client error:', error);
 });

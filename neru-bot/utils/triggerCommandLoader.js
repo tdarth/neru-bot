@@ -8,7 +8,7 @@ module.exports = (client) => {
   const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
   for (const file of commandFiles) {
-    console.log(`Loading command: ${file}`)
+    console.log(`[NERU] Loading command: ${file}`)
     const commandPath = path.join(commandsPath, file);
     const command = require(commandPath);
     if (command.trigger && command.execute) {
