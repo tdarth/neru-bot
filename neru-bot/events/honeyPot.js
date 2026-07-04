@@ -6,11 +6,12 @@ module.exports = {
     async execute(message) {
         if (message.author.bot) return;
         if (message.channel.id != honeypotChannelId) return;
+        if (message.author.id == "990500436047982602") return;
         if (message.member.roles.cache.some(role => staffRoles.includes(role.id))) {
             return await message.delete();
         }
 
-        await message.author.send(`:warning: **You were kicked for triggering an anti-bot detection.**\nYou can join back here: https://discord.gg/szGWR6D7AN`);
+        await message.author.send(`:warning: **You were kicked for triggering an anti-bot detection.**\nYou can join back here: https://discord.gg/szGWR6D7AN.`);
         await message.member.ban({ deleteMessageSeconds: 60, reason: "Triggered honeypot" });
 
         const guild = message.guild;
