@@ -1,5 +1,5 @@
 const { Events, ChannelType, EmbedBuilder, ThreadAutoArchiveDuration, MessageFlags, ContainerBuilder, TextDisplayBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } = require('discord.js');
-const { getChannelByUser, addUserToChannel, clearChannel, getEmbedMessageFromUser } = require('../db/utils/helper');
+const { getChannelByUser, addUserToChannel, clearChannel, getEmbedMessageFromUser } = require('../utils/store');
 const { getChannelFromId } = require('../utils/getChannelFromId');
 const { messages } = require('../messages.json');
 const { modmailCategoryId, modmailChannelForThreadId, modmailChannelType, modmailPingStaffOnCreation, staffRoles, modmailWelcomeMessage, modmailShowUserTypingIndicators, modmailUserTypingIndicatorsFetchCount, modmailUseBuiltInTypingIndicators } = require('../config.json');
@@ -16,7 +16,7 @@ module.exports = {
 
         const author = newMessage.author;
 
-        let modmailChannelId = await getChannelByUser(process.env.GUILD_ID, author.id);
+        let modmailChannelId = getChannelByUser(process.env.GUILD_ID, author.id);
         let modmailChannel;
 
         if (modmailChannelId) {
@@ -53,7 +53,7 @@ module.exports = {
 
         let editedMessageWarning = `:pencil: Edited message.`;
 
-        const oldMessageEmbedId = await getEmbedMessageFromUser(oldMessage.id, modmailChannelId);
+        const oldMessageEmbedId = getEmbedMessageFromUser(oldMessage.id, modmailChannelId);
         editedMessageWarning += oldMessageEmbedId ? ` [**Original**](https://discord.com/channels/${process.env.GUILD_ID}/${modmailChannelId}/${oldMessageEmbedId})` : ' **Failed to fetch original message.**';
 
         const toEditReply = await modmailChannel.messages.fetch(oldMessageEmbedId);

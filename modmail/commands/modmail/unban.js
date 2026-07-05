@@ -1,7 +1,7 @@
 const { SlashCommandSubcommandBuilder, MessageFlags } = require('discord.js');
 const { staffRoles } = require('../../config.json');
 const { messages } = require('../../messages.json');
-const { removeBannedUser, isUserBanned } = require('../../db/utils/helper');
+const { removeBannedUser, isUserBanned } = require('../../utils/store');
 const { formatUser } = require('../../utils/formatUser');
 
 module.exports = {
@@ -18,10 +18,10 @@ module.exports = {
         if (!user) return await interaction.reply({flags: MessageFlags.Ephemeral, content: messages.errors.CATCH_ALL_ERROR_COMMAND});
         if (user.bot) return await interaction.reply({flags: MessageFlags.Ephemeral, content: messages.errors.NO_BOTS_ALLOWED});
         
-        const userStatus = await isUserBanned(interaction.guild.id, user.id);
+        const userStatus = isUserBanned(interaction.guild.id, user.id);
         if (!userStatus?.banned) return await interaction.reply(messages.errors.USER_ALREADY_UNBANNED.replaceAll('{user}', `${formatUser(user)}`));
 
-        await removeBannedUser(interaction.guild.id, user.id);
+        removeBannedUser(interaction.guild.id, user.id);
         await interaction.reply({content: messages.success.USER_UNBANNED.replaceAll('{user}', formatUser(user)), allowedMentions: { repliedUser: true, parse: [] }});
     }
 };

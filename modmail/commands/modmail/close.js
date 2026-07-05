@@ -2,7 +2,7 @@ const { SlashCommandSubcommandBuilder, MessageFlags, EmbedBuilder, AttachmentBui
 const { createTranscript } = require('discord-html-transcripts');
 const { staffRoles, modmailLogChannelId, emojis, modmailChannelType, modmailChannelForThreadId } = require('../../config.json');
 const { messages } = require('../../messages.json');
-const { clearChannel, getUserByChannel, clearMessageAssociations } = require('../../db/utils/helper');
+const { clearChannel, getUserByChannel, clearMessageAssociations } = require('../../utils/store');
 const { getDiscUserById } = require('../../utils/getDiscUserById');
 const { getChannelFromId } = require('../../utils/getChannelFromId');
 const { makeTranscriptFile } = require('../../utils/makeTranscriptFile');
@@ -21,14 +21,14 @@ module.exports = {
         if (!interaction.channel.name.includes('modmail-') || (modmailChannelType == 1 && interaction.channel.parentId !== modmailChannelForThreadId)) return await interaction.reply({ flags: MessageFlags.Ephemeral, content: messages.errors.NOT_MODMAIL });
         if (modmailChannelType == 0 && interaction.channel.topic.includes('CLOSED')) return await interaction.reply({ flags: MessageFlags.Ephemeral, content: messages.errors.ALREADY_CLOSED });
 
-        const user = await getDiscUserById(interaction.client, interaction.channel.topic || await getUserByChannel(process.env.GUILD_ID, interaction.channel.id) || null);
+        const user = await getDiscUserById(interaction.client, interaction.channel.topic || getUserByChannel(process.env.GUILD_ID, interaction.channel.id) || null);
         if (!user) return await interaction.reply({ flags: MessageFlags.Ephemeral, content: messages.errors.NOT_MODMAIL });
 
         const reason = interaction?.options?.getString('reason') || null;
         const silentClose = interaction?.options?.getString('silent-close') || null;
         const notes = interaction?.options?.getString('notes') || null;
 
-        await clearChannel(process.env.GUILD_ID, interaction.channel.id);
+        clearChannel(process.env.GUILD_ID, interaction.channel.id);
         if (modmailChannelType == 0) await interaction.channel.edit({ topic: `CLOSED - ${interaction.channel.topic}` });
 
         const embed = new EmbedBuilder();
@@ -101,7 +101,7 @@ module.exports = {
             }
         }
 
-        await clearMessageAssociations(interaction.channel.id);
+        clearMessageAssociations(interaction.channel.id);
 
         const deleteButton = new ButtonBuilder()
             .setCustomId(`deleteChannel_${interaction.channel.id}`)

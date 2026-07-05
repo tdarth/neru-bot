@@ -1,5 +1,5 @@
 const { Events, ChannelType, EmbedBuilder, ThreadAutoArchiveDuration, MessageFlags, ContainerBuilder, TextDisplayBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } = require('discord.js');
-const { getChannelByUser, addUserToChannel, clearChannel, isUserBanned, getEmbedMessageFromUser } = require('../db/utils/helper');
+const { getChannelByUser, getEmbedMessageFromUser } = require('../utils/store');
 const { getChannelFromId } = require('../utils/getChannelFromId');
 const { messages } = require('../messages.json');
 const { modmailCategoryId, modmailChannelForThreadId, modmailChannelType, modmailPingStaffOnCreation, staffRoles, modmailWelcomeMessage, modmailShowUserTypingIndicators, modmailUserTypingIndicatorsFetchCount, modmailUseBuiltInTypingIndicators } = require('../config.json');
@@ -16,7 +16,7 @@ module.exports = {
 
         const author = message.author;
 
-        let modmailChannelId = await getChannelByUser(process.env.GUILD_ID, author.id);
+        let modmailChannelId = getChannelByUser(process.env.GUILD_ID, author.id);
         let modmailChannel;
 
         if (modmailChannelId) {
@@ -30,7 +30,7 @@ module.exports = {
 
         let deletedMessageWarning = `:wastebasket: The user deleted this message.`;
 
-        const oldMessageEmbedId = await getEmbedMessageFromUser(message.id, modmailChannelId);
+        const oldMessageEmbedId = getEmbedMessageFromUser(message.id, modmailChannelId);
         deletedMessageWarning += oldMessageEmbedId ? ` [**Original**](https://discord.com/channels/${process.env.GUILD_ID}/${modmailChannelId}/${oldMessageEmbedId})` : ' **Failed to fetch original message.**';
 
         const toEditReply = await modmailChannel.messages.fetch(oldMessageEmbedId);

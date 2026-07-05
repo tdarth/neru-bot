@@ -1,7 +1,7 @@
 const { Events, EmbedBuilder } = require('discord.js');
 const { messages } = require('../messages.json');
 const { modmailShowUserTypingIndicators, modmailUseBuiltInTypingIndicators, modmailUserTypingIndicatorsFetchCount, modmailUserTypingIndicatorsDeleteTime } = require('../config.json');
-const { getChannelByUser } = require('../db/utils/helper');
+const { getChannelByUser } = require('../utils/store');
 const { getChannelFromId } = require('../utils/getChannelFromId');
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
         if (typing.guild) return;
         if (typing.user.bot) return;
 
-        const modmailChannelId = await getChannelByUser(process.env.GUILD_ID, typing?.user?.id) || null;
+        const modmailChannelId = getChannelByUser(process.env.GUILD_ID, typing?.user?.id) || null;
         if (!modmailChannelId) return;
 
         const modmailChannel = await getChannelFromId(typing.client, modmailChannelId) || null;

@@ -1,7 +1,7 @@
 const { SlashCommandSubcommandBuilder, MessageFlags } = require('discord.js');
 const { staffRoles, modmailChannelType, modmailChannelForThreadId } = require('../../config.json');
 const { messages } = require('../../messages.json');
-const { getUserByChannel } = require('../../db/utils/helper');
+const { getUserByChannel } = require('../../utils/store');
 const { getDiscUserById } = require('../../utils/getDiscUserById');
 const { formatUser } = require('../../utils/formatUser');
 
@@ -18,8 +18,8 @@ module.exports = {
         if (!interaction.member.roles.cache.some(role => staffRoles.includes(role.id))) return await interaction.reply({ flags: MessageFlags.Ephemeral, content: messages.errors.MISSING_PERMISSION });
         if (!interaction.channel.name.includes('modmail-') || (modmailChannelType == 1 && interaction.channel.parentId !== modmailChannelForThreadId)) return await interaction.reply({ flags: MessageFlags.Ephemeral, content: messages.errors.NOT_MODMAIL });
 
-        const user = await getDiscUserById(interaction.client, interaction.channel.topic || await getUserByChannel(process.env.GUILD_ID, interaction.channel.id) || null);
-        const member = await getDiscUserById(interaction.client, interaction.channel.topic || await getUserByChannel(process.env.GUILD_ID, interaction.channel.id) || null, true, process.env.GUILD_ID);
+        const user = await getDiscUserById(interaction.client, interaction.channel.topic || getUserByChannel(process.env.GUILD_ID, interaction.channel.id) || null);
+        const member = await getDiscUserById(interaction.client, interaction.channel.topic || getUserByChannel(process.env.GUILD_ID, interaction.channel.id) || null, true, process.env.GUILD_ID);
 
         if (!user) return await interaction.reply({ flags: MessageFlags.Ephemeral, content: messages.errors.NOT_MODMAIL });
 

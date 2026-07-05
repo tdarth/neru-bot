@@ -1,0 +1,11 @@
+{
+  "tickets": {
+    "byUser": {},
+    "byChannel": {}
+  },
+  "banned": {},
+  "messageAssociations": {
+    "byUser": {},
+    "byEmbed": {}
+  }
+}

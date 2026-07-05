@@ -1,7 +1,7 @@
 const { SlashCommandSubcommandBuilder, MessageFlags } = require('discord.js');
 const { staffRoles } = require('../../config.json');
 const { messages } = require('../../messages.json');
-const { addBannedUser, isUserBanned } = require('../../db/utils/helper');
+const { addBannedUser, isUserBanned } = require('../../utils/store');
 const { formatUser } = require('../../utils/formatUser');
 
 module.exports = {
@@ -20,10 +20,10 @@ module.exports = {
         if (!user) return await interaction.reply({flags: MessageFlags.Ephemeral, content: messages.errors.CATCH_ALL_ERROR_COMMAND});
         if (user.bot) return await interaction.reply({flags: MessageFlags.Ephemeral, content: messages.errors.NO_BOTS_ALLOWED});
 
-        const userStatus = await isUserBanned(interaction.guild.id, user.id);
+        const userStatus = isUserBanned(interaction.guild.id, user.id);
         if (userStatus?.banned) return await interaction.reply(messages.errors.USER_ALREADY_BANNED.replaceAll('{user}', `${formatUser(user)}`).replaceAll('{reason}', userStatus.reason ? `(\`${userStatus.reason}\`)` : ''));
 
-        await addBannedUser(interaction.guild.id, user.id, reason || 'No reason specified.');
+        addBannedUser(interaction.guild.id, user.id, reason || 'No reason specified.');
         await interaction.reply({content: messages.success.USER_BANNED.replaceAll('{user}', formatUser(user)).replaceAll('{reason}', reason ? `(\`${reason}\`)` : ''), allowedMentions: { repliedUser: true, parse: [] }});
     }
 };

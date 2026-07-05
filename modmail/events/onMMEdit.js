@@ -1,5 +1,5 @@
 const { Events, ChannelType, EmbedBuilder, ThreadAutoArchiveDuration, MessageFlags, ContainerBuilder, TextDisplayBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } = require('discord.js');
-const { getUserByChannel, getEmbedMessageFromUser } = require('../db/utils/helper');
+const { getUserByChannel, getEmbedMessageFromUser } = require('../utils/store');
 const { getDiscUserById } = require('../utils/getDiscUserById');
 const { getChannelFromId } = require('../utils/getChannelFromId');
 const { messages } = require('../messages.json');
@@ -15,7 +15,7 @@ module.exports = {
         if (newMessage.author.bot) return;
         if (newMessage.content.startsWith(prefixes.IGNORE)) return;
 
-        const userId = newMessage?.channel?.topic || await getUserByChannel(newMessage.guild.id, newMessage.channel.id) || null;
+        const userId = newMessage?.channel?.topic || getUserByChannel(newMessage.guild.id, newMessage.channel.id) || null;
         const author = newMessage.author;
 
         if (userId) {
@@ -46,7 +46,7 @@ module.exports = {
 
             let editedMessageWarning = `:pencil: Edited message.`;
 
-            const oldMessageEmbedId = await getEmbedMessageFromUser(oldMessage.id, newMessage.channel.id);
+            const oldMessageEmbedId = getEmbedMessageFromUser(oldMessage.id, newMessage.channel.id);
             const dmChannel = await user.createDM();
             editedMessageWarning += oldMessageEmbedId ? ` [**Original**](https://discord.com/channels/@me/${dmChannel.id}/${oldMessageEmbedId.id})` : ' **Failed to fetch original message.**';
 

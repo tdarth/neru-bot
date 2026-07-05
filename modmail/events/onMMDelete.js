@@ -1,5 +1,5 @@
 const { Events, ChannelType, EmbedBuilder, ThreadAutoArchiveDuration, MessageFlags, ContainerBuilder, TextDisplayBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } = require('discord.js');
-const { getUserByChannel, getEmbedMessageFromUser } = require('../db/utils/helper');
+const { getUserByChannel, getEmbedMessageFromUser } = require('../utils/store');
 const { getDiscUserById } = require('../utils/getDiscUserById');
 const { getChannelFromId } = require('../utils/getChannelFromId');
 const { messages } = require('../messages.json');
@@ -15,13 +15,13 @@ module.exports = {
         if (message.author.bot) return;
         if (message.content.startsWith(prefixes.IGNORE)) return;
 
-        const userId = message?.channel?.topic || await getUserByChannel(message.guild.id, message.channel.id) || null;
+        const userId = message?.channel?.topic || getUserByChannel(message.guild.id, message.channel.id) || null;
 
         if (userId) {
             const user = await getDiscUserById(message.client, userId) || null;
             if (!user) return;
 
-            const oldMessageEmbedId = await getEmbedMessageFromUser(message.id, message.channel.id);
+            const oldMessageEmbedId = getEmbedMessageFromUser(message.id, message.channel.id);
             const dmChannel = await user.createDM();
 
             const toDelete = await dmChannel.messages.fetch(oldMessageEmbedId);
