@@ -77,7 +77,7 @@ module.exports = {
                             new ActionRowBuilder()
                                 .addComponents(
                                     new ButtonBuilder()
-                                        .setCustomId("staffAppAccept_button")
+                                        .setCustomId(`staffAppAccept_button:${interaction.user.id}`)
                                         .setLabel("Accept")
                                         .setStyle(ButtonStyle.Success),
                                     new ButtonBuilder()
@@ -98,7 +98,7 @@ module.exports = {
                     new ContainerBuilder()
                         .addTextDisplayComponents(
                             new TextDisplayBuilder()
-                                .setContent(":white_check_mark: **Your application was submitted!**")
+                                .setContent(":white_check_mark: **Your application was submitted!**\n-# > Please don't ask for your application to be reviewed. You will only receive a response back if you were accepted.")
                         )
                 ]
             })

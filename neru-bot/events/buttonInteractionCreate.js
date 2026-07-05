@@ -1,4 +1,4 @@
-const { Events, MessageFlags, TextDisplayBuilder, ContainerBuilder, SeparatorBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, LabelBuilder } = require('discord.js');
+const { Events, MessageFlags, TextDisplayBuilder, ContainerBuilder, SeparatorBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, LabelBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { staffRoles, honeypotRoleId, levelRoles } = require('../config.json');
 const replyWithText = require('../utils/replyWithText');
 
@@ -10,28 +10,117 @@ module.exports = {
     async execute(interaction) {
         if (!interaction.isButton()) return;
 
-        if (interaction.customId === "staffAppAccept_button") {
-            await interaction.message.edit({
+        if (interaction.customId == "cancel") {
+            await interaction.deferUpdate();
+            await interaction.deleteReply();
+        }
+
+        if (interaction.customId.startsWith("staffAppAccept_button")) {
+            await interaction.reply({
+                flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
+                components: [
+                    new ContainerBuilder()
+                        .addTextDisplayComponents(
+                            new TextDisplayBuilder().setContent("**Are you sure you want to accept?**\nThe user will be notified of this action.")
+                        )
+                        .addActionRowComponents(
+                            new ActionRowBuilder()
+                                .addComponents(
+                                    new ButtonBuilder()
+                                        .setCustomId(interaction.customId.replace("staffAppAccept", "staffAppAccept2"))
+                                        .setLabel("Confirm")
+                                        .setStyle(ButtonStyle.Success),
+                                    new ButtonBuilder()
+                                        .setCustomId("cancel")
+                                        .setLabel("Cancel")
+                                        .setStyle(ButtonStyle.Danger)
+                                )
+                        )
+                ]
+            })
+        }
+
+        if (interaction.customId.startsWith("staffAppAccept2_button")) {
+            await interaction.deferUpdate();
+
+            const userId = interaction.customId.split(":")[1];
+
+            let dmStatus = false;
+
+            try {
+                const userToDm = await interaction.client.users.fetch(userId);
+
+                await userToDm.send({
+                    flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
+                    components: [
+                        new ContainerBuilder()
+                            .addTextDisplayComponents(
+                                new TextDisplayBuilder().setContent(":pencil: **Congratulations!**\nYour staff application was accepted.")
+                            )
+                    ]
+                });
+
+                dmStatus = true;
+            } catch (e) {
+
+            }
+
+            const buttonMsg = await interaction.message.channel.messages.fetch(interaction.message.reference.messageId);
+
+            await buttonMsg.edit({
                 flags: MessageFlags.IsComponentsV2,
                 components: [
                     new ContainerBuilder()
                         .addTextDisplayComponents(
-                            new TextDisplayBuilder().setContent("### :white_check_mark: Application Accepted")
+                            new TextDisplayBuilder().setContent(`### :white_check_mark: Application Accepted${dmStatus ? "" : " (failed to DM)"}`)
                         )
                 ]
             });
+
+            await interaction.deleteReply();
+        }
+
+        if (interaction.customId === "staffAppDeny2_button") {
+            await interaction.deferUpdate();
+
+            const buttonMsg = await interaction.message.channel.messages.fetch(interaction.message.reference.messageId);
+
+            await buttonMsg.edit({
+                flags: MessageFlags.IsComponentsV2,
+                components: [
+                    new ContainerBuilder()
+                        .addTextDisplayComponents(
+                            new TextDisplayBuilder().setContent(`### :x: Application Denied`)
+                        )
+                ]
+            });
+
+            await interaction.deleteReply();
         }
 
         if (interaction.customId === "staffAppDeny_button") {
-            await interaction.message.edit({
-                flags: MessageFlags.IsComponentsV2,
+            await interaction.reply({
+                flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
                 components: [
                     new ContainerBuilder()
                         .addTextDisplayComponents(
-                            new TextDisplayBuilder().setContent("### :x: Application Denied")
+                            new TextDisplayBuilder().setContent("**Are you sure you want to deny?**")
+                        )
+                        .addActionRowComponents(
+                            new ActionRowBuilder()
+                                .addComponents(
+                                    new ButtonBuilder()
+                                        .setCustomId(interaction.customId.replace("staffAppDeny", "staffAppDeny2"))
+                                        .setLabel("Confirm")
+                                        .setStyle(ButtonStyle.Success),
+                                    new ButtonBuilder()
+                                        .setCustomId("cancel")
+                                        .setLabel("Cancel")
+                                        .setStyle(ButtonStyle.Danger)
+                                )
                         )
                 ]
-            });
+            })
         }
 
         if (interaction.customId === "staffApp_button") {
@@ -84,7 +173,7 @@ module.exports = {
                 .setLabel("Please list past moderation experience.")
                 .setDescription("(If any). Include your position and contributions.")
                 .setTextInputComponent(exInput)
-                
+
             const bcInput = new TextInputBuilder()
                 .setCustomId('staffBc')
                 .setStyle(TextInputStyle.Paragraph)
@@ -106,11 +195,6 @@ module.exports = {
                 .addLabelComponents(infoLabel, whyLabel, exLabel, bcLabel, swLabel);
 
             await interaction.showModal(modal);
-        }
-
-        if (interaction.customId === "unhoneypot") {
-            await interaction.deferUpdate();
-            await interaction.member.roles.remove(honeypotRoleId);
         }
 
         if (interaction.customId === "markAsResolved_button") {
