@@ -24,7 +24,7 @@ module.exports = {
 
         setTimeout(async () => {
             try {
-                await guild.bans.remove(userId);
+                await guild.bans.remove(userId, "Honeypot unban");
             } catch (e) {
                 const channel = guild.channels.cache.get('1369790374234820618');
 
