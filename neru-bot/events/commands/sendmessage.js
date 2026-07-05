@@ -12,15 +12,15 @@ module.exports = {
 
         const arg = message.content.replace(`${prefix}sendmessage `, ``);
         switch (arg) {
-            case "unmutebtn":
+            case "staffapp":
                 container.addSectionComponents(
                     new SectionBuilder().addTextDisplayComponents(
-                        new TextDisplayBuilder().setContent(`## :wave: Hi!\nYou may return to the server at any time.`)
+                        new TextDisplayBuilder().setContent(`## :pencil: Staff Application\nClicking **Create** will open a form within Discord for you to preview and complete. It won't be visible to anyone until you submit the application.\n-# > **NOTE:** Your progress will be saved, assuming you don't close Discord. Please respect the 2 week application cooldown.`)
                     ).setButtonAccessory(
                         new ButtonBuilder()
-                            .setCustomId('unhoneypot')
-                            .setStyle(ButtonStyle.Secondary)
-                            .setLabel("Return")
+                            .setCustomId('staffApp_button')
+                            .setStyle(ButtonStyle.Primary)
+                            .setLabel("Create")
                     )
                 );
 
@@ -28,8 +28,9 @@ module.exports = {
                     flags: MessageFlags.IsComponentsV2,
                     components: [container]
                 })
+            
+            break;
 
-                break;
             case "honeypotmsg":
                 container.addTextDisplayComponents(new TextDisplayBuilder().setContent(`## :warning: Don't send messages here.\nThis channel is used for automatically banning scam bots.\n-# > You will receive a 1 second ban if you send a message here.`));
 

@@ -1,109 +1,13 @@
 require('dotenv').config();
 const fs = require('node:fs');
 const path = require('node:path');
-const express = require('express');
 const { Client, GatewayIntentBits, Collection, MessageFlags, ContainerBuilder, TextDisplayBuilder, SeparatorBuilder } = require('discord.js');
 const { DefaultWebSocketManagerOptions: { identifyProperties } } = require("@discordjs/ws");
 
 const loadTriggers = require('./utils/triggerCommandLoader');
 const splitIntoChunks = require('./utils/splitIntoChunks');
-const app = express();
 
-app.use(express.json());
-
-const INTERNAL_API_SECRET = process.env.INTERNAL_API_SECRET;
 const token = process.env.TOKEN;
-
-app.get('/', (req, res) => res.send('https://discord.gg/nerutag'));
-
-app.post('/newapplication', async (req, res) => {
-  try {
-    const auth = req.headers["authorization"];
-    if (!auth || auth !== `Bearer ${INTERNAL_API_SECRET}`) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-
-    const { username, verifyCode, application } = req.body;
-
-    if (!username || !verifyCode) {
-      return res.status(400).json({ error: "Missing username or verifyCode" });
-    }
-
-    const user = client.users.cache.find(u => u.username === username);
-
-    if (!user) {
-      return res.status(404).json({ error: "Discord user not found" });
-    }
-
-    let applicationFields = Object.entries(application)
-      .map(([q, a]) => {
-        const cleanQuestion = q.replace(/\s*\n\s*/g, ' ').trim();
-        let cleanAnswer;
-
-        if (Array.isArray(a)) {
-          cleanAnswer = a.map(item => String(item).replace(/\*/g, '').trim()).join('\n- ');
-          cleanAnswer = '- ' + cleanAnswer;
-        } else {
-          cleanAnswer = '- ' + String(a || '').replace(/\*/g, '').trim();
-        }
-
-        return `-# **${cleanQuestion}**\n${cleanAnswer}`;
-      })
-      .join("\n\n");
-
-    const chunks = splitIntoChunks(applicationFields, 3900);
-
-    for (const chunk of chunks) {
-      await user.send({
-        flags: MessageFlags.IsComponentsV2,
-        components: [new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(chunk))]
-      });
-    }
-
-    await user.send({
-      flags: MessageFlags.IsComponentsV2,
-      components: [new ContainerBuilder()
-        .addTextDisplayComponents(new TextDisplayBuilder()
-          .setContent(`:warning: If this application was sent by you, please type \`${verifyCode}\` in this DM.`))]
-    });
-
-    return res.status(200).json({ success: true });
-  } catch (err) {
-    console.error("Error in /newapplication:", err);
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
-app.get('/config', async (req, res) => {
-  try {
-    const auth = req.headers["authorization"];
-    if (!auth || auth !== `Bearer ${INTERNAL_API_SECRET}`) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-
-    const serverId = req.query.serverId;
-    if (!serverId) {
-      return res.status(400).json({ error: "Missing serverId" });
-    }
-
-    const config = await getConfig(serverId);
-    if (!config) {
-      return res.status(404).json({ error: "Server config not found" });
-    }
-
-    const encrypted = encryptJSON(config);
-
-    return res.status(200).json(encrypted);
-  } catch (err) {
-    console.error("Error in /config:", err);
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`[NERU] Listening on port ${PORT}`);
-});
 
 identifyProperties.browser = "Discord iOS";
 
@@ -112,7 +16,6 @@ const client = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
-    GatewayIntentBits.DirectMessages,
     GatewayIntentBits.GuildVoiceStates
   ],
   partials: ["CHANNEL"]
