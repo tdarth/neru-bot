@@ -14,7 +14,7 @@ module.exports = {
         const id = message.author.id;
 
         if (id in afkUsers) {
-            await message.react('<:teto_wave:1373197110815621201>');
+            await message.react('<:teto_wave:1369235578427670570>');
 
             if (message.member && message.member.manageable) {
                 await message.member.setNickname(afkUsers[id].username, `User returned.`).catch(error => {
