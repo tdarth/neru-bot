@@ -1,6 +1,6 @@
 const { SlashCommandSubcommandBuilder, MessageFlags, EmbedBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ContainerBuilder, TextDisplayBuilder } = require('discord.js');
 const { createTranscript } = require('discord-html-transcripts');
-const { staffRoles, modmailLogChannelId, emojis, modmailChannelType, modmailChannelForThreadId } = require('../../config.json');
+const { staffRoles, modmailLogChannelId, emojis, modmailChannelType, modmailChannelForThreadId, modmailChannelPrefix } = require('../../config.json');
 const { messages } = require('../../messages.json');
 const { clearChannel, getUserByChannel, clearMessageAssociations } = require('../../utils/store');
 const { getDiscUserById } = require('../../utils/getDiscUserById');
@@ -120,6 +120,6 @@ module.exports = {
 
         const closed = await interaction.fetchReply();
         await closed.edit({ content: closed.content.replace(`${emojis.spinner} Transcribing...`, `Transcript generated in <#${modmailLogChannelId}>.`), components: [row] });
-        await interaction.channel.setName(`[${silentClose ? "SILENT " : ''}CLOSED] ${interaction.channel.name}`)
+        await interaction.channel.setName(`[${silentClose ? "SILENT " : ''}CLOSED] ${interaction.channel.name.replace(modmailChannelPrefix, '')}`)
     }
 };
