@@ -85,7 +85,16 @@ module.exports = {
                         .setThumbnailAccessory(
                             new ThumbnailBuilder().setURL(`https://cdn.discordapp.com/avatars/${interaction.user.id}/${interaction.user.avatar}.png`)
                         )
-                );
+                )
+                .addActionRowComponents(
+                    new ActionRowBuilder()
+                        .addComponents(
+                            new ButtonBuilder()
+                                .setURL(dataIh.url)
+                                .setLabel("Role Image")
+                                .setStyle(ButtonStyle.Link)
+                        )
+                )
 
             const footerContainer = new ContainerBuilder()
                 .addActionRowComponents(
@@ -99,10 +108,6 @@ module.exports = {
                                 .setCustomId(`crDeny_button:${interaction.user.id}`)
                                 .setLabel("Deny")
                                 .setStyle(ButtonStyle.Danger),
-                            new ButtonBuilder()
-                                .setURL(dataIh.url)
-                                .setLabel("Role Image")
-                                .setStyle(ButtonStyle.Link)
                         )
                 )
 
