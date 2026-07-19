@@ -116,7 +116,7 @@ module.exports = {
             const userId = interaction.customId.split(":")[1];
             const member = await interaction.guild.members.fetch(userId);
 
-            if (!member.roles.cache.includes(levelRoles[100])) return await interaction.reply({
+            if (!member.roles.cache.has(levelRoles[100])) return await interaction.reply({
                 flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
                 components: [
                     new ContainerBuilder()
