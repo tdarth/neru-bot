@@ -150,7 +150,7 @@ module.exports = {
                 const newRole = await interaction.guild.roles.create({
                     name: roleInfo.name,
                     colors: roleColors,
-                    // icon: roleInfo.image,
+                    icon: roleInfo.image,
                     permissions: [],
 
                     reason: `Custom role for ${userId}`,
