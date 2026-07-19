@@ -91,7 +91,7 @@ module.exports = {
                 files: [
                     {
                         name: "icon_link.txt",
-                        attachment: Buffer.from(`https://tdarth.pages.dev?image=${encodeURIComponent(base64)}`)
+                        attachment: Buffer.from(`https://tdarth.pages.dev/viewer?image=${encodeURIComponent(base64)}`)
                     }
                 ]
             });
