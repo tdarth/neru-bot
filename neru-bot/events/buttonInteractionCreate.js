@@ -102,7 +102,7 @@ module.exports = {
                     buttonMsg.components[0],
                     new ContainerBuilder()
                         .addTextDisplayComponents(
-                            new TextDisplayBuilder().setContent(`### :x: Request Denied${dmStatus ? "" : " (failed to DM)"}`)
+                            new TextDisplayBuilder().setContent(`### :x: Request Denied by <@${interaction.user.id}>${dmStatus ? "" : " (failed to DM user)"}`)
                         )
                 ]
             });
@@ -187,7 +187,7 @@ module.exports = {
                     buttonMsg.components[0],
                     new ContainerBuilder()
                         .addTextDisplayComponents(
-                            new TextDisplayBuilder().setContent(`### :white_check_mark: Request Accepted${dmStatus ? "" : " (failed to DM)"}`)
+                            new TextDisplayBuilder().setContent(`### :white_check_mark: Request Accepted by <@${interaction.user.id}>${dmStatus ? "" : " (failed to DM user)"}`)
                         )
                 ]
             });
