@@ -114,26 +114,17 @@ module.exports = {
             await interaction.deferUpdate();
 
             const userId = interaction.customId.split(":")[1];
+            const member = await interaction.guild.members.fetch(userId);
 
-            let dmStatus = false;
-
-            try {
-                const userToDm = await interaction.client.users.fetch(userId);
-
-                await userToDm.send({
-                    flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
-                    components: [
-                        new ContainerBuilder()
-                            .addTextDisplayComponents(
-                                new TextDisplayBuilder().setContent(":white_check_mark: **Congratulations!**\nYour Custom Role request was approved. If you don't have it, please open a ticket.")
-                            )
-                    ]
-                });
-
-                dmStatus = true;
-            } catch (e) {
-
-            }
+            if (!member.roles.cache.includes(levelRoles[100])) return await interaction.reply({
+                flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
+                components: [
+                    new ContainerBuilder()
+                        .addTextDisplayComponents(
+                            new TextDisplayBuilder().setContent(":x: You cannot accept this request because the user isn't Boosting anymore.")
+                        )
+                ]
+            });
 
             try {
                 const roleInfo = customRoles[userId];
@@ -160,15 +151,32 @@ module.exports = {
                 const insertPoint = roleBelow.position;
 
                 await interaction.guild.roles.setPosition(newRole, insertPoint)
-
-                const member = await interaction.guild.members.fetch(userId);
-
                 await member.roles.add(newRole);
 
                 setCustomRoleEntry(userId, { has_role: true, role_id: newRole.id, name: roleInfo.name });
             } catch (e) {
                 await interaction.channel.send(`:warning: <@990500436047982602> **Role failed to create**: ${e}`);
                 console.log(`[NERU] Custom role failed to create: ${e}`);
+            }
+
+            let dmStatus = false;
+
+            try {
+                const userToDm = await interaction.client.users.fetch(userId);
+
+                await userToDm.send({
+                    flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
+                    components: [
+                        new ContainerBuilder()
+                            .addTextDisplayComponents(
+                                new TextDisplayBuilder().setContent(":white_check_mark: **Congratulations!**\nYour Custom Role request was approved. If you don't have it, please open a ticket.")
+                            )
+                    ]
+                });
+
+                dmStatus = true;
+            } catch (e) {
+
             }
 
             const buttonMsg = await interaction.message.channel.messages.fetch(interaction.message.reference.messageId);
