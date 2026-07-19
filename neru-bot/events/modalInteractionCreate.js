@@ -50,7 +50,7 @@ module.exports = {
             const rawBase64 = buffer.toString("base64");
             const base64 = `data:image/${roleIcon.contentType.replace('image/', '')};base64,${rawBase64}`
 
-            const response = await fetch(process.env.IMAGE_HOST, {
+            const responseIh = await fetch(`${process.env.IMAGE_HOST}/upload`, {
                 method: "POST",
                 body: JSON.stringify({
                     base64: base64,
@@ -58,7 +58,7 @@ module.exports = {
                 })
             })
 
-            if (!response.ok) return await interaction.reply({
+            if (!responseIh.ok) return await interaction.reply({
                 flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
                 components: [
                     new ContainerBuilder()
@@ -69,7 +69,7 @@ module.exports = {
                 ]
             })
 
-            const data = await response.json();
+            const dataIh = await responseIh.json();
 
             setCustomRoleEntry(interaction.user.id, { in_progress: true, name: roleName, color: JSON.stringify(roleColor), image: base64 });
 
@@ -97,7 +97,7 @@ module.exports = {
                                 .setLabel("Deny")
                                 .setStyle(ButtonStyle.Danger),
                             new ButtonBuilder()
-                                .setURL(data.url)
+                                .setURL(dataIh.url)
                                 .setLabel("Role Image")
                         )
                 )
