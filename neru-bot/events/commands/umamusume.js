@@ -1,9 +1,11 @@
 const { prefix } = require('../../config.json');
 const replyWithText = require('../../utils/replyWithText');
 
+const aliases = [`${prefix}umamusume`, '.umamusume']
+
 module.exports = {
     name: 'umamusume',
-    trigger: (message) => message.content.startsWith(`${prefix}umamusume`),
+    trigger: (message) => aliases.some(alias => message.content.toLowerCase().startsWith(`${alias}`)),
     async execute(message) {
         await message.channel.sendTyping();
 

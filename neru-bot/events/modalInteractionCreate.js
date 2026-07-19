@@ -1,5 +1,6 @@
-const { Events, MessageFlags, TextDisplayBuilder, ContainerBuilder, SeparatorBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, LabelBuilder, SectionBuilder, ThumbnailBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { modApplicationsChannelId } = require('../config.json');
+const { Events, MessageFlags, TextDisplayBuilder, ContainerBuilder, SeparatorBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, LabelBuilder, SectionBuilder, ThumbnailBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, FileBuilder } = require('discord.js');
+const { modApplicationsChannelId, customRoleRequestChannelId } = require('../config.json');
+const { setCustomRoleEntry } = require('../utils/crHelper');
 const replyWithText = require('../utils/replyWithText');
 const splitIntoChunks = require('../utils/splitIntoChunks');
 
@@ -19,10 +20,93 @@ const fields = [
     "Sw"
 ]
 
+const hexRegex = /^#[0-9A-Fa-f]{6}(?:,#[0-9A-Fa-f]{6})?$/;
+
 module.exports = {
     name: Events.InteractionCreate,
     async execute(interaction) {
         if (!interaction.isModalSubmit()) return;
+
+        if (interaction.customId === 'roleEdit') {
+            const channel = await interaction.client.channels.fetch(customRoleRequestChannelId);
+
+            const roleName = interaction.fields.getTextInputValue('crName');
+            const roleColor = interaction.fields.getTextInputValue('crColor').replaceAll(' ', '').split(",");
+            const roleIcon = interaction.fields.getUploadedFiles('crIcon').first();
+            const acceptedRules = interaction.fields.getCheckbox('crRules');
+
+            if (roleIcon.size > 262143 || !['image/jpeg', 'image/png'].includes(roleIcon.contentType) || !acceptedRules || !hexRegex.test(roleColor.join(",")) || roleName.length > 100) {
+                console.log('[NERU] Custom role file failed validation');
+                return;
+            };
+
+
+            const response = await fetch(roleIcon.url);
+
+            if (!response.ok) return;
+
+            const arrayBuffer = await response.arrayBuffer();
+
+            const buffer = Buffer.from(arrayBuffer);
+            const rawBase64 = buffer.toString("base64");
+            const base64 = `data:image/${roleIcon.contentType.replace('image/', '')};base64,${rawBase64}`
+
+            setCustomRoleEntry(interaction.user.id, { in_progress: true, name: roleName, color: JSON.stringify(roleColor), image: base64 });
+
+            const headerContainer = new ContainerBuilder()
+                .addSectionComponents(
+                    new SectionBuilder()
+                        .addTextDisplayComponents(
+                            new TextDisplayBuilder().setContent(`# <@${interaction.user.id}>'s Custom Role\n> **User ID:** ${interaction.user.id}\n\n:pencil2: **Role Name**: \`${roleName}\`\n:rainbow: **Role Color**: ${roleColor.length >= 2 ? `Gradient - \`${roleColor[0]}\` to \`${roleColor[1]}\`` : `\`${roleColor[0]}\``}`)
+                        )
+                        .setThumbnailAccessory(
+                            new ThumbnailBuilder().setURL(`https://cdn.discordapp.com/avatars/${interaction.user.id}/${interaction.user.avatar}.png`)
+                        )
+                );
+
+            const footerContainer = new ContainerBuilder()
+                .addActionRowComponents(
+                    new ActionRowBuilder()
+                        .addComponents(
+                            new ButtonBuilder()
+                                .setCustomId(`crAccept_button:${interaction.user.id}`)
+                                .setLabel("Accept")
+                                .setStyle(ButtonStyle.Success),
+                            new ButtonBuilder()
+                                .setCustomId(`crDeny_button:${interaction.user.id}`)
+                                .setLabel("Deny")
+                                .setStyle(ButtonStyle.Danger)
+                        )
+                )
+
+            await channel.send({
+                flags: MessageFlags.IsComponentsV2,
+                components: [
+                    headerContainer,
+                    footerContainer
+                ]
+            });
+
+            await channel.send({
+                files: [
+                    {
+                        name: "icon_link.txt",
+                        attachment: Buffer.from(`https://tdarth.pages.dev?image=${encodeURIComponent(base64)}`)
+                    }
+                ]
+            });
+
+            await interaction.reply({
+                flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
+                components: [
+                    new ContainerBuilder()
+                        .addTextDisplayComponents(
+                            new TextDisplayBuilder()
+                                .setContent(":white_check_mark: **Your Custom Role request was submitted!**\n-# > If your DMs are enabled, you will receive one when it's reviewed.")
+                        )
+                ]
+            })
+        }
 
         if (interaction.customId === 'staffApp') {
             let appString = "";
@@ -40,12 +124,12 @@ module.exports = {
             const headerContainer = new ContainerBuilder()
                 .addSectionComponents(
                     new SectionBuilder()
-                    .addTextDisplayComponents(
-                        new TextDisplayBuilder().setContent(`# <@${interaction.user.id}>'s Application\n> :hourglass: **Account Creation:** <t:${accountCreation}:f> (<t:${accountCreation}:R>)\n> :arrow_forward: **Joined:** <t:${memberLength}:f> (<t:${memberLength}:R>)\n-# **User ID:** ${interaction.user.id}`)
-                    )
-                    .setThumbnailAccessory(
-                        new ThumbnailBuilder().setURL(`https://cdn.discordapp.com/avatars/${interaction.user.id}/${interaction.user.avatar}.png`)
-                    )
+                        .addTextDisplayComponents(
+                            new TextDisplayBuilder().setContent(`# <@${interaction.user.id}>'s Application\n> :hourglass: **Account Creation:** <t:${accountCreation}:f> (<t:${accountCreation}:R>)\n> :arrow_forward: **Joined:** <t:${memberLength}:f> (<t:${memberLength}:R>)\n-# **User ID:** ${interaction.user.id}`)
+                        )
+                        .setThumbnailAccessory(
+                            new ThumbnailBuilder().setURL(`https://cdn.discordapp.com/avatars/${interaction.user.id}/${interaction.user.avatar}.png`)
+                        )
                 );
 
             const chunks = splitIntoChunks(appString, 3900);
@@ -85,7 +169,7 @@ module.exports = {
                                         .setLabel("Deny")
                                         .setStyle(ButtonStyle.Danger)
                                 )
-                    )
+                        )
                 ]
             })
 

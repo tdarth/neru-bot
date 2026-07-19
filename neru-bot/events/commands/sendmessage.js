@@ -1,6 +1,11 @@
-const { TextDisplayBuilder, ContainerBuilder, SeparatorBuilder, MessageFlags, ActionRowBuilder, SectionBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { TextDisplayBuilder, ContainerBuilder, SeparatorBuilder, MessageFlags, ActionRowBuilder, SectionBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder } = require('discord.js');
 const { prefix, emojis } = require('../../config.json');
 const replyWithText = require("../../utils/replyWithText");
+
+const boostMenuOptions = [
+    { label: 'Create', value: 'boostMenu_manage', emoji: '✏️', description: 'Create your custom role.' },
+    { label: 'Delete', value: 'boostMenu_delete', emoji: '❌', description: 'Deletes your custom role.' },
+];
 
 module.exports = {
     name: 'sendmessage',
@@ -12,6 +17,27 @@ module.exports = {
 
         const arg = message.content.replace(`${prefix}sendmessage `, ``);
         switch (arg) {
+            case "boostmenu":
+                container.addTextDisplayComponents(
+                    new TextDisplayBuilder().setContent(`## :sparkles: Custom Role\nThank you for Boosting the server! <:01_neru_heart:1430394945327333438>\nYou may create a custom role in the server using the dropdown below.\n> **NOTE:** Your custom role will be removed if you choose to stop boosting.`)
+                )
+
+                container.addActionRowComponents(
+                    new ActionRowBuilder()
+                        .addComponents(
+                            new StringSelectMenuBuilder()
+                                .setCustomId('boostMenu')
+                                .setPlaceholder('Choose an option...')
+                                .addOptions(boostMenuOptions)
+                        )
+                )
+
+                await message.client.channels.cache.get(message.channel.id)?.send({
+                    flags: MessageFlags.IsComponentsV2,
+                    components: [container]
+                })
+
+                break;
             case "staffapp":
                 container.addSectionComponents(
                     new SectionBuilder().addTextDisplayComponents(
@@ -28,8 +54,8 @@ module.exports = {
                     flags: MessageFlags.IsComponentsV2,
                     components: [container]
                 })
-            
-            break;
+
+                break;
 
             case "honeypotmsg":
                 container.addTextDisplayComponents(new TextDisplayBuilder().setContent(`## :warning: Don't send messages here.\nThis channel is used for automatically banning scam bots.\n-# > You will receive a 1 second ban if you send a message here.`));

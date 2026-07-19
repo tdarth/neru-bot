@@ -1,5 +1,6 @@
 const { Events, MessageFlags, TextDisplayBuilder, ContainerBuilder, SeparatorBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, LabelBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { staffRoles, honeypotRoleId, levelRoles } = require('../config.json');
+const { staffRoles, honeypotRoleId, levelRoles, customRoleAboveRoleId } = require('../config.json');
+const { customRoles, setCustomRoleEntry, deleteCustomRoleEntry } = require('../utils/crHelper');
 const replyWithText = require('../utils/replyWithText');
 
 const appRoles = [levelRoles[15], levelRoles[30], levelRoles[40], levelRoles[50], levelRoles[75], levelRoles[100]];
@@ -12,6 +13,177 @@ module.exports = {
 
         if (interaction.customId == "cancel") {
             await interaction.deferUpdate();
+            await interaction.deleteReply();
+        }
+
+
+        if (interaction.customId.startsWith("crDeny_button")) {
+            await interaction.reply({
+                flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
+                components: [
+                    new ContainerBuilder()
+                        .addTextDisplayComponents(
+                            new TextDisplayBuilder().setContent("**Are you sure you want to deny?**\nThe user will be notified of this action.")
+                        )
+                        .addActionRowComponents(
+                            new ActionRowBuilder()
+                                .addComponents(
+                                    new ButtonBuilder()
+                                        .setCustomId(interaction.customId.replace("crDeny", "crDeny2"))
+                                        .setLabel("Confirm")
+                                        .setStyle(ButtonStyle.Success),
+                                    new ButtonBuilder()
+                                        .setCustomId("cancel")
+                                        .setLabel("Cancel")
+                                        .setStyle(ButtonStyle.Danger)
+                                )
+                        )
+                ]
+            })
+        }
+
+        if (interaction.customId.startsWith("crAccept_button")) {
+            await interaction.reply({
+                flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
+                components: [
+                    new ContainerBuilder()
+                        .addTextDisplayComponents(
+                            new TextDisplayBuilder().setContent("**Are you sure you want to accept?**\nThe user will be notified of this action.\nThis will also automatically create and apply the role to the user.")
+                        )
+                        .addActionRowComponents(
+                            new ActionRowBuilder()
+                                .addComponents(
+                                    new ButtonBuilder()
+                                        .setCustomId(interaction.customId.replace("crAccept", "crAccept2"))
+                                        .setLabel("Confirm")
+                                        .setStyle(ButtonStyle.Success),
+                                    new ButtonBuilder()
+                                        .setCustomId("cancel")
+                                        .setLabel("Cancel")
+                                        .setStyle(ButtonStyle.Danger)
+                                )
+                        )
+                ]
+            })
+        }
+
+        if (interaction.customId.startsWith("crDeny2_button")) {
+            await interaction.deferUpdate();
+
+            const userId = interaction.customId.split(":")[1];
+
+            let dmStatus = false;
+
+            deleteCustomRoleEntry(userId);
+
+            try {
+                const userToDm = await interaction.client.users.fetch(userId);
+
+                await userToDm.send({
+                    flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
+                    components: [
+                        new ContainerBuilder()
+                            .addTextDisplayComponents(
+                                new TextDisplayBuilder().setContent(":x: **Sorry!**\nYour Custom Role request was denied. You may make another request, but please make sure it follows our rules.")
+                            )
+                    ]
+                });
+
+                dmStatus = true;
+            } catch (e) {
+
+            }
+
+            const buttonMsg = await interaction.message.channel.messages.fetch(interaction.message.reference.messageId);
+
+            await buttonMsg.edit({
+                flags: MessageFlags.IsComponentsV2,
+                components: [
+                    buttonMsg.components[0],
+                    new ContainerBuilder()
+                        .addTextDisplayComponents(
+                            new TextDisplayBuilder().setContent(`### :x: Request Denied${dmStatus ? "" : " (failed to DM)"}`)
+                        )
+                ]
+            });
+
+            await interaction.deleteReply();
+        }
+
+        if (interaction.customId.startsWith("crAccept2_button")) {
+            await interaction.deferUpdate();
+
+            const userId = interaction.customId.split(":")[1];
+
+            let dmStatus = false;
+
+            try {
+                const userToDm = await interaction.client.users.fetch(userId);
+
+                await userToDm.send({
+                    flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
+                    components: [
+                        new ContainerBuilder()
+                            .addTextDisplayComponents(
+                                new TextDisplayBuilder().setContent(":white_check_mark: **Congratulations!**\nYour Custom Role request was approved. If you don't have it, please open a ticket.")
+                            )
+                    ]
+                });
+
+                dmStatus = true;
+            } catch (e) {
+
+            }
+
+            try {
+                const roleInfo = customRoles[userId];
+
+                const roleColors = {}
+
+                roleColors['primaryColor'] = JSON.parse(roleInfo.color)[0];
+
+                if (roleInfo.color.length >= 2) {
+                    roleColors['secondaryColor'] = JSON.parse(roleInfo.color)[1];
+
+                }
+
+                const newRole = await interaction.guild.roles.create({
+                    name: roleInfo.name,
+                    colors: roleColors,
+                    // icon: roleInfo.image,
+                    permissions: [],
+
+                    reason: `Custom role for ${userId}`,
+                });
+
+                const roleBelow = await interaction.guild.roles.fetch(customRoleAboveRoleId);
+                const insertPoint = roleBelow.position;
+
+                await interaction.guild.roles.setPosition(newRole, insertPoint)
+
+                const member = await interaction.guild.members.fetch(userId);
+
+                await member.roles.add(newRole);
+
+                setCustomRoleEntry(userId, { has_role: true, role_id: newRole.id, name: roleInfo.name });
+            } catch (e) {
+                await interaction.channel.send(`:warning: <@990500436047982602> **Role failed to create**: ${e}`);
+                console.log(`[NERU] Custom role failed to create: ${e}`);
+            }
+
+            const buttonMsg = await interaction.message.channel.messages.fetch(interaction.message.reference.messageId);
+
+            await buttonMsg.edit({
+                flags: MessageFlags.IsComponentsV2,
+                components: [
+                    buttonMsg.components[0],
+                    new ContainerBuilder()
+                        .addTextDisplayComponents(
+                            new TextDisplayBuilder().setContent(`### :white_check_mark: Request Accepted${dmStatus ? "" : " (failed to DM)"}`)
+                        )
+                ]
+            });
+
             await interaction.deleteReply();
         }
 
@@ -110,7 +282,7 @@ module.exports = {
                             new ActionRowBuilder()
                                 .addComponents(
                                     new ButtonBuilder()
-                                        .setCustomId(interaction.customId.replace("staffAppDeny", "staffAppDeny2"))
+                                        .setCustomId("staffAppDeny2_button")
                                         .setLabel("Confirm")
                                         .setStyle(ButtonStyle.Success),
                                     new ButtonBuilder()
