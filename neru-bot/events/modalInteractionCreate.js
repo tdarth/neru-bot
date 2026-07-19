@@ -36,7 +36,14 @@ module.exports = {
             const acceptedRules = interaction.fields.getCheckbox('crRules');
 
             if (roleIcon.size > 262143 || !['image/jpeg', 'image/png'].includes(roleIcon.contentType) || !acceptedRules || !hexRegex.test(roleColor.join(",")) || roleName.length > 100) {
-                console.log('[NERU] Custom role file failed validation');
+                const reasons = [];
+                if (roleIcon.size > 262143) reasons.push(`icon too large (${roleIcon.size} bytes > 262143)`);
+                if (!['image/jpeg', 'image/png'].includes(roleIcon.contentType)) reasons.push(`invalid icon type (${roleIcon.contentType})`);
+                if (!acceptedRules) reasons.push('rules not accepted');
+                if (!hexRegex.test(roleColor.join(","))) reasons.push(`invalid role color (${roleColor.join(",")})`);
+                if (roleName.length > 100) reasons.push(`role name too long (${roleName.length} chars)`);
+
+                console.log(`[NERU] Custom role validation failed for ${interaction.user.username} (${interaction.user.id}): ${reasons.join(', ')}`);
                 return;
             };
 
