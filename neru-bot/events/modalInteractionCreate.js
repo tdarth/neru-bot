@@ -102,6 +102,7 @@ module.exports = {
                             new ButtonBuilder()
                                 .setURL(dataIh.url)
                                 .setLabel("Role Image")
+                                .setStyle(ButtonStyle.Link)
                         )
                 )
 
