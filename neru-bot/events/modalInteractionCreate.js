@@ -40,7 +40,6 @@ module.exports = {
                 return;
             };
 
-
             const response = await fetch(roleIcon.url);
 
             if (!response.ok) return;
@@ -50,6 +49,27 @@ module.exports = {
             const buffer = Buffer.from(arrayBuffer);
             const rawBase64 = buffer.toString("base64");
             const base64 = `data:image/${roleIcon.contentType.replace('image/', '')};base64,${rawBase64}`
+
+            const response = await fetch(process.env.IMAGE_HOST, {
+                method: "POST",
+                body: JSON.stringify({
+                    base64: base64,
+                    apiKey: process.env.IMAGE_HOST_API_KEY
+                })
+            })
+
+            if (!response.ok) return await interaction.reply({
+                flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
+                components: [
+                    new ContainerBuilder()
+                        .addTextDisplayComponents(
+                            new TextDisplayBuilder()
+                                .setContent(":x: An error occurred. Please open a ticket and ping <@990500436047982602>.")
+                        )
+                ]
+            })
+
+            const data = await response.json();
 
             setCustomRoleEntry(interaction.user.id, { in_progress: true, name: roleName, color: JSON.stringify(roleColor), image: base64 });
 
@@ -75,7 +95,10 @@ module.exports = {
                             new ButtonBuilder()
                                 .setCustomId(`crDeny_button:${interaction.user.id}`)
                                 .setLabel("Deny")
-                                .setStyle(ButtonStyle.Danger)
+                                .setStyle(ButtonStyle.Danger),
+                            new ButtonBuilder()
+                                .setURL(data.url)
+                                .setLabel("Role Image")
                         )
                 )
 
@@ -84,15 +107,6 @@ module.exports = {
                 components: [
                     headerContainer,
                     footerContainer
-                ]
-            });
-
-            await channel.send({
-                files: [
-                    {
-                        name: "icon_link.txt",
-                        attachment: Buffer.from(`https://tdarth.pages.dev/viewer?image=${encodeURIComponent(base64)}`)
-                    }
                 ]
             });
 
