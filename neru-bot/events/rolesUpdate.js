@@ -10,7 +10,7 @@ module.exports = {
 
         const removedRoles = oldMember.roles.cache.filter(role => !newMember.roles.cache.has(role.id));
 
-        if (removedRoles.has(levelRoles[100]) && customRoles[newMember.id].has_role) {
+        if (removedRoles.has(levelRoles.Booster) && customRoles[newMember.id].has_role) {
             try {
                 await newMember.guild.roles.delete(customRoles[newMember.id].role_id);
             } catch (e) {
