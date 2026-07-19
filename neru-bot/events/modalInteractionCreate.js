@@ -52,6 +52,9 @@ module.exports = {
 
             const responseIh = await fetch(`${process.env.IMAGE_HOST}/upload`, {
                 method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({
                     base64: base64,
                     apiKey: process.env.IMAGE_HOST_API_KEY
