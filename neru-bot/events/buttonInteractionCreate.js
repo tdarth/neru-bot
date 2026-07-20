@@ -116,7 +116,7 @@ module.exports = {
             const userId = interaction.customId.split(":")[1];
             const member = await interaction.guild.members.fetch(userId);
 
-            if (!member.roles.cache.has(levelRoles.Booster) && !message.roles.cache.some(role => staffRoles.includes(role.id))) return await interaction.editReply({
+            if (!member.roles.cache.has(levelRoles.Booster) && !member.roles.cache.some(role => staffRoles.includes(role.id))) return await interaction.editReply({
                 flags: MessageFlags.IsComponentsV2 | MessageFlags.Ephemeral,
                 components: [
                     new ContainerBuilder()
