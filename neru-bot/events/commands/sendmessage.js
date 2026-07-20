@@ -4,7 +4,7 @@ const replyWithText = require("../../utils/replyWithText");
 
 const boostMenuOptions = [
     { label: 'Create', value: 'boostMenu_manage', emoji: '✏️', description: 'Create your custom role.' },
-    { label: 'Delete', value: 'boostMenu_delete', emoji: '❌', description: 'Deletes your custom role.' },
+    { label: 'Delete', value: 'boostMenu_delete', emoji: '❌', description: 'Deletes your custom role, allowing you to make a new one.' },
 ];
 
 module.exports = {
