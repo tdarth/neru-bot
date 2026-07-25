@@ -8,6 +8,7 @@ cadmium/allowed_servers.json
 miku-bot/node_modules
 tagroles/node_modules
 modmail/node_modules
+modmail/data.json
 nowplaying/node_modules
 suzuka/node_modules
 vocavote/node_modules

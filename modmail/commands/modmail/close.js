@@ -2,7 +2,7 @@ const { SlashCommandSubcommandBuilder, MessageFlags, EmbedBuilder, AttachmentBui
 const { createTranscript } = require('discord-html-transcripts');
 const { staffRoles, modmailLogChannelId, emojis, modmailChannelType, modmailChannelForThreadId, modmailChannelPrefix } = require('../../config.json');
 const { messages } = require('../../messages.json');
-const { clearChannel, getUserByChannel, clearMessageAssociations } = require('../../utils/store');
+const { clearChannel, getUserByChannel, clearMessageAssociations, getLogMessageFromChannel, clearChannelToLogMessage } = require('../../utils/store');
 const { getDiscUserById } = require('../../utils/getDiscUserById');
 const { getChannelFromId } = require('../../utils/getChannelFromId');
 const { makeTranscriptFile } = require('../../utils/makeTranscriptFile');
@@ -44,12 +44,15 @@ module.exports = {
         // const transcriptFileName = `${interaction.channel.name}-${Date.now()}.txt`;
         // const transcript = new AttachmentBuilder(buffer, { name: transcriptFileName });
 
+        let logChannel;
+        let closedLogMessage;
+
         if (modmailLogChannelId) {
-            const logChannel = await getChannelFromId(interaction.client, modmailLogChannelId);
+            logChannel = await getChannelFromId(interaction.client, modmailLogChannelId);
 
             // await logChannel.send({ files: [transcript], content: `:outbox_tray: <t:${Math.floor(Date.now() / 1000)}:f> <#${interaction.channel.id}> (**#${interaction.channel.name}**, \`${interaction.channel.id}\`) opened by <@!${user.id}> (**${user.username || 'unknown'}**, \`${user.id}\`), was closed by <@!${interaction.user.id}> (**${interaction.user.username || 'unknown'}**, \`${interaction.user.id}\`) with reason: \`${reason ? reason : 'null'}\` Closed silently? : ${silentClose ? '`true`' : '`false`'}.`, allowedMentions: { parse: [] } });
 
-            await logChannel.send({
+            closedLogMessage = await logChannel.send({
                 flags: MessageFlags.IsComponentsV2,
                 components: [
                     new ContainerBuilder()
@@ -101,13 +104,37 @@ module.exports = {
             }
         }
 
+        try {
+            const logMessage = await logChannel.messages.fetch(getLogMessageFromChannel(interaction.channel.id));
+
+            if (logMessage) {
+                await logMessage.edit({
+                    flags: MessageFlags.IsComponentsV2,
+                    components: [
+                        logMessage.components[0],
+                        new ActionRowBuilder()
+                            .addComponents(
+                                new ButtonBuilder()
+                                    .setLabel("Jump to Transcript")
+                                    .setStyle(ButtonStyle.Link)
+                                    .setURL(`https://discord.com/channels/${process.env.GUILD_ID}/${logChannel.id}/${closedLogMessage.id}`)
+                            )
+                    ],
+                    allowedMentions: { parse: [] }
+                })
+            }
+        } catch (e) {
+            console.log(`[MODMAIL] Failed to edit log message: ${e}`);
+        }
+
+        clearChannelToLogMessage(interaction.channel.id);
         clearMessageAssociations(interaction.channel.id);
 
         const deleteButton = new ButtonBuilder()
             .setCustomId(`deleteChannel_${interaction.channel.id}`)
             .setLabel('🗑️')
             .setStyle(ButtonStyle.Secondary);
-        
+
         const infoButton = new ButtonBuilder()
             .setCustomId(`info`)
             .setLabel(messages.info.DELETE_BUTTON_INFO)
@@ -120,6 +147,11 @@ module.exports = {
 
         const closed = await interaction.fetchReply();
         await closed.edit({ content: closed.content.replace(`${emojis.spinner} Transcribing...`, `Transcript generated in <#${modmailLogChannelId}>.`), components: [row] });
-        await interaction.channel.setName(`[${silentClose ? "SILENT " : ''}CLOSED] ${interaction.channel.name.replace(modmailChannelPrefix, '')}`)
+
+        if (modmailChannelType == 1) {
+            await interaction.channel.setName(`[${silentClose ? "SILENT " : ''}CLOSED] ${interaction.channel.name.replace(modmailChannelPrefix, '')}`)
+        } else if (modmailChannelType == 0) {
+            await interaction.channel.setName(`${silentClose ? "silentclosed" : "closed"}-${interaction.channel.name.replace(`${modmailChannelPrefix.toLowerCase().trim().replace(/[^a-zA-Z]/g, '')}-`, '')}`);
+        }
     }
 };

@@ -9,7 +9,7 @@
         },
 
         "info": {
-            "WELCOME_MESSAGE": "Ticket opened by {user}. (**{username}**, `{userid}`)\n\n__Prefixes__ (start your message with the following symbol)\n> `=` Sent anonymously to the user.\n> `-` Message ignored, not sent to user.\n\n__Commands__\n> </modmail ban:1416319768675356766> Ban a user from using ModMail.\n> </modmail check:1416319768675356766> Shows information about the user who opened this ticket.\n> </modmail close:1416319768675356766> Close the ModMail optionally with a reason/silently.\n\n-# :pushpin: Only messages that receive a :white_check_mark: reaction are shown to the user.\n-# **__Please refrain from pinging non-staff members, as doing so grants them access to view this channel.__**",
+            "WELCOME_MESSAGE": "Ticket opened by {user}. (**{username}**, `{userid}`)\n\n__Prefixes__ (start your message with the following symbol)\n> `=` Sent anonymously to the user.\n> `-` Message ignored, not sent to user.\n\n__Commands__\n> </modmail ban:1416319768675356766> Ban a user from using ModMail.\n> </modmail check:1416319768675356766> Shows information about the user who opened this ticket.\n> </modmail close:1416319768675356766> Close the ModMail optionally with a reason/silently.\n> </modmail templates:> Returns a message template for certain topics.\n\n-# :pushpin: Only messages that receive a :white_check_mark: reaction are shown to the user. Editing/Deleting messages is supported.\n-# **__Please refrain from pinging non-staff members, as doing so grants them access to view this channel.__**",
             "OPENED_MODMAIL": "```Thank you for the message!```\nIf you haven't already, please specify your inquiry. You __**will not**__ hear back from us if you begin your ticket without a question or concern.\n-# Additionally, please keep Direct Messages from our server in Discord's Content & Social settings __enabled__ for the remainder of this ticket.",
             "USER_START_TYPING": "<a:typing:1456444126437310599>‎ ‎ **Started typing**",
             "DELETE_BUTTON_INFO": "<- Attachments aren't transcribed."
@@ -31,7 +31,13 @@
             "EDITED_MSG_WITHOUT_OPEN_TICKET": ":x: **Error:** Your edited message was not sent to staff. Please open a ticket by sending a new message.",
             "MM_MSG_NOT_DELETED_FOR_USER": ":x: **Error:** {user}, the message you deleted failed to delete on the user's end. They will still see the message.",
             "MESSAGE_NOT_EDITED": ":x: **Error:** The bot failed to edit your message. Your updated message was not shared.",
-            "MODMAIL_CHANNEL_CREATE_ERROR": ":x: **Error:** An error occurred while creating your ModMail channel. If this persists, please directly message @tdarth_."
+            "MODMAIL_CHANNEL_CREATE_ERROR": ":x: **Error:** An error occurred while creating your ModMail channel. If this persists, please directly message @tdarth_.",
+            "TEMPLATE_NOT_FOUND": ":x: **Error:** The template you provided doesn't exist."
+        },
+
+        "templates": {
+            "CHILD_SAFETY": "Thank you for the report. We've taken appropriate action on our end.\n## Recommended Next Steps\n- If you believe a minor may be at risk, consider reporting this behavior to your local law enforcement.\n- Submit a report to the [**National Center for Missing & Exploited Children (NCMEC) CyberTipline**](<https://report.cybertip.org/>), which helps investigate reports of suspected child exploitation.\n- If there is an immediate risk of harm, contact emergency services in your area.\n-# Please note that our moderation team can only take action within this community and may not have access to incidents or evidence that occurred outside of the server. For more information about child safety and reporting, please visit the [**Discord Child Safety Policy Explainer**](<https://discord.com/safety/child-safety-policy-explainer/>).",
+            "CAN'T_CHAT_CLARIFICATION": "Chatting in the server is unfortunately not open to all users.\n-# For more information, please read the <#1369184141245026375> channel (`#server-information`)."
         }
     }
 }

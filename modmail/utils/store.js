@@ -11,6 +11,7 @@ function emptyDb() {
         tickets: { byUser: {}, byChannel: {} },
         banned: {},
         messageAssociations: { byUser: {}, byEmbed: {} },
+        logAssociations: { byChannel: {} },
     };
 }
 
@@ -27,6 +28,8 @@ function init() {
             db.messageAssociations ??= { byUser: {}, byEmbed: {} };
             db.messageAssociations.byUser ??= {};
             db.messageAssociations.byEmbed ??= {};
+            db.logAssociations ??= { byChannel: {} };
+            db.logAssociations.byChannel ??= {};
         } catch (err) {
             console.error("[MODMAIL] Store: Failed to parse data.json, starting with empty:", err.message);
             db = emptyDb();
@@ -188,6 +191,21 @@ function clearMessageAssociations(modmailChannelId) {
     _scheduleSave();
 }
 
+function associateChannelToLogMessage(channelId, logMessageId) {
+    db.logAssociations.byChannel[channelId] = logMessageId;
+    _scheduleSave();
+}
+
+function clearChannelToLogMessage(channelId) {
+    if (db.logAssociations.byChannel[channelId] === undefined) return;
+    delete db.logAssociations.byChannel[channelId];
+    _scheduleSave();
+}
+
+function getLogMessageFromChannel(channelId) {
+    return db.logAssociations.byChannel[channelId] ?? null;
+}
+
 module.exports = {
     init,
 
@@ -206,4 +224,8 @@ module.exports = {
     getEmbedMessageFromUser,
     getUserMessageFromEmbed,
     clearMessageAssociations,
+
+    associateChannelToLogMessage,
+    clearChannelToLogMessage,
+    getLogMessageFromChannel,
 };

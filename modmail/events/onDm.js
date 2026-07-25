@@ -1,5 +1,5 @@
 const { Events, ChannelType, EmbedBuilder, ThreadAutoArchiveDuration, MessageFlags, ContainerBuilder, TextDisplayBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, AttachmentBuilder } = require('discord.js');
-const { getChannelByUser, addUserToChannel, clearChannel, isUserBanned, associateMessageToEmbed } = require('../utils/store');
+const { getChannelByUser, addUserToChannel, clearChannel, isUserBanned, associateMessageToEmbed, associateChannelToLogMessage } = require('../utils/store');
 const { getChannelFromId } = require('../utils/getChannelFromId');
 const { messages } = require('../messages.json');
 const { modmailCategoryId, modmailLogChannelId, modmailChannelForThreadId, modmailChannelType, modmailPingStaffOnCreation, staffRoles, modmailWelcomeMessage, modmailShowUserTypingIndicators, modmailUserTypingIndicatorsFetchCount, modmailUseBuiltInTypingIndicators, modmailShouldAddChannelPrefix, modmailChannelPrefix } = require('../config.json');
@@ -62,9 +62,9 @@ module.exports = {
             if (!modmailChannel) {
                 clearChannel(process.env.GUILD_ID, modmailChannelId);
                 modmailChannel = await createChannel(guild, `${modmailShouldAddChannelPrefix ? `${modmailChannelPrefix}` : ''}modmail-${author?.username || 'unknown'}`, author.id, modmailChannelType, modmailChannelForThreadId, client);
-                
+
                 if (!modmailChannel) return author.send(messages.errors.MODMAIL_CHANNEL_CREATE_ERROR);
-                
+
                 await author.send(messages.info.OPENED_MODMAIL);
 
                 if (modmailPingStaffOnCreation) await modmailChannel.send(staffRoles.map(role => `<@&${role}>`).join(', '));
@@ -93,7 +93,7 @@ module.exports = {
                             new ActionRowBuilder()
                                 .addComponents(
                                     new ButtonBuilder()
-                                        .setLabel("Jump")
+                                        .setLabel(`Jump to ${modmailChannelType == 1 ? 'Thread' : 'Channel'}`)
                                         .setStyle(ButtonStyle.Link)
                                         .setURL(`https://discord.com/channels/${process.env.GUILD_ID}/${modmailChannel.id}`)
                                 )
@@ -106,9 +106,9 @@ module.exports = {
             }
         } else {
             modmailChannel = await createChannel(guild, `${modmailShouldAddChannelPrefix ? `${modmailChannelPrefix}` : ''}modmail-${author?.username || 'unknown'}`, author.id, modmailChannelType, modmailChannelForThreadId, client);
-            
+
             if (!modmailChannel) return author.send(messages.errors.MODMAIL_CHANNEL_CREATE_ERROR);
-            
+
             await author.send(messages.info.OPENED_MODMAIL);
 
             if (modmailPingStaffOnCreation) await modmailChannel.send(staffRoles.map(role => `<@&${role}>`).join(', '));
@@ -126,7 +126,7 @@ module.exports = {
                 const logChannel = await getChannelFromId(message.client, modmailLogChannelId);
                 // await logChannel.send({ content: `:inbox_tray: <t:${Math.floor(Date.now() / 1000)}:f> <#${modmailChannel.id}> (**#${modmailChannel.name}**, \`${modmailChannel.id}\`) opened by <@!${author.id}> (**${author.username || 'unknown'}**, \`${author.id}\`).`, allowedMentions: { parse: [] } });
 
-                await logChannel.send({
+                const logMessage = await logChannel.send({
                     flags: MessageFlags.IsComponentsV2,
                     components: [
                         new ContainerBuilder()
@@ -137,7 +137,7 @@ module.exports = {
                         new ActionRowBuilder()
                             .addComponents(
                                 new ButtonBuilder()
-                                    .setLabel("Jump")
+                                    .setLabel(`Jump to ${modmailChannelType == 1 ? 'Thread' : 'Channel'}`)
                                     .setStyle(ButtonStyle.Link)
                                     .setURL(`https://discord.com/channels/${process.env.GUILD_ID}/${modmailChannel.id}`)
                             )
@@ -146,6 +146,8 @@ module.exports = {
                         parse: []
                     }
                 })
+
+                associateChannelToLogMessage(modmailChannel.id, logMessage.id);
             }
         }
 
