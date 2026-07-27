@@ -14,7 +14,11 @@ module.exports = {
         const id = message.author.id;
 
         if (id in afkUsers) {
-            await message.react('👋');
+            try {
+                await message.react('👋');
+            } catch (e) {
+
+            }
 
             if (message.member && message.member.manageable) {
                 await message.member.setNickname(afkUsers[id].username, `User returned.`).catch(error => {

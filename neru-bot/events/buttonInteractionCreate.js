@@ -155,8 +155,8 @@ module.exports = {
 
                 setCustomRoleEntry(userId, { has_role: true, role_id: newRole.id, name: roleInfo.name });
             } catch (e) {
-                await interaction.channel.send(`:warning: <@990500436047982602> **Role failed to create**: ${e}`);
-                console.log(`[NERU] Custom role failed to create: ${e}`);
+                await interaction.channel.send(`:warning: <@990500436047982602> **Role (might have) failed to create**: ${e}`);
+                console.log(`[NERU] Custom role (might have) failed to create: ${e}`);
             }
 
             let dmStatus = false;
