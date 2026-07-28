@@ -21,10 +21,8 @@ module.exports = {
         const author = message.author;
 
         if (userId) {
-            const member = await getDiscUserById(message.client, userId, true, message.guild.id) || null;
-            if (!member) return await message.react('❌');
-
-            const user = member.user;
+            const user = await getDiscUserById(message.client, userId) || null;
+            if (!user) return;
 
             const embed = new EmbedBuilder();
             embed.setAuthor({ name: message.content.startsWith(prefixes.HIDE_NAME) ? 'Staff' : author?.username || 'unknown', iconURL: message.content.startsWith(prefixes.HIDE_NAME) ? `https://cdn.discordapp.com/avatars/${message.client.user.id}/${message.client.user.avatar}.png` : `https://cdn.discordapp.com/avatars/${author.id}/${author.avatar}.png` });
@@ -56,10 +54,10 @@ module.exports = {
                 associateMessageToEmbed(message.id, finalEmbed.id, message.channel.id);
                 await message.react('✅');
             } catch (err) {
-                if (String(err).startsWith("DiscordAPIError[50007]")) await message.reply(messages.errors.USER_HAS_DMS_DISABLED);
+                if (["DiscordAPIError[50007]", "DiscordAPIError[50278]"].includes(String(err))) await message.reply(messages.errors.USER_HAS_DMS_DISABLED);
                 console.log(`[MODMAIL] Error in sending message to ${user.id}: ${err}`);
                 await message.react('❌');
-                await message.reply(messages.errors.SPECIFIC.replaceAll("{error}", String(err)));
+                await message.reply(messages.errors.SPECIFIC.replaceAll("{error}", string(err)));
             }
         }
     },
