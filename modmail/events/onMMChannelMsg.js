@@ -54,10 +54,10 @@ module.exports = {
                 associateMessageToEmbed(message.id, finalEmbed.id, message.channel.id);
                 await message.react('✅');
             } catch (err) {
-                if (["DiscordAPIError[50007]", "DiscordAPIError[50278]"].includes(String(err))) await message.reply(messages.errors.USER_HAS_DMS_DISABLED);
+                if (["DiscordAPIError[50007]", "DiscordAPIError[50278]"].some(msg => String(err).includes(msg))) await message.reply(messages.errors.USER_HAS_DMS_DISABLED);
                 console.log(`[MODMAIL] Error in sending message to ${user.id}: ${err}`);
                 await message.react('❌');
-                await message.reply(messages.errors.SPECIFIC.replaceAll("{error}", string(err)));
+                await message.reply(messages.errors.SPECIFIC.replaceAll("{error}", String(err)));
             }
         }
     },
