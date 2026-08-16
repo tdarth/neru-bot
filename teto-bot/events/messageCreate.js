@@ -8,8 +8,9 @@ module.exports = {
     if (message.guild) {
       for (const trigger of message.client.triggers) {
         try {
+
           const testMessage = message;
-          testMessage.content = testMessage.content.replace(new RegExp(`<@${message.client.user.id}>\\s*`), '');
+          if (trigger.name != "talk-to-teto") testMessage.content = testMessage.content.replace(new RegExp(`<@${message.client.user.id}>\\s*`), '');
 
           if (trigger.trigger(testMessage)) {
             await trigger.execute(message);
