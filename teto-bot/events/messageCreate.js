@@ -12,7 +12,7 @@ module.exports = {
           if (trigger.name != "talk-to-teto") testMessage.content = testMessage.content.replace(new RegExp(`<@${message.client.user.id}>\\s*`), '');
 
           if (trigger.trigger(testMessage)) {
-            await trigger.execute(message);
+            await trigger.execute(testMessage);
 
             let warningMsg;
 
