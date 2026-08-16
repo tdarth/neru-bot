@@ -16,7 +16,7 @@ module.exports = {
 
             let warningMsg;
 
-            if (!message.mentions.users.has(message.client.user.id)) warningMsg = await message.reply(`\n-# :warning: [Due to a Discord change](<https://support-dev.discord.com/hc/en-us/articles/40281523410967-Changes-to-Privileged-Intent-Access-for-Discord-Apps>), this command will soon require you to ping the bot in your message.\n\`\`\`@${message?.client?.member?.nickname || message?.client?.user?.username} ${message.content}\`\`\``);
+            if (!message.mentions.users.has(message.client.user.id)) warningMsg = await message.reply(`\n-# :warning: [Due to a Discord change](<https://support-dev.discord.com/hc/en-us/articles/40281523410967-Changes-to-Privileged-Intent-Access-for-Discord-Apps>), this command will soon require you to ping the bot in your message.\n\`\`\`@${message?.guild?.members?.me?.nickname || message?.client?.user?.username} ${message.content}\`\`\``);
 
             if (warningMsg) {
               setTimeout(async () => {
