@@ -8,8 +8,7 @@ module.exports = {
     if (message.guild) {
       for (const trigger of message.client.triggers) {
         try {
-
-          const testMessage = message;
+          const testMessage = Object.create(message);
           if (trigger.name != "talk-to-teto") testMessage.content = testMessage.content.replace(new RegExp(`<@${message.client.user.id}>\\s*`), '');
 
           if (trigger.trigger(testMessage)) {
