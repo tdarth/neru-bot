@@ -1,7 +1,7 @@
 const { Events, MessageFlags, PermissionsBitField, ContainerBuilder, TextDisplayBuilder, SeparatorBuilder } = require('discord.js');
 const { deletedLinksChannelId } = require('../config.json');
 
-const urlRegex = /https?:\/\/[^\s]+|www\.[^\s]+/i;
+const urlRegex = /(?:https?:\/\/|www\.)[^\s]+|(?:discord\.gg|discord(?:app)?\.com\/invite)\/[a-z0-9-]+/gi;
 const allowedChannels = ['1370819406308835359', '1370819438139674634', '1369383513132105874', '1369899579029459035']
 
 module.exports = {
